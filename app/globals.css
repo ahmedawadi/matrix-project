@@ -2,26 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.backgroundImage{
+  background-image: url('../public/backgroundImage.png');
+  
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.titleSkew{
+  transform: skew(0, -5deg)
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.calculTitle{
+
+  background-image: url(../public/titleFont.png);
+  background-clip: text;
+  color: transparent;
+  
+}
+
+.calculTitle::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left:0;
+  width: 100%;
+  background-image: url('../public/backgroundImage.png');
+  height: 8px;
+}
+
+.calculSecondTitle{
+  background-image: url(../public/titleSecondPartFont.png);
+  background-clip: text;
+  color: transparent;
+
+}
+
+.calculSecondTitle::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left:0;
+  width: 100%;
+  background-image: url('../public/backgroundImage.png');
+  height: 8px;
 }
