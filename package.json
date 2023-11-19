@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -14,10 +15,12 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "axios": "^1.6.2",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-modal": "^3.16.1"
+    "react-modal": "^3.16.1",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "20.8.7",
