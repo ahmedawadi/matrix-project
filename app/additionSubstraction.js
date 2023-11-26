@@ -40,7 +40,7 @@ export default function AdditionSubstraction(){
             second_matrix: matrixB
         }
         
-        axios.post('http://192.168.129.58:8000/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend).then(res => {
+        axios.post('http://192.168.1.16:8000/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend).then(res => {
             window.open(`/${(additionOrSubstraction == 0 ? 'additionCalculation' : 'substractionCalculation' )}?matrixId=${res.data._id}`, '_blank')
         }).catch(error => {
             console.log(error)
@@ -61,7 +61,7 @@ export default function AdditionSubstraction(){
                 </div>
                 <MatrixAdditionSubstractionInput setAdditionOrSubstraction={setAdditionOrSubstraction} additionOrSubstraction={additionOrSubstraction} getMatrix={getMatrixInput} />
             </div>
-            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto'} className={'flex space-x-[20px] outline-none'}>
+            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto' + (matrixColumns > 7 ? '' : ' xl:justify-center xl:items-center')} className={'flex space-x-[20px] outline-none'}>
                 <div className="flex justify-center items-center">
                     <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} />
                 </div>

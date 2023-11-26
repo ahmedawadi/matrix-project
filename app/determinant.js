@@ -34,13 +34,13 @@ export default function Determinant(){
             matrix : matrix
         }
         
-        axios.post('http://192.168.129.58:8000/matrix/determinant/', dataToSend).then(res => {
+        axios.post('http://192.168.1.16:8000/matrix/determinant/', dataToSend).then(res => {
             window.open('/determinantCaclucation?matrixId=' + res.data._id, '_blank')
+            setMatrixInputIsOpen(false)
         }).catch(error => {
             console.log(error)
         })
 
-        setMatrixInputIsOpen(false)
     }
 
     return (

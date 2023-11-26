@@ -222,9 +222,10 @@ export default function MultiplicationMatrices(){
             second_matrix_type : getMatrixTypeNameInTheServer(matrixType, 2)
         }
 
-        console.log(dataToSend)
+        if(matrixType == 4 || matrixType == 5 || matrixType == 6)
+            dataToSend['m'] = bandSize
 
-        axios.post('http://192.168.129.58:8000/matrix/multiply/', dataToSend).then(res => {
+        axios.post('http://192.168.1.16:8000/matrix/multiply/', dataToSend).then(res => {
             window.open('/multiplicationCalculation?matrixId=' + res.data._id, '_blank')
 
             setMatrixInputIsOpen(false)
@@ -296,7 +297,7 @@ export default function MultiplicationMatrices(){
                 </div>
                 <MatrixMultiplicationInput containsMatrixBand={matrixType == 4 || matrixType == 5 || matrixType == 6 ? true : undefined} openMatrixMultiplication={openMatrixMultiplication} />
             </div>
-            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto'} className={'flex space-x-[20px] outline-none'}>
+            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto' + (matrixAColumns > 7 || matrixBColumns > 7 ? '' : ' xl:justify-center xl:items-center')} className={'flex space-x-[20px] outline-none'}>
                 <div className="flex justify-center items-center">
                     <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixType={matrixType == 1 ? 0 : matrixType == 2 ? 1 : matrixType == 3 ? 0 : matrixType == 4 ? 2 : matrixType == 5 ? 3 : matrixType == 6 ? 4 : undefined } matrixName={'A'} bandSize={matrixType == 4 || matrixType == 5 || matrixType == 6 ? bandSize : undefined} />
                 </div>

@@ -10,6 +10,7 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
       <body className='backgroundImage min-h-screen w-full flex flex-col md:space-y-[50px] space-y-[30px] lg:space-y-[75px] pb-[20px]'>

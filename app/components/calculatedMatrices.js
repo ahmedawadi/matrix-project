@@ -49,20 +49,20 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
                 calcultionType == 'systemSolvingCalculation' ? <div className="flex space-x-[10px]">
                     <div className="h-full w-[2px] bg-[#c2c2c2]"></div>
                     <table className="flex flex-col border">
-                        <thead>
+                        <thead className="flex justify-center">
                             <tr>
-                                <th className="font-extrabold text-[22px] text-[#c2c2c2] border border-[#c2c2c2] py-[5px]">b</th>
+                                <th className="font-extrabold text-[22px] text-[#c2c2c2]  border-[#c2c2c2] py-[5px]">b</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="flex flex-col">
                         {
-                            Array.from({length : secondMatrix?.length}).map((_, lineIndex) => <td key={lineIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] border-[2px]">
-                                <div className="flex justify-center items-center text-white">
+                            Array.from({length : secondMatrix?.length}).map((_, lineIndex) => <tr key={lineIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] px-[10px] py-[5px]">
+                                <td className="flex justify-center items-center text-white">
                                     {
-                                        secondMatrix[0][lineIndex]
+                                        secondMatrix[lineIndex]
                                     }
-                                </div>
-                            </td>)
+                                </td>
+                            </tr>)
                         }
                         </tbody>
                     </table>
@@ -75,7 +75,7 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
             }
         </div>
         {
-            secondMatrix ? <div className="overflow-x-auto">
+            calcultionType == 'systemSolvingCalculation' || !secondMatrix ? null : <div className="overflow-x-auto">
                 <table className="border-collapse border border-[#c2c2c2]">
                     <thead>
                         <tr>
@@ -116,7 +116,7 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
                         }
                     </tbody>
                 </table>
-            </div> : null
+            </div> 
         }
     </div>
 }

@@ -7,7 +7,9 @@ import {checkMatrixSize} from "./matrixInverse"
 import axios from "axios"
 
 let matrixSize = 1
-const algorthims = ["Méthode de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky"]//algorthims that will be choosed to sovle the system
+let bandSize = 1
+const algorthims = ["Méthode de Gauss pour une matrice bande", "Méthode de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
+const algorithmNameOnServer = ["pivot partiel gauss bande", "pivot partel gauss", "gauss jordan", "LU", "cholesky", "jacobi", "gauss-seidel"]//these are the algorithms names stocked in the server
 
 export default function SystemSolving(){
 
@@ -18,6 +20,32 @@ export default function SystemSolving(){
     const getMatrix = () => {
 
         matrixSize = document.getElementById('matrixSize').value
+
+        //getting the band of the matrix and check it if the algorithm works with band matrix
+        if(algorithm == 0){
+
+            const matrixBand = document.getElementById('matrixBand')//used if we gonna work with band matrices
+            const matrixBandWarning = document.getElementById('matrixBandWarning')
+
+            if(matrixBand.value == ''){
+                matrixBandWarning.innerHTML = 'Ajouter la bande de la matrice!'
+                return
+            }
+            else if ((Number(matrixBand.value) + 1) > Number(matrixSize)){
+                matrixBandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice"
+                return
+            }
+            else if ((Number(matrixBand.value) + 1) == Number(matrixSize)){
+                matrixBandWarning.innerHTML = "La matrice devient une matrice dense!"
+                return
+            }
+            else 
+                bandSize = matrixBand.value
+
+            if(matrixBandWarning.innerText != '')
+                matrixBandWarning.innerHTML = ''
+
+        }
 
         //get the matrix values
         setMatrixInputIsOpen(true)
@@ -34,10 +62,14 @@ export default function SystemSolving(){
 
         const dataToSend = {
             matrix : systemData[0],
-                vector : systemData[1]
+                vector : systemData[1],
+                    algorithm : algorithmNameOnServer[algorithm]
         }
-        console.log(dataToSend)
-        axios.post('http://192.168.129.58:8000/matrix/solve/', dataToSend).then(res => {
+
+        if(algorithm == 0)
+            dataToSend['m'] = bandSize
+        
+        axios.post('http://192.168.1.16:8000/matrix/solve/', dataToSend).then(res => {
             window.open('/systemSolvingCalculation?matrixId=' + res.data._id, '_blank')
 
             const matrixWarning = document.getElementById('matrixWarning')
@@ -87,25 +119,38 @@ export default function SystemSolving(){
                         
                     </ul>
                 </div>
-                <div className='xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-center space-x-[25px] items-center w-full xl:h-[200px]'>
-                    
-                    <div className='flex md:flex-row flex-col space-y-[5px] md:space-x-[15px] text-[20px]'>
-                        <div>
-                            Dimension de la matrice:
+                <div className="flex flex-col space-y-[25px] items-center justify-center xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] w-full xl:h-[200px]">
+                    {   
+                        algorithm == 0 ?
+                        <div className="flex flex-col w-full">
+                            <div className="font-extrabold flex items-center space-x-[15px] w-full">
+                                <div>
+                                    * Ajouter la taille du bande de la matrice A : 
+                                </div>
+                                <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]'/>
+                            </div>
+                            <div id="matrixBandWarning" className="text-[#c92a1e] text-[18px]"></div>
+                        </div> : null
+                    }
+                    <div className='flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-center space-x-[25px] items-center'>
+                        <div className='flex md:flex-row flex-col space-y-[5px] md:space-x-[15px] text-[20px]'>
+                            <div>
+                                Dimension de la matrice:
+                            </div>
+                            <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
                         </div>
-                        <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
-                    </div>
-                    
-                    <div className="h-full flex items-center">
-                        <button className="font-semibold border-2 border-[#4a4a4a] text-white px-[10px] py-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={getMatrix}>
-                            Ajouter matrice
-                        </button>
+                        
+                        <div className="h-full flex items-center">
+                            <button className="font-semibold border-2 border-[#4a4a4a] text-white px-[10px] py-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={getMatrix}>
+                                Ajouter matrice
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
+                    <MatrixInput matrixType={algorithm == 0 ? 2 : undefined} bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
                 </div>
             </ReactModal>
         </div>
@@ -129,12 +174,16 @@ function getSystemToSolveData(matrixName, vectorName, matrixSize){
 
         for(let j=0; j<matrixSize; j++){
 
-            const matrixElement = document.getElementById(matrixName + i + j).value
+            const matrixElement = document.getElementById(matrixName + i + j)
 
-            if(matrixElement === '')
+            if(!matrixElement)
+                matrixLine.push(0)
+            else if(matrixElement.value == '')
                 return null
+            else
+                matrixLine.push(Number(matrixElement.value))
 
-            matrixLine.push(Number(matrixElement))
+
         }
 
         matrix.push(matrixLine)

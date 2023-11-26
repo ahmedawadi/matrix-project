@@ -116,19 +116,20 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
                             containsBVector ? <div className="flex space-x-[10px]">
                                 <div className="h-full w-[2px] bg-[#c2c2c2]"></div>
                                 <table className="flex flex-col border">
-                                    <thead>
+                                    <thead className="w-full border-b-2 flex justify-center">
                                         <tr>
-                                            <th className="font-extrabold text-[22px] text-[#c2c2c2] border border-[#c2c2c2] py-[5px]">b</th>
+                                            <th className="font-extrabold text-[22px] text-[#c2c2c2] border-[#c2c2c2] py-[5px]">b</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="flex flex-col space-y-[0px]">
                                         {
-                                            Array.from({length : matrixLines}).map((_, lineIndex) => <td key={"b" + lineIndex} className={"border-[#c2c2c2] p-[5px]" + ( lineIndex != matrixLines - 1 ? ' border-b-[2px]' : '')}>
-                                                <input type="number" id={'b' + lineIndex} className="p-[5px] w-[60px] h-[40px] hover:bg-[url('../public/titleFont.png')] focus:bg-[url('../public/titleFont.png')] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
-                                            </td>)
+                                            Array.from({length : matrixLines}).map((_, lineIndex) => <tr key={"b" + lineIndex} className={"border-[#c2c2c2] p-[5px]" + ( lineIndex != matrixLines - 1 ? ' border-b-[2px]' : '')}>
+                                                <td>
+                                                    <input type="number" id={'b' + lineIndex} className="p-[5px] w-[60px] h-[40px] hover:bg-[url('../public/titleFont.png')] focus:bg-[url('../public/titleFont.png')] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                                                </td>
+                                            </tr>)
                                         }
                                     </tbody>
-
                                 </table>
                             </div> : null
                         }

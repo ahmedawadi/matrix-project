@@ -43,7 +43,7 @@ export default function MatrixTranspose(){
             matrix : matrix
         }
         
-        axios.post('http://192.168.129.58:8000/matrix/transpose/', dataToSend).then(res => {
+        axios.post('http://192.168.1.16:8000/matrix/transpose/', dataToSend).then(res => {
             window.open('/transposeCalculation?matrixId=' + res.data._id, '_blank')
 
             const matrixWarning = document.getElementById('matrixWarning')

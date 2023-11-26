@@ -20,10 +20,9 @@ let matrixBLines = 1
 let matrixBColumns = 1
 let matrixDeterminantResult = null//will be used if we have calculated the determinant of a matrix
 let matrixRankResult = null//will be used if we have calculated the rank of a matrix
+let firstMatrixForTest = null
+let secondMatrixForTest = null
 const fetcher = (url) => axios.get(url).then(res => res.data)
-
-const firstMatrixForTest = [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]]
-const secondMatrixForTest = [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]]
 
 export function CalculationResult({params}){
 
@@ -39,10 +38,17 @@ export function CalculationResult({params}){
 
         const functionnalitiesList = document.getElementById("functionnalitiesList")
         const functionnalitiesListButton = document.getElementById("functionnalitiesListButton")
-        
+    
         if(!(functionnalitiesList?.contains(event.target) || functionnalitiesListButton?.contains(event.target)))
             closeFunctionnalitiesList()
             
+    })
+
+    useEffect(() => {
+        if(typeof window !== 'undefined')
+            window.addEventListener('click', closeFunctionnalitiesListInOutSideClick)
+
+        return () => window.removeEventListener('click', closeFunctionnalitiesListInOutSideClick)
     })
 
     useEffect(() => {
@@ -50,29 +56,33 @@ export function CalculationResult({params}){
         if(data){
 
             //setting the matrix information data
-            if(params.calculationResult == 'determinantCaclucation')
+            if(params.calculationResult == 'determinantCaclucation'){
                 matrixDeterminantResult = data.determinant
-            else if(params.calculationResult == 'rankCalculation')          
+                setMatrix(data.matrix)
+            }
+            else if(params.calculationResult == 'rankCalculation')    {      
                 matrixRankResult = data.rank
+                setMatrix(data.matrix)
+            }
+            else if(params.calculationResult == 'inverseCalculation')    {      
+                firstMatrixForTest = data.matrix
+                setMatrix(data.inverse)
+            }
+            else if(params.calculationResult == 'transposeCalculation')    {      
+                firstMatrixForTest = data.matrix
+                setMatrix(data.transpose)
+            }
+            else{
+                firstMatrixForTest = data.first_matrix
+                secondMatrixForTest = data.second_matrix
+                setMatrix(data.result)
+            }
 
-            setMatrix(data.matrix)
+
         }
            
 
     }, [data])
-
-    useEffect(() => {
-        
-        if(typeof window !== 'undefined'){
-            //addition of the outside click of the funcitonnalities list to the listenner functionalities
-            addEventListener('click', closeFunctionnalitiesListInOutSideClick)
-        }
-
-        return () => {
-            removeEventListener('click', closeFunctionnalitiesListInOutSideClick)
-        }
-
-    }, [])
 
     const continueCalculation = (functionality) => {
 
@@ -83,7 +93,7 @@ export function CalculationResult({params}){
                     matrix : matrix
                 }
         
-                axios.post('http://192.168.129.58:8000/matrix/determinant/', dataToSend).then(res => {
+                axios.post('http://192.168.1.16:8000/matrix/determinant/', dataToSend).then(res => {
                     window.open('determinantCaclucation/?matrixId=' + res.data._id, '_blank')
                 }).catch(error => {
                     console.log(error)
@@ -96,11 +106,11 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('http://192.168.129.58:8000/matrix/rank/', dataToSend).then(res => {
+            axios.post('http://192.168.1.16:8000/matrix/rank/', dataToSend).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
             }).catch(error => {
                 console.log(error)
-                })
+            })
         }
         else 
             document.getElementById('functionnalitiesListButton').classList.add('hidden')
@@ -134,10 +144,12 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'http://192.168.129.58:8000/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 5 ? 'inverse/' : actionToTake == 6 ? 'transpose/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const url = 'http://192.168.1.16:8000/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 5 ? 'inverse/' : actionToTake == 6 ? 'transpose/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation/' : actionToTake == 5 ? 'inverseCalculation/' : actionToTake == 6 ? 'transposeCalculation/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation/' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation/' : null) + '?matrixId='
 
         axios.post(url, dataToSend).then(res => {
-            window.open('/calculationResult?matrixId=' + res.data._id, '_blank')
+            window.open(urlToOpenOnDisplayedMatrix + res.data._id, '_blank')
+
 
             setMatrixInputIsOpen(false)
         }).catch(error => {
@@ -195,7 +207,7 @@ export function CalculationResult({params}){
                             </div>
                             <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstMatrixForTest} secondMatrix={secondMatrixForTest} />
                         </div>
-                        <div className={"relative flex flex-col items-center w-full"}>
+                        <div className={"flex flex-col items-center w-full"}>
                             <div className="flex space-x-[10px]">
                                 {
                                     params.calculationResult == 'determinantCaclucation' || params.calculationResult == 'rankCalculation' ? null :
@@ -203,20 +215,22 @@ export function CalculationResult({params}){
                                         voir les matrices calculées     
                                     </button>
                                 }
-                                <button id="functionnalitiesListButton" className="font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={openFunctionnalitiesList}>
-                                    {
-                                        params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
-                                    }      
-                                </button>
-                            </div>
-                            <div id="functionnalitiesList" className=" xl:mr-0 mr-[65px]  hidden absolute flex flex-col border-y-[2px] border-[#4a4a4a] top-[45px] backgroundImage" >
-                                {
-                                    functionalities.map((functionality, index) => (matrix && matrix?.length == matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
+                                <div className="relative">
+                                    <button id="functionnalitiesListButton" className="font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={openFunctionnalitiesList}>
                                         {
-                                            functionality
+                                            params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
                                         }
-                                    </div>)
-                                }
+                                    </button>
+                                    <div id="functionnalitiesList" className="hidden absolute right-0 flex flex-col border-y-[2px] border-[#4a4a4a] top-[45px] backgroundImage" >
+                                        {
+                                            functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
+                                                {
+                                                    functionality
+                                                }
+                                            </div>)
+                                        }
+                                    </div>
+                                </div>
                             </div>
                             <div className="w-full mt-[20px]">
                             {
@@ -292,7 +306,7 @@ export function CalculationResult({params}){
                     </div>
                 </div>
             </div>
-            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto'} className={'flex space-x-[20px] outline-none'}>
+            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 w-full flex bg-black bg-opacity-60 overflow-auto'} className={'flex space-x-[20px] outline-none'}>
                 <div className="flex justify-center items-center">
                     <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixName={'A'} matrix={actionToTake == 3 || actionToTake == 4 ? matrix : null} />
                 </div>
@@ -380,16 +394,28 @@ function getResultTitle(joinedPage){
 function getMatrixUrl(typeCalculation, matrixId){
 
     if(typeCalculation == 'determinantCaclucation')
-        return 'http://192.168.129.58:8000/matrix/determinant/' + matrixId + '/'
+        return 'http://192.168.1.16:8000/matrix/determinant/' + matrixId + '/'
 
     else if(typeCalculation == 'rankCalculation')
-        return 'http://192.168.129.58:8000/matrix/rank/' + matrixId + '/'
+        return 'http://192.168.1.16:8000/matrix/rank/' + matrixId + '/'
     
     else if(typeCalculation == 'systemSolvingCalculation')
-        return 'http://192.168.129.58:8000/matrix/' + matrixId + '/'
+        return 'http://192.168.1.16:8000/matrix/solve/' + matrixId + '/'
 
-    else
-        return 'http://192.168.129.58:8000/matrix/' + matrixId + '/'
+    else if(typeCalculation == 'multiplicationCalculation')
+        return 'http://192.168.1.16:8000/matrix/multiply/' + matrixId + '/'
+    
+    else if(typeCalculation == 'additionCalculation')
+        return 'http://192.168.1.16:8000/matrix/add/' + matrixId + '/'
+    
+    else if(typeCalculation == 'substractionCalculation')
+        return 'http://192.168.1.16:8000/matrix/substract/' + matrixId + '/'
+    
+    else if(typeCalculation == 'inverseCalculation')
+        return 'http://192.168.1.16:8000/matrix/inverse/' + matrixId + '/'
+
+    else if(typeCalculation == 'transposeCalculation')
+        return 'http://192.168.1.16:8000/matrix/transpose/' + matrixId + '/'
 
 }
 
