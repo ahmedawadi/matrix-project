@@ -12,7 +12,6 @@ import { closeMatricesTypeList, openmatricesTypeList } from "./multpilcationMatr
 let matrixSize = 1
 let bandSize = 1
 const algorthims = [ "Méthode de matrice triangulaire par choix", "Méthode de Gauss avec pivotage partiel", "Méthodes d’élimination de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
-const algorithmNameOnServer = [ "triangular", "pivot partiel gauss avec pivotage", "pivot partiel gauss", "gauss jordan", "LU", "cholesky", "jacobi", "gauss-seidel"]//these are the algorithms names stocked in the server
 const triangularSystemMatricesType = ["Matrice inférieure dense", "Matrice supérieure dense", "Matrice inférieure demi-bande", "Matrice supérieure demi-bande"]
 const EG_LU__EGJ_matricesType = ["Matrice dense (Symétrique définie positive)", "Matrice bande (Symétrique définie positive)"]
 const EGPP_cholesky_matricesType = ["Matrice dense non symétrique", "Matrice bande non symétrique"]
@@ -107,16 +106,18 @@ export default function SystemSolving(){
         const dataToSend = {
             matrix : systemData[0],
                 vector : systemData[1],
-                    matrix_type: getMatrixTypeNameOnTheServer(algorithm, matrixType)
+                    matrix_type: getMatrixTypeNameOnTheServer(algorithm, matrixType),
         }
 
+        //only triangular matrices do not require the addition of the algorithm name
         if(algorithm != 0)
-            dataToSend["algorithm"] = algorithmNameOnServer[algorithm]
+            dataToSend["algorithm"] = getAlgorithmNameOnTheServer(algorithm, matrixType)
 
+        //addition of the band size for the banded matrices
         if(([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))
             dataToSend['m'] = bandSize
         
-        axios.post('http://192.168.1.16:8000/matrix/solve/', dataToSend).then(res => {
+        axios.post('https://matrixapi-ez2e.onrender.com/matrix/solve/', dataToSend).then(res => {
             window.open('/systemSolvingCalculation?matrixId=' + res.data._id, '_blank')
 
             const matrixWarning = document.getElementById('matrixWarning')
@@ -126,9 +127,7 @@ export default function SystemSolving(){
 
             setMatrixInputIsOpen(false)
         }).catch(error => {
-            console.log(error)
-
-
+            
             if(error?.response?.status == 400){
                 const matrixWarning = document.getElementById('matrixWarning')
 
@@ -228,7 +227,7 @@ export default function SystemSolving(){
                     </div>
                 </div>
             </div>
-            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto'}>
+            <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto outline-none'}>
                 <div className="flex justify-center items-center">
                     <MatrixInput matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
                 </div>
@@ -335,4 +334,32 @@ function getMatrixTypeNameOnTheServer(algorithm, matrixType){
 export function checkPositiveValue(event){
     if(event.target.value < 0)
         event.target.value = ''
+}
+
+//this function will be used to get the algorithm name on the server based on the algorithm and matrix type
+function getAlgorithmNameOnTheServer(algorithm, matrixType){
+    switch(algorithm){
+        //case 0 is triangular algorithm so we don't need to send the algorithm name
+        case 1 : {//gauss avec pivotage
+            return matrixType == 0 ?  "pivot partiel gauss dense" : "pivot partiel gauss banded"
+        }
+        case 2 : {//gauss ave elimination
+            return matrixType == 0 ? "gauss elimination symmetric dense matrix" : "gauss eliminatoion symmetric banded matrix"
+        }
+        case 3 : {//gauss jordan
+            return matrixType == 0 ? "gauss jordan symmetric dense matrix" : "gauss jordan symmetric banded matrix"
+        }
+        case 4 : {//decomposition LU
+            return matrixType == 0 ? "LU dense symmetric" :"LU banded symmetric"
+        }
+        case 5 : {//cholesky
+            return matrixType == 0 ? "cholesky dense" : "cholesky banded"
+        }
+        case 6 : {//jacobi
+            return "jacobi"
+        }
+        case 7 : {//gauss seidel
+            return "gauss-seidel"
+        }
+    }
 }

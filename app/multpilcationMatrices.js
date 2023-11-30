@@ -78,12 +78,12 @@ export default function MultiplicationMatrices(){
             dataToSend['m_second_matrix'] = bandBSize
         }
 
-        axios.post('http://192.168.1.16:8000/matrix/multiply/', dataToSend).then(res => {
+        axios.post('https://matrixapi-ez2e.onrender.com/matrix/multiply/', dataToSend).then(res => {
             window.open('/multiplicationCalculation?matrixId=' + res.data._id, '_blank')
 
             setMatrixInputIsOpen(false)
-        }).catch(error => {
-            console.log(error)
+        }).catch(_ => {
+            //needs to be catched
         })
     }
 

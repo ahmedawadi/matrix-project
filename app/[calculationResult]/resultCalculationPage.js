@@ -98,10 +98,10 @@ export function CalculationResult({params}){
                     matrix : matrix
                 }
         
-                axios.post('http://192.168.1.16:8000/matrix/determinant/', dataToSend).then(res => {
+                axios.post('https://matrixapi-ez2e.onrender.com/matrix/determinant/', dataToSend).then(res => {
                     window.open('determinantCaclucation/?matrixId=' + res.data._id, '_blank')
-                }).catch(error => {
-                    console.log(error)
+                }).catch(_ => {
+                    //needs to be catched
                 })
         }
         else if (functionality == 1){
@@ -111,10 +111,10 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('http://192.168.1.16:8000/matrix/rank/', dataToSend).then(res => {
+            axios.post('https://matrixapi-ez2e.onrender.com/matrix/rank/', dataToSend).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
-            }).catch(error => {
-                console.log(error)
+            }).catch(_ => {
+                //needs to be catched
             })
         }
         else if (functionality == 5){
@@ -122,12 +122,12 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('http://192.168.1.16:8000/matrix/inverse/', dataToSend).then(res => {
+            axios.post('https://matrixapi-ez2e.onrender.com/matrix/inverse/', dataToSend).then(res => {
                 window.open('inverseCalculation?matrixId=' + res.data._id, '_blank')
     
     
                 setMatrixInputIsOpen(false)
-            }).catch(error => {
+            }).catch(_ => {
                 matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
             })
         }
@@ -136,13 +136,13 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('http://192.168.1.16:8000/matrix/transpose/', dataToSend).then(res => {
+            axios.post('https://matrixapi-ez2e.onrender.com/matrix/transpose/', dataToSend).then(res => {
                 window.open('transposeCalculation?matrixId=' + res.data._id, '_blank')
     
     
                 setMatrixInputIsOpen(false)
-            }).catch(error => {
-                console.log(error)
+            }).catch(_ => {
+                //needs to be catched
             })
         }
         else 
@@ -177,7 +177,7 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'http://192.168.1.16:8000/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const url = 'https://matrixapi-ez2e.onrender.com/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
         const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation/'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation/' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation/' : null) + '?matrixId='
 
         axios.post(url, dataToSend).then(res => {
@@ -185,8 +185,8 @@ export function CalculationResult({params}){
 
 
             setMatrixInputIsOpen(false)
-        }).catch(error => {
-            console.log(error)
+        }).catch(_ => {
+            //needs to be catched
         })
     }
 
@@ -223,7 +223,7 @@ export function CalculationResult({params}){
         matrix && 
         <div className="xl:px-[0px] flex justify-center w-full px-[15px]">
             <div className='xl:px-[50px] xl:w-[70%] w-full bg-[#424143] py-[20px] flex flex-col min-h-screen'>
-                <div className='xl:text-[28px] xl:pl-[0px] pl-[20px] w-full flex justify-end font-semibold text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
+                <div className='xl:text-[28px] xl:pl-[0px] sm:pl-[20px] px-[10px] w-full flex justify-end font-semibold text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
                     {
                         getResultTitle(params.calculationResult)
                     }
@@ -240,12 +240,14 @@ export function CalculationResult({params}){
                             </div>
                             <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstCalculatedMatrix} secondMatrix={secondCalculatedMatrix} />
                         </div>
-                        <div className={"flex flex-col items-center w-full"}>
+                        <div className={"flex flex-col items-center w-full sm:px-0 px-[10px]"}>
                             <div className="flex space-x-[10px]">
                                 {
                                     params.calculationResult == 'determinantCaclucation' || params.calculationResult == 'rankCalculation' ? null :
                                     <button id="displayCalculatedMatricesButton" className="relative font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={seeCalculatedMatrices}>
-                                        voir les matrices calculées     
+                                    {
+                                        params.calculationResult == 'systemSolvingCalculation' ? "voir le système" : "voir les matrices calculées"
+                                    }    
                                     </button>
                                 }
                                 <div className="relative">
@@ -254,7 +256,7 @@ export function CalculationResult({params}){
                                             params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
                                         }
                                     </button>
-                                    <div id="functionnalitiesList" className="hidden absolute right-0 w-[300px] flex flex-col border-y-[2px] border-[#4a4a4a] top-[45px] backgroundImage" >
+                                    <div id="functionnalitiesList" className="hidden absolute right-0 w-[300px] flex flex-col border-y-[2px] border-[#4a4a4a] sm:top-[45px] top-[70px] backgroundImage" >
                                         {
                                             functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
                                                 {
@@ -428,28 +430,28 @@ function getResultTitle(joinedPage){
 function getMatrixUrl(typeCalculation, matrixId){
 
     if(typeCalculation == 'determinantCaclucation')
-        return 'http://192.168.1.16:8000/matrix/determinant/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/determinant/' + matrixId + '/'
 
     else if(typeCalculation == 'rankCalculation')
-        return 'http://192.168.1.16:8000/matrix/rank/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/rank/' + matrixId + '/'
     
     else if(typeCalculation == 'systemSolvingCalculation')
-        return 'http://192.168.1.16:8000/matrix/solve/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/solve/' + matrixId + '/'
 
     else if(typeCalculation == 'multiplicationCalculation')
-        return 'http://192.168.1.16:8000/matrix/multiply/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/multiply/' + matrixId + '/'
     
     else if(typeCalculation == 'additionCalculation')
-        return 'http://192.168.1.16:8000/matrix/add/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/add/' + matrixId + '/'
     
     else if(typeCalculation == 'substractionCalculation')
-        return 'http://192.168.1.16:8000/matrix/substract/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/substract/' + matrixId + '/'
     
     else if(typeCalculation == 'inverseCalculation')
-        return 'http://192.168.1.16:8000/matrix/inverse/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/inverse/' + matrixId + '/'
 
     else if(typeCalculation == 'transposeCalculation')
-        return 'http://192.168.1.16:8000/matrix/transpose/' + matrixId + '/'
+        return 'https://matrixapi-ez2e.onrender.com/matrix/transpose/' + matrixId + '/'
 
 }
 

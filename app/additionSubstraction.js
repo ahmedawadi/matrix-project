@@ -40,10 +40,10 @@ export default function AdditionSubstraction(){
             second_matrix: matrixB
         }
         
-        axios.post('http://192.168.1.16:8000/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend).then(res => {
+        axios.post('https://matrixapi-ez2e.onrender.com/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend).then(res => {
             window.open(`/${(additionOrSubstraction == 0 ? 'additionCalculation' : 'substractionCalculation' )}?matrixId=${res.data._id}`, '_blank')
-        }).catch(error => {
-            console.log(error)
+        }).catch(_ => {
+            //needs to be catched
         })
 
         setMatrixInputIsOpen(false)
