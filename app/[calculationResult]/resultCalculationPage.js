@@ -11,7 +11,7 @@ import axios from 'axios'
 import useSWR from 'swr'
 
 const calcuationResult = ['Résultat de la calculation du déterminant', 'Résultat de la produit matriciel', "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", 'Résultat de la calculation du matrice inverse', "Résultat de la transposition de la matrice", 'Résultat de la calculation du rang']
-const functionalities = ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel à droite", "Produit matriciel à gauche", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"]
+const functionalities = ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel provenant de la gauche", "Produit matriciel provenant de la droite", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"]
 
 //this variables are used for the matrix multiplication
 let matrixALines = 1
@@ -20,8 +20,8 @@ let matrixBLines = 1
 let matrixBColumns = 1
 let matrixDeterminantResult = null//will be used if we have calculated the determinant of a matrix
 let matrixRankResult = null//will be used if we have calculated the rank of a matrix
-let firstMatrixForTest = null
-let secondMatrixForTest = null
+let firstCalculatedMatrix = null
+let secondCalculatedMatrix = null
 const fetcher = (url) => axios.get(url).then(res => res.data)
 
 export function CalculationResult({params}){
@@ -65,16 +65,16 @@ export function CalculationResult({params}){
                 setMatrix(data.matrix)
             }
             else if(params.calculationResult == 'inverseCalculation')    {      
-                firstMatrixForTest = data.matrix
+                firstCalculatedMatrix = data.matrix
                 setMatrix(data.inverse)
             }
             else if(params.calculationResult == 'transposeCalculation')    {      
-                firstMatrixForTest = data.matrix
+                firstCalculatedMatrix = data.matrix
                 setMatrix(data.transpose)
             }
             else{
-                firstMatrixForTest = data.first_matrix
-                secondMatrixForTest = data.second_matrix
+                firstCalculatedMatrix = data.first_matrix
+                secondCalculatedMatrix = data.second_matrix
                 setMatrix(data.result)
             }
 
@@ -85,6 +85,11 @@ export function CalculationResult({params}){
     }, [data])
 
     const continueCalculation = (functionality) => {
+
+        const matrixCalculationWarning = document.getElementById("matrixCalculationWarning")
+
+        if(matrixCalculationWarning.innerText != '')
+            matrixCalculationWarning.innerHTML = ''
 
         if(functionality == 0){
                 //calculation of the determinant of a matrix
@@ -112,6 +117,34 @@ export function CalculationResult({params}){
                 console.log(error)
             })
         }
+        else if (functionality == 5){
+            const dataToSend = {
+                matrix : matrix
+            }
+
+            axios.post('http://192.168.1.16:8000/matrix/inverse/', dataToSend).then(res => {
+                window.open('inverseCalculation?matrixId=' + res.data._id, '_blank')
+    
+    
+                setMatrixInputIsOpen(false)
+            }).catch(error => {
+                matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
+            })
+        }
+        else if (functionality == 6){
+            const dataToSend = {
+                matrix : matrix
+            }
+
+            axios.post('http://192.168.1.16:8000/matrix/transpose/', dataToSend).then(res => {
+                window.open('transposeCalculation?matrixId=' + res.data._id, '_blank')
+    
+    
+                setMatrixInputIsOpen(false)
+            }).catch(error => {
+                console.log(error)
+            })
+        }
         else 
             document.getElementById('functionnalitiesListButton').classList.add('hidden')
 
@@ -121,7 +154,7 @@ export function CalculationResult({params}){
     }
 
     const calculate = () => {
-
+        
         //if it is substractionor addition the matrix will putted on the left side matrix A 
         const newMatrixAdded = actionToTake == 2 ? getMatrix('A') : actionToTake == 3 || actionToTake == 4 ? getMatrix('B') : null
         const dataToSend = {}
@@ -144,8 +177,8 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'http://192.168.1.16:8000/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 5 ? 'inverse/' : actionToTake == 6 ? 'transpose/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
-        const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation/' : actionToTake == 5 ? 'inverseCalculation/' : actionToTake == 6 ? 'transposeCalculation/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation/' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation/' : null) + '?matrixId='
+        const url = 'http://192.168.1.16:8000/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation/'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation/' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation/' : null) + '?matrixId='
 
         axios.post(url, dataToSend).then(res => {
             window.open(urlToOpenOnDisplayedMatrix + res.data._id, '_blank')
@@ -205,7 +238,7 @@ export function CalculationResult({params}){
                                     params.calculationResult == 'inverseCalculation' || params.calculationResult == 'transposeCalculation' ? 'La matrice calculée' : 'Les matrice calculées'
                                 }
                             </div>
-                            <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstMatrixForTest} secondMatrix={secondMatrixForTest} />
+                            <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstCalculatedMatrix} secondMatrix={secondCalculatedMatrix} />
                         </div>
                         <div className={"flex flex-col items-center w-full"}>
                             <div className="flex space-x-[10px]">
@@ -221,7 +254,7 @@ export function CalculationResult({params}){
                                             params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
                                         }
                                     </button>
-                                    <div id="functionnalitiesList" className="hidden absolute right-0 flex flex-col border-y-[2px] border-[#4a4a4a] top-[45px] backgroundImage" >
+                                    <div id="functionnalitiesList" className="hidden absolute right-0 w-[300px] flex flex-col border-y-[2px] border-[#4a4a4a] top-[45px] backgroundImage" >
                                         {
                                             functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
                                                 {
@@ -292,6 +325,7 @@ export function CalculationResult({params}){
                                 </table>
                             </div>
                         </div>
+                        <div id="matrixCalculationWarning" className="text-[#c92a1e] text-[18px]"></div>
                         {   
                             params.calculationResult == 'determinantCaclucation' ? <div>
                             {

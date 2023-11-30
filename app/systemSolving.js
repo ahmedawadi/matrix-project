@@ -1,20 +1,68 @@
 'use client'
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import ReactModal from "react-modal"
 import MatrixInput from "./matrixInput"
 import {checkMatrixSize} from "./matrixInverse"
 import axios from "axios"
+import { faCheck, faChevronDown } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { closeMatricesTypeList, openmatricesTypeList } from "./multpilcationMatrices"
 
 let matrixSize = 1
 let bandSize = 1
-const algorthims = ["Méthode de Gauss pour une matrice bande", "Méthode de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
-const algorithmNameOnServer = ["pivot partiel gauss bande", "pivot partel gauss", "gauss jordan", "LU", "cholesky", "jacobi", "gauss-seidel"]//these are the algorithms names stocked in the server
+const algorthims = [ "Méthode de matrice triangulaire par choix", "Méthode de Gauss avec pivotage partiel", "Méthodes d’élimination de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
+const algorithmNameOnServer = [ "triangular", "pivot partiel gauss avec pivotage", "pivot partiel gauss", "gauss jordan", "LU", "cholesky", "jacobi", "gauss-seidel"]//these are the algorithms names stocked in the server
+const triangularSystemMatricesType = ["Matrice inférieure dense", "Matrice supérieure dense", "Matrice inférieure demi-bande", "Matrice supérieure demi-bande"]
+const EG_LU__EGJ_matricesType = ["Matrice dense (Symétrique définie positive)", "Matrice bande (Symétrique définie positive)"]
+const EGPP_cholesky_matricesType = ["Matrice dense non symétrique", "Matrice bande non symétrique"]
+let matricesTypeList = triangularSystemMatricesType//it will contains the list that we need to choose from it
 
 export default function SystemSolving(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [algorithm, setAlgorithm] = useState(0)//by default the Gauss algorithm will be used
+    const [matrixType, setMatrixType] = useState(0)//it will be used with the algorithms that needs the choose of specific type of matrices
+
+
+    /*this functions are used to handle the list of matices types that the user will choose */
+
+    //this function is used to close the functionalities list when the user click outside of it and outside the button that open it 
+    const closeTypeMatricesListInOutSideClick = useCallback((event) => {
+
+        const matricesTypeList = document.getElementById("matricesTypeList")
+        const matricesTypeListButton = document.getElementById("matricesTypeListButton")
+        
+        if(!(matricesTypeList?.contains(event.target) || matricesTypeListButton?.contains(event.target)))
+            closeMatricesTypeList()
+            
+    })
+
+    useEffect(() => {
+        
+        if(typeof window !== 'undefined'){
+
+            //addition of the outside click of the matrix type list to the listenner functionalities
+            addEventListener('click', closeTypeMatricesListInOutSideClick)
+        }
+
+        return () => {
+            removeEventListener('click', closeTypeMatricesListInOutSideClick)
+        }
+
+    }, [])
+    //this function is used just to selet which matrix type will we use
+    const chooseMatrixType = (matrixType) => {
+
+        //we'll check if there's any previous warning to remove it when we change the matrix type
+        const matrixABandWarning = document.getElementById('matrixABandWarning')
+
+        if( matrixABandWarning && matrixABandWarning.innerText != '')
+            matrixABandWarning.innerHTML = ''
+
+        setMatrixType(matrixType)
+        closeMatricesTypeList()
+    }
 
     //this function is used to get the values of a matrix with a specific size
     const getMatrix = () => {
@@ -22,7 +70,7 @@ export default function SystemSolving(){
         matrixSize = document.getElementById('matrixSize').value
 
         //getting the band of the matrix and check it if the algorithm works with band matrix
-        if(algorithm == 0){
+        if(([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType))){
 
             const matrixBand = document.getElementById('matrixBand')//used if we gonna work with band matrices
             const matrixBandWarning = document.getElementById('matrixBandWarning')
@@ -31,12 +79,8 @@ export default function SystemSolving(){
                 matrixBandWarning.innerHTML = 'Ajouter la bande de la matrice!'
                 return
             }
-            else if ((Number(matrixBand.value) + 1) > Number(matrixSize)){
+            else if ((Number(matrixBand.value) + 1) >= Number(matrixSize)){
                 matrixBandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice"
-                return
-            }
-            else if ((Number(matrixBand.value) + 1) == Number(matrixSize)){
-                matrixBandWarning.innerHTML = "La matrice devient une matrice dense!"
                 return
             }
             else 
@@ -63,10 +107,13 @@ export default function SystemSolving(){
         const dataToSend = {
             matrix : systemData[0],
                 vector : systemData[1],
-                    algorithm : algorithmNameOnServer[algorithm]
+                    matrix_type: getMatrixTypeNameOnTheServer(algorithm, matrixType)
         }
 
-        if(algorithm == 0)
+        if(algorithm != 0)
+            dataToSend["algorithm"] = algorithmNameOnServer[algorithm]
+
+        if(([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))
             dataToSend['m'] = bandSize
         
         axios.post('http://192.168.1.16:8000/matrix/solve/', dataToSend).then(res => {
@@ -91,6 +138,14 @@ export default function SystemSolving(){
 
     }
 
+    const chooseAlgorithm = (algorithm) => {
+        setAlgorithm(algorithm)
+        setMatrixType(0)
+        
+        matricesTypeList = (algorithm == 0 ? triangularSystemMatricesType : [1, 5].includes(algorithm) ? EGPP_cholesky_matricesType : [2, 3, 4].includes(algorithm)? EG_LU__EGJ_matricesType : [])
+
+    }
+
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
@@ -106,28 +161,53 @@ export default function SystemSolving(){
                     <ul className="list-disc pl-[25px] font-bold">
                         {
                             algorthims.map((algorithmName, index) => <li key={index} className="">
-                                <label className="flex space-x-[15px]">
+                                <label className="flex space-x-[15px] w-fit">
                                     <div>
                                         {
                                             algorithmName
                                         }
                                     </div>
-                                    <input type="radio" checked={index == algorithm} className="accent-black w-[15px]" onClick={() => setAlgorithm(index)} /> 
+                                    <input type="radio" checked={index == algorithm} className="accent-black w-[15px]" onClick={() => chooseAlgorithm(index)} /> 
                                 </label>
                             </li>)
                         }
                         
                     </ul>
                 </div>
+                <div className={"w-[80%] font-bold border-2 relative" + ([6, 7].includes(algorithm) ? " hidden" : "")}>
+                    <div id="matricesTypeListButton" className="flex justify-between px-[10px] py-[5px] cursor-pointer h-[45px]" onClick={openmatricesTypeList}>
+                        <div>
+                            Types des matrices
+                        </div>
+                        <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
+                    </div>
+                    <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden absolute border-y-2 border-x-2 font-bold top-[50px] right-0 w-full">
+                        {   
+                            matricesTypeList.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matricesTypeList.length - 1 ? " border-b-[3px]" : '')}>
+                                <label className="flex justify-between items-center px-[15px]" onClick={() => chooseMatrixType(index)}>
+                                    <div>
+                                        {
+                                            matrixTypeName
+                                        }
+                                    </div>
+                                    {
+                                        index === matrixType ? <FontAwesomeIcon icon={faCheck} /> : null
+                                    }
+                                </label>
+                            </li>)
+                        }
+                        
+                    </ul>
+                </div> 
                 <div className="flex flex-col space-y-[25px] items-center justify-center xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] w-full xl:h-[200px]">
                     {   
-                        algorithm == 0 ?
+                        (([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))?
                         <div className="flex flex-col w-full">
                             <div className="font-extrabold flex items-center space-x-[15px] w-full">
                                 <div>
-                                    * Ajouter la taille du bande de la matrice A : 
+                                    * Ajouter la taille du bande de la matrice : 
                                 </div>
-                                <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]'/>
+                                <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkPositiveValue(event)}/>
                             </div>
                             <div id="matrixBandWarning" className="text-[#c92a1e] text-[18px]"></div>
                         </div> : null
@@ -150,7 +230,7 @@ export default function SystemSolving(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixType={algorithm == 0 ? 2 : undefined} bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
+                    <MatrixInput matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
                 </div>
             </ReactModal>
         </div>
@@ -190,4 +270,69 @@ function getSystemToSolveData(matrixName, vectorName, matrixSize){
     }
 
     return [matrix, vector]
+}
+
+//used to get the matrix type that we'll pass in the input
+function getMatrixType(algorithm, matrixType){
+
+    if(algorithm == 0){
+        switch(matrixType){
+            case 0 : //inferior matrix
+                return 1
+            case 1 ://superior matrix
+                return 0
+            case 2 : //inferior band matrix
+                return 4
+            case 3 ://superior band matrix
+                return 3
+        }
+    }
+    else if([2, 3, 4].includes(algorithm)){
+        switch(matrixType){
+            case 0 : //symetric matrix
+                return 5
+            case 1 ://symetric band matrix
+                return 6
+        }
+    }
+    else if ([1, 5].includes(algorithm)){
+        switch(matrixType){
+            case 0 : //dense matrix
+                return undefined
+            case 1 ://band matrix
+                return 2
+        }
+    }
+
+}
+
+//used to get the matrix type name on the server t
+function getMatrixTypeNameOnTheServer(algorithm, matrixType){
+
+    if(algorithm == 0){
+        switch(matrixType){
+            case 0 : //inferior matrix
+                return "lower"
+            case 1 ://superior matrix
+                return "upper"
+            case 2 : //inferior band matrix
+                return  "lower banded"
+            case 3 ://superior band matrix
+                return "upper banded"
+        }
+    }
+    else if ([1, 2, 3, 4, 5].includes(algorithm)){
+        switch(matrixType){
+            case 0 : //dense matrix
+                return "dense"
+            case 1 ://band matrix
+                return "banded"
+        }
+    }
+
+}
+
+export function checkPositiveValue(event){
+    if(event.target.value < 0)
+        event.target.value = ''
 }

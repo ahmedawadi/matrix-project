@@ -12,6 +12,8 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
         2 : bande
         3 : bande superieure
         4 : bande inferieure
+        5 : dense symetrique positive
+        6 : bande symterique positive
     */
 
     const fillEmptyCellsWithZeros = () => {
@@ -54,6 +56,21 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
             if(vectorElement.value === '')
                 vectorElement.value = 0
         }
+    }
+
+    //used to change other values in the other side in symectric matrix
+    function updateSymetricMatricCells(lineIndex, columnIndex, event){
+        //symetric matrix have to be positive
+
+        if(event.target.value < 0){
+            event.target.value = ''
+            return 
+        }
+
+        //changing the value of the symetric element
+        const symetricElement = document.getElementById(matrixName + columnIndex + lineIndex)
+        
+        symetricElement.value = event.target.value
     }
 
     return ( 
@@ -103,7 +120,7 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
                                         Array.from({length : matrixColumns}).map((_, columnIndex) => <td key={matrixName + lineIndex + columnIndex} className="p-[5px] border border-[#c2c2c2] border-[2px]">
                                             {
                                                 isMatrixCellEmpty(matrixType, bandSize, matrixLines, lineIndex, columnIndex) ? null :
-                                                <input type="number" id={matrixName + lineIndex + columnIndex} value={matrix ? matrix[lineIndex][columnIndex] : undefined} className="p-[5px] w-[60px] h-[40px] hover:bg-[url('../public/titleFont.png')] focus:bg-[url('../public/titleFont.png')] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                                                <input type="number" id={matrixName + lineIndex + columnIndex} value={matrix ? matrix[lineIndex][columnIndex] : undefined} className="p-[5px] w-[60px] h-[40px] hover:bg-[url('../public/titleFont.png')] focus:bg-[url('../public/titleFont.png')] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" onChange={ [5, 6].includes(matrixType)? (event) => updateSymetricMatricCells(lineIndex, columnIndex, event) :undefined}/>
                                             }
                                         </td>)
                                     }
@@ -198,6 +215,10 @@ function isMatrixCellEmpty(matrixType, bandSize, matrixSize, lineIndex, columnIn
             return isCellEmptyHalfBandSuperiorCondition(bandSize, matrixSize, lineIndex, columnIndex)
         case 4 : //half band inferior matrix
             return isCellEmptyHalfBandInferiorCondition(bandSize, matrixSize, lineIndex, columnIndex)
+        case 6 : //band and symetric positive matrix
+            return isCellEmptyBandCondition(bandSize, matrixSize, lineIndex, columnIndex)
+
 
     }
 }
+

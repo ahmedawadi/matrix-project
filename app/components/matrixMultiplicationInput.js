@@ -1,20 +1,31 @@
 'use client'
 
-export default function MatrixMultiplicationInput({openMatrixMultiplication, matrixLines, matrixColumns, matrixName, containsMatrixBand}){
+import { checkPositiveValue } from "../systemSolving"
 
+export default function MatrixMultiplicationInput({openMatrixMultiplication, matrixLines, matrixColumns, matrixName, containsMatrixBand, sameBandOnTwoMatrices}){
+    //sameBandOnTwoMatrices is a variable that will be used to check if we need to get the band that will be applied on the two matrices
+    //containsMatrixBand is an integer that contains the number of the matrices that contains bandaries it can be 1 or 2
     //matrixName is the name of the matrix that we gonna put for the the initial values and they can not changed we use this in the continue calculation
     return (
-        <div className='xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex flex-col space-y-[20px] items-center justify-center w-full xl:h-[200px]'>
+        <div className='xl:px-[30px] xl:py-[20px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex flex-col space-y-[20px] items-center justify-center w-full xl:min-h-[200px]'>
             {   
                 containsMatrixBand ?
-                <div className="flex flex-col w-full">
-                    <div className="font-extrabold flex items-center space-x-[15px] w-full">
-                        <div>
-                            * Ajouter la taille du bande de la matrice A : 
-                        </div>
-                        <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]'/>
-                    </div>
-                    <div id="matrixBandWarning" className="text-[#c92a1e] text-[18px]"></div>
+                <div className="flex flex-col">
+                    {
+                        Array.from({length : containsMatrixBand}).map((_, index) => <div key={index} className="flex flex-col w-full">
+                            <div className="font-extrabold flex items-center space-x-[15px] w-full">
+                                <div>
+                                {    
+                                    sameBandOnTwoMatrices ? 'Ajouter la taille du bande des deux matrices' :
+                                    '* Ajouter la taille du bande de la matrice ' + (index == 0 ? 'A' : 'B') + ' :' 
+                                }
+                                </div>
+                                <input type='number' id={"matrix" + (index == 0 ? 'A' : 'B') + "Band"} defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkPositiveValue(event)}/>
+                            </div>
+                            <div id={"matrix" + (index == 0 ? 'A' : 'B') + "BandWarning"} className="text-[#c92a1e] text-[18px]"></div>
+                        </div>)
+                    }
+
                 </div> : null
             }
             <div className="flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-between items-center w-full">
