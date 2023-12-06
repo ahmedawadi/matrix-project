@@ -31,6 +31,7 @@ export function CalculationResult({params}){
     const [actionToTake, setActionToTake] = useState(null)//used to stock the action that we gonna take from the functionnalities of the continuing the calculation
     const [additionOrSubstraction, setAdditionOrSubstraction] = useState(0)//used to choose addition or substraction when the user want to continue the calculation with his matrix
     const matrixId = useSearchParams().get('matrixId')
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
     const {data, error} = useSWR(getMatrixUrl(params.calculationResult, matrixId), fetcher)
 
     //this function is used to close the functionalities list when the user click outside of it and outside the button that open it 
@@ -66,11 +67,11 @@ export function CalculationResult({params}){
             }
             else if(params.calculationResult == 'inverseCalculation')    {      
                 firstCalculatedMatrix = data.matrix
-                setMatrix(data.inverse)
+                setMatrix(data.result)
             }
             else if(params.calculationResult == 'transposeCalculation')    {      
                 firstCalculatedMatrix = data.matrix
-                setMatrix(data.transpose)
+                setMatrix(data.result)
             }
             else{
                 firstCalculatedMatrix = data.first_matrix
@@ -92,17 +93,18 @@ export function CalculationResult({params}){
             matrixCalculationWarning.innerHTML = ''
 
         if(functionality == 0){
-                //calculation of the determinant of a matrix
+            //calculation of the determinant of a matrix
 
-                const dataToSend = {
-                    matrix : matrix
-                }
-        
-                axios.post('https://matrixapi-ez2e.onrender.com/matrix/determinant/', dataToSend).then(res => {
-                    window.open('determinantCaclucation/?matrixId=' + res.data._id, '_blank')
-                }).catch(_ => {
-                    //needs to be catched
-                })
+            const dataToSend = {
+                matrix : matrix
+            }
+    
+            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
+                window.open('determinantCaclucation?matrixId=' + res.data._id, '_blank')
+            }).catch(_ => {
+                
+                matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
+            })
         }
         else if (functionality == 1){
             //calculation of a rank of a matrix
@@ -111,38 +113,43 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('https://matrixapi-ez2e.onrender.com/matrix/rank/', dataToSend).then(res => {
+            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
-                //needs to be catched
+                matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
             })
         }
         else if (functionality == 5){
+
             const dataToSend = {
                 matrix : matrix
             }
 
-            axios.post('https://matrixapi-ez2e.onrender.com/matrix/inverse/', dataToSend).then(res => {
+            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('inverseCalculation?matrixId=' + res.data._id, '_blank')
     
-    
                 setMatrixInputIsOpen(false)
-            }).catch(_ => {
+            }).catch(error => {
+                
+                if(error?.response?.status == 400){
+                    matrixCalculationWarning.innerHTML = "il n'y a pas d'inverse à cette matrice"
+                }
+
                 matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
             })
         }
         else if (functionality == 6){
+
             const dataToSend = {
                 matrix : matrix
             }
 
-            axios.post('https://matrixapi-ez2e.onrender.com/matrix/transpose/', dataToSend).then(res => {
+            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('transposeCalculation?matrixId=' + res.data._id, '_blank')
-    
     
                 setMatrixInputIsOpen(false)
             }).catch(_ => {
-                //needs to be catched
+                matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
             })
         }
         else 
@@ -155,12 +162,24 @@ export function CalculationResult({params}){
 
     const calculate = () => {
         
-        //if it is substractionor addition the matrix will putted on the left side matrix A 
+        //if it is substraction or addition the matrix will putted on the left side matrix A 
         const newMatrixAdded = actionToTake == 2 ? getMatrix('A') : actionToTake == 3 || actionToTake == 4 ? getMatrix('B') : null
+        const newMatrixName = actionToTake == 2 ? 'A' : actionToTake == 3 || actionToTake == 4 ? 'B' : null
         const dataToSend = {}
+        const matrixWarning = document.getElementById('matrixWarning' + newMatrixName)
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
 
-        if(!newMatrixAdded)
-            return 
+        if(!newMatrixAdded){
+            matrixWarning.innerHTML = "Il y a des cellules vides!"
+            return
+        }
+        else if(matrixWarning.innerText != '')
+            matrixWarning.innerHTML = ''
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
+        
 
         if(actionToTake == 2 || actionToTake == 3 || actionToTake == 4){
             dataToSend['first_matrix'] = actionToTake == 2 ? newMatrixAdded : actionToTake == 3 || actionToTake == 4 ? matrix : null
@@ -177,16 +196,23 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'https://matrixapi-ez2e.onrender.com/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
-        const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation/'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation/' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation/' : null) + '?matrixId='
+        const url = 'https://matrixoperationsapi-production.up.railway.app/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation' : null) + '?matrixId='
 
-        axios.post(url, dataToSend).then(res => {
+        axios.post(url, dataToSend, {timeout: 12000}).then(res => {
             window.open(urlToOpenOnDisplayedMatrix + res.data._id, '_blank')
 
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+            setIsLoading(false)
 
             setMatrixInputIsOpen(false)
         }).catch(_ => {
-            //needs to be catched
+            matrixWarning.innerHTML = "essayer de calculer une autre fois!"
+
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+            setIsLoading(false)
         })
     }
 
@@ -218,7 +244,7 @@ export function CalculationResult({params}){
         //get the matrix values
         setMatrixInputIsOpen(true)
     }
-
+    
     return (
         matrix && 
         <div className="xl:px-[0px] flex justify-center w-full px-[15px]">
@@ -229,13 +255,14 @@ export function CalculationResult({params}){
                     }
                 </div>
                 <div className="xl:pt-[40px] xl:text-[22px] pt-[30px] pl-[15px] text-[#b5b5b5] text-[18px]">
-                    Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé.                </div>
+                    Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé.               
+                </div>
                 <div className='pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px] xl:pt-[50px]'>
                     <div className="w-full flex flex-col items-center justify-center">
                         <div id="calculatedMatrices" className="hidden flex flex-col space-y-[20px] w-full pb-[20px] mb-[30px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] ">
                             <div className="xl:text-[28px] pl-[20px] font-serif text-[22px] font-extrabold">
                                 {
-                                    params.calculationResult == 'inverseCalculation' || params.calculationResult == 'transposeCalculation' ? 'La matrice calculée' : 'Les matrice calculées'
+                                    params.calculationResult == 'inverseCalculation' || params.calculationResult == 'transposeCalculation' ? 'La matrice calculée' : 'Les matrices calculées'
                                 }
                             </div>
                             <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstCalculatedMatrix} secondMatrix={secondCalculatedMatrix} />
@@ -256,7 +283,7 @@ export function CalculationResult({params}){
                                             params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
                                         }
                                     </button>
-                                    <div id="functionnalitiesList" className="hidden absolute right-0 w-[300px] flex flex-col border-y-[2px] border-[#4a4a4a] sm:top-[45px] top-[70px] backgroundImage" >
+                                    <div id="functionnalitiesList" className={"hidden absolute sm:right-0 md:w-[300px] sm:top-[45px] w-[250px] flex flex-col border-y-[2px] border-[#4a4a4a] backgroundImage" + (params.calculationResult == 'determinantCaclucation' || params.calculationResult == 'rankCalculation' ? " top-[45px] right-[-30px]" : " right-0 top-[70px]")} >
                                         {
                                             functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
                                                 {
@@ -316,7 +343,7 @@ export function CalculationResult({params}){
                                                     Array.from({length : matrix[0]?.length}).map((_, columnIndex) => <td key={columnIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] border-[2px]">
                                                         <div className="flex justify-center items-center text-white">
                                                             {
-                                                                matrix[lineIndex][columnIndex]
+                                                                (Math.round(matrix[lineIndex][columnIndex] * 100) / 100)
                                                             }
                                                         </div>
                                                     </td>)
@@ -328,17 +355,19 @@ export function CalculationResult({params}){
                             </div>
                         </div>
                         <div id="matrixCalculationWarning" className="text-[#c92a1e] text-[18px]"></div>
-                        {   
-                            params.calculationResult == 'determinantCaclucation' ? <div>
-                            {
-                                'Déterminant de la matrice = ' + (Math.round(matrixDeterminantResult * 100) / 100)
-                            }    
-                            </div> : params.calculationResult == 'rankCalculation' ? <div>
-                            {
-                                'Rang de la matrice = ' + matrixRankResult
-                            }    
-                            </div> : null
-                        }
+                        <div className="text-[25px] font-extrabold flex justify-center w-full">
+                            {   
+                                params.calculationResult == 'determinantCaclucation' ? <div>
+                                {
+                                    'Déterminant de la matrice = ' + (Math.round(matrixDeterminantResult * 100) / 100)
+                                }    
+                                </div> : params.calculationResult == 'rankCalculation' ? <div>
+                                {
+                                    'Rang de la matrice = ' + (Math.round(matrixRankResult * 100) / 100)
+                                }    
+                                </div> : null
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -347,7 +376,7 @@ export function CalculationResult({params}){
                     <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixName={'A'} matrix={actionToTake == 3 || actionToTake == 4 ? matrix : null} />
                 </div>
                 <div className="">
-                    <MatrixInput matrixLines={matrixBLines} matrixColumns={matrixBColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} matrix={actionToTake == 2 ? matrix : null} />
+                    <MatrixInput matrixLines={matrixBLines} matrixColumns={matrixBColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} matrix={actionToTake == 2 ? matrix : null} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>
@@ -430,28 +459,28 @@ function getResultTitle(joinedPage){
 function getMatrixUrl(typeCalculation, matrixId){
 
     if(typeCalculation == 'determinantCaclucation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/determinant/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/determinant/' + matrixId + '/'
 
     else if(typeCalculation == 'rankCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/rank/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/rank/' + matrixId + '/'
     
     else if(typeCalculation == 'systemSolvingCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/solve/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/solve/' + matrixId + '/'
 
     else if(typeCalculation == 'multiplicationCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/multiply/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/multiply/' + matrixId + '/'
     
     else if(typeCalculation == 'additionCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/add/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/add/' + matrixId + '/'
     
     else if(typeCalculation == 'substractionCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/substract/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/substract/' + matrixId + '/'
     
     else if(typeCalculation == 'inverseCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/inverse/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/inverse/' + matrixId + '/'
 
     else if(typeCalculation == 'transposeCalculation')
-        return 'https://matrixapi-ez2e.onrender.com/matrix/transpose/' + matrixId + '/'
+        return 'https://matrixoperationsapi-production.up.railway.app/matrix/transpose/' + matrixId + '/'
 
 }
 

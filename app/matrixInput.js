@@ -1,9 +1,9 @@
 'use client'
 
-import { faClose } from "@fortawesome/free-solid-svg-icons"
+import { faClose, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-export default function MatrixInput({matrixLines, matrixColumns, matrixName, closeMatrix, catlucate, containsBVector, matrix, matrixType, bandSize}){
+export default function MatrixInput({matrixLines, matrixColumns, matrixName, closeMatrix, catlucate, containsBVector, matrix, matrixType, bandSize, isLoading}){
     //matrix variable is used when we want to put a matrix by default in the input
     /*matrixType is an integer that indicates the type of the matrix
         by default the matrix is dense 
@@ -60,12 +60,6 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
 
     //used to change other values in the other side in symectric matrix
     function updateSymetricMatricCells(lineIndex, columnIndex, event){
-        //symetric matrix have to be positive
-
-        if(event.target.value < 0){
-            event.target.value = ''
-            return 
-        }
 
         //changing the value of the symetric element
         const symetricElement = document.getElementById(matrixName + columnIndex + lineIndex)
@@ -75,7 +69,7 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
 
     return ( 
         matrixColumns && matrixLines && matrixName &&
-        <div className=" p-[2px] bg-[url('../public/titleFont.png')] min-w-[300px]">
+        <div className=" p-[2px] bg-[url('../public/titleFont.png')] min-w-[300px] ">
             <div className="flex flex-col w-full">
                 <div className="w-full basis-[10%] flex relative justify-between py-[3px] text-[25px] text-white font-serif font-bold">
                     <div className="basis-[80%] flex justify-center">
@@ -151,26 +145,35 @@ export default function MatrixInput({matrixLines, matrixColumns, matrixName, clo
                             </div> : null
                         }
                     </div>
-                    <div id="matrixWarning" className="text-[#c92a1e] text-[18px]"></div>
-                    <div className="xl:flex-row xl:space-x-[40px] xl:space-y-0 xl:text-[22px] text-[18px] space-y-[10px] flex flex-col w-full">
-                        <button className="font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={clearMatrixValues}>
-                            Clear
-                        </button>
-                        <button className="font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={fillEmptyCellsWithZeros}>
-                            Fill empty cells with zeros
-                        </button>
+                    <div id={"matrixWarning" + matrixName} className="text-[#c92a1e] text-[18px]"></div>
+                    <div className="max-w-[400px] flex flex-col space-y-[10px]">
+                        <div className="xl:flex-row xl:space-x-[20px] xl:space-y-0 xl:text-[22px] text-[18px] space-y-[10px] flex flex-col w-full">
+                            <button className="font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={clearMatrixValues}>
+                                Effacer
+                            </button>
+                            <button className=" font-semibold flex-1 border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={fillEmptyCellsWithZeros}>
+                                Remplir les cellules vides avec des zéros
+                            </button>
+                        </div>
+                        {
+                            containsBVector ? <button className="xl:text-[22px] text-[18px] font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={fillVectorEmptyCellsWithZeros}>
+                                Remplir les cellules vides de vecteur avec des zéros
+                            </button> : null
+                        }
+                        {
+                            catlucate ? 
+                            <button id="calculateButton" className="xl:text-[22px] text-[18px] font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex justify-center space-x-[10px]" onClick={catlucate}>
+                                <div>
+                                    Calculer
+                                </div>
+                                {
+                                    isLoading ? <div>
+                                        <FontAwesomeIcon icon={faSpinner} spin />
+                                    </div> : null 
+                                }
+                            </button> : null
+                        }
                     </div>
-                    {
-                        containsBVector ? <button className="xl:text-[22px] text-[18px] font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={fillVectorEmptyCellsWithZeros}>
-                            Fill vector empty cells with zeros
-                        </button> : null
-                    }
-                    {
-                        catlucate ? 
-                        <button className="xl:text-[22px] text-[18px] font-semibold border-2 hover:border-[#4a4a4a] rounded-[10px] border-[#737373] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={catlucate}>
-                            Calculate
-                        </button> : null
-                    }
                 </div>
             </div>
         </div>

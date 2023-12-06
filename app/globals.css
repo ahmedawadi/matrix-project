@@ -19,29 +19,29 @@
   
 }
 
-.calculTitle::after{
-  content: '';
-  position: absolute;
-  top: 50%;
-  left:0;
-  width: 100%;
-  background-image: url('../public/backgroundImage.png');
-  height: 8px;
+@media (max-width: 1024px){
+  .navBarElements{
+  background-image: url(../public/titleFont.png);
+  background-clip: text;
+  color: transparent;
+  }
 }
+
+@media (max-width: 1024px){
+  .navBarPageElement{
+    background-image: url(../public/backgroundImage.png);
+    background-clip: text;
+    color: transparent;
+  }
+  
+}
+
+
+
 
 .calculSecondTitle{
   background-image: url(../public/titleSecondPartFont.png);
   background-clip: text;
   color: transparent;
 
-}
-
-.calculSecondTitle::after{
-  content: '';
-  position: absolute;
-  top: 50%;
-  left:0;
-  width: 100%;
-  background-image: url('../public/backgroundImage.png');
-  height: 8px;
 }

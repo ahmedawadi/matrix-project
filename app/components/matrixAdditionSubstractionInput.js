@@ -53,29 +53,32 @@ export default function MatrixAdditionSubstractionInput({setAdditionOrSubstracti
                 <input type='number' id="matrixColumns" defaultValue={'1'} value={matrixColumns ? matrixColumns : undefined} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event) } />
             </div>
         </div>
-        <label htmlFor="additionOrSubstraction" className="xl:hidden">
-            Type d'opération
-        </label>
-        <div id="additionOrSubstraction" className="bg-white w-fit text-black font-semibold relative border-2 border-[#4a4a4a] px-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]">
-            <div id="additionOrSubstractionListButton" className="flex items-center space-x-[15px] cursor-pointer" onClick={openAdditionOrSubstractionList}>
-                <div className="font-bold text-[22px]"> 
-                    {
-                        additionOrSubstraction === 0 ? '+' : '-'
-                    }
+        <label htmlFor="additionOrSubstraction" className="flex space-x-[15px]">
+            <div className='xl:hidden'>
+                Type d'opération
+            </div>
+            <div id="additionOrSubstraction" className="bg-white w-fit text-black font-semibold relative border-2 border-[#4a4a4a] px-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]">
+                <div id="additionOrSubstractionListButton" className="flex items-center space-x-[15px] cursor-pointer" onClick={openAdditionOrSubstractionList}>
+                    <div className="font-bold text-[22px]"> 
+                        {
+                            additionOrSubstraction === 0 ? '+' : '-'
+                        }
+                    </div>
+                    
+                    < FontAwesomeIcon icon={faChevronDown} />
                 </div>
                 
-                < FontAwesomeIcon icon={faChevronDown} />
-            </div>
-            
-            <div id="additionOrSubstractionList" className="hidden absolute right-0 w-full top-[40px] flex flex-col bg-white border-[1px] border-[#4a4a4a]">
-                <div className="flex justify-center hover:bg-[url('../public/titleFont.png')] active:bg-[url('../public/titleFont.png')]  cursor-pointer" onClick={() => chooseAdditionOrSubstraction(0)}>
-                    +
-                </div>
-                <div className="flex justify-center border-t-[1px] border-[#4a4a4a] hover:bg-[url('../public/titleFont.png')] active:bg-[url('../public/titleFont.png')]  cursor-pointer" onClick={() => chooseAdditionOrSubstraction(1)}>
-                    -
+                <div id="additionOrSubstractionList" className="hidden absolute right-0 w-full top-[40px] flex flex-col bg-white border-[1px] border-[#4a4a4a]">
+                    <div className="flex justify-center hover:bg-[url('../public/titleFont.png')] active:bg-[url('../public/titleFont.png')]  cursor-pointer" onClick={() => chooseAdditionOrSubstraction(0)}>
+                        +
+                    </div>
+                    <div className="flex justify-center border-t-[1px] border-[#4a4a4a] hover:bg-[url('../public/titleFont.png')] active:bg-[url('../public/titleFont.png')]  cursor-pointer" onClick={() => chooseAdditionOrSubstraction(1)}>
+                        -
+                    </div>
                 </div>
             </div>
-        </div>
+        </label>
+        
         <div className="h-full flex justify-center items-center">
             <button className="font-semibold border-2 border-[#4a4a4a] text-white px-[10px] py-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={getMatrix}>
                 Ajouter matrice

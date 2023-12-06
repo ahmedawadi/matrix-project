@@ -13,6 +13,7 @@ export default function AdditionSubstraction(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [additionOrSubstraction, setAdditionOrSubstraction] = useState(0)//0 is addition and 1 is substraction
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
 
     //this function is used to get the values of a matrix with a specific size
     const getMatrixInput = () => {
@@ -31,22 +32,54 @@ export default function AdditionSubstraction(){
 
         const matrixA = getMatrix('A')
         const matrixB = getMatrix('B')
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        let validMatrices = true
 
-        if(!matrixA || !matrixB)
-            return
+        const matrixAWarning = document.getElementById('matrixWarningA')
+        const matrixBWarning = document.getElementById("matrixWarningB")
+
+        if(!matrixA){
+            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            validMatrices = false
+        }
+        else if(matrixAWarning.innerText != '')
+            matrixAWarning.innerHTML = ''
+        
+        if(!matrixB){
+            matrixBWarning.innerHTML = "Il y a des cellules vides!"
+            validMatrices = false 
+        }
+        else if(matrixBWarning.innerText != '')
+            matrixBWarning.innerHTML = ''
+
+        if(!validMatrices)
+            return 
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
 
         const dataToSend = {
             first_matrix: matrixA,
             second_matrix: matrixB
         }
         
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend, {timeout: 12000}).then(res => {
             window.open(`/${(additionOrSubstraction == 0 ? 'additionCalculation' : 'substractionCalculation' )}?matrixId=${res.data._id}`, '_blank')
-        }).catch(_ => {
-            //needs to be catched
-        })
 
-        setMatrixInputIsOpen(false)
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+
+            setMatrixInputIsOpen(false)
+        }).catch(_ => {
+            
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+
+            matrixBWarning.innerHTML = "essayer une autre fois!"
+        })
 
     }
 
@@ -66,7 +99,7 @@ export default function AdditionSubstraction(){
                     <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} />
                 </div>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} />
+                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>

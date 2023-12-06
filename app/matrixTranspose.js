@@ -13,6 +13,7 @@ let matrixColumns = 1
 export default function MatrixTranspose(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
 
     //this function is used to get the values of a matrix with a specific size
     const getMatrixInput = () => {
@@ -29,36 +30,41 @@ export default function MatrixTranspose(){
 
     const calculate = () => {
 
-        const matrixWarning = document.getElementById('matrixWarning')
-        
-        if(matrixWarning.innerText != '')
-            matrixWarning.innerHTML = ''
-
         const matrix = getMatrix('A')
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        const matrixAWarning = document.getElementById('matrixWarningA')
+        
+        if(!matrix){
+            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            return 
+        }
+        else if(matrixAWarning.innerText != '')
+            matrixAWarning.innerHTML = ''
 
-        if(!matrix)
-            return
+        setIsLoading(true)
 
         const dataToSend = {
             matrix : matrix
         }
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
         
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/transpose/', dataToSend).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/transposeCalculation?matrixId=' + res.data._id, '_blank')
 
-            const matrixWarning = document.getElementById('matrixWarning')
-
-            if(matrixWarning.innerText != '')
-                matrixWarning.innerHTML = ''
-
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(error => {
             
-            if(error?.response?.status == 400){
-                const matrixWarning = document.getElementById('matrixWarning')
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
 
-                matrixWarning.innerHTML = "il n'y a pas d'inverse à cette matrice"
-            }
+            matrixAWarning.innerHTML = "essayer une autre fois!"
         })
 
         
@@ -96,7 +102,7 @@ export default function MatrixTranspose(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60'} className={'flex overflow-auto'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} />
+                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>

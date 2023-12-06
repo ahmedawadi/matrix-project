@@ -19,7 +19,8 @@ let bandBSize = 0//used if we gonna work with band matrices on the matrix B
 export default function MultiplicationMatrices(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
-    const [matrixType, setMatrixType] = useState(0)//by default the matries types are dense
+    const [matrixType, setMatrixType] = useState(-1)//by default the matries types are dense
+    const [isLoading, setIsLoading] = useState(false)//used when we are making the calculation
 
     //this function is used to close the functionalities list when the user click outside of it and outside the button that open it 
     const closeTypeMatricesListInOutSideClick = useCallback((event) => {
@@ -46,6 +47,17 @@ export default function MultiplicationMatrices(){
 
     }, [])
 
+    useEffect(() => {
+        //checking if we were in the matrices types that needs only one matrix and correct the first matrix columns and second matrix lines
+        if(![8, 9].includes(matrixType)){
+            const matrixAColumns = document.getElementById("matrixAColumns")
+            const matrixBLines = document.getElementById("matrixBLines")
+
+            if(matrixAColumns.value != matrixBLines.value)
+                matrixBLines.value = matrixAColumns.value
+        }
+    }, [matrixType])
+
     const openMatrixMultiplication = () => {
 
         //check the validity of the matrices added
@@ -59,16 +71,54 @@ export default function MultiplicationMatrices(){
     const calculate = () => {
 
         const matrixA = getMatrix('A')
-        const matrixB = getMatrix('B')
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        let matrixB = []
+        let validMatrices = true
+        const matrixAWarning = document.getElementById('matrixWarningA')
+        const matrixBWarning = document.getElementById("matrixWarningB")
 
-        if(!matrixA || !matrixB)
-            return
+        if(!matrixA){
+            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            validMatrices = false
+        }
+        else if(matrixAWarning.innerText != '')
+            matrixAWarning.innerHTML = ''
+        
+        if(![8,9].includes(matrixType)){
+
+            matrixB = getMatrix('B')
+
+            if(!matrixB){
+                matrixBWarning.innerHTML = "Il y a des cellules vides!"
+                validMatrices = false 
+            }
+            else if(matrixBWarning.innerText != '')
+                matrixBWarning.innerHTML = ''
+
+        }
+
+
+        if(!validMatrices)
+            return 
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
 
         const dataToSend = {
             first_matrix: matrixA,
-            second_matrix: matrixB,
             first_matrix_type : getMatrixTypeNameInTheServer(matrixType, 1),
-            second_matrix_type : matrixB[0].length == 1 ? 'vector' : getMatrixTypeNameInTheServer(matrixType, 2)
+        }
+
+        if(![8,9].includes(matrixType)){
+            dataToSend["second_matrix"] = matrixB
+            dataToSend["second_matrix_type"] = matrixB[0].length == 1 ? 'vector' : getMatrixTypeNameInTheServer(matrixType, 2)
+        }
+        else{
+            if(matrixType == 8)
+                dataToSend["second_matrix_type"] = 'inverse'
+            else 
+                dataToSend["second_matrix_type"] = 'transpose'
         }
 
         if([4, 5, 6, 7, 8, 9].includes(matrixType) )
@@ -78,12 +128,23 @@ export default function MultiplicationMatrices(){
             dataToSend['m_second_matrix'] = bandBSize
         }
 
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/multiply/', dataToSend).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/multiply/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/multiplicationCalculation?matrixId=' + res.data._id, '_blank')
 
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(_ => {
-            //needs to be catched
+
+            calculateButton.classList.add("opacity-40")
+            calculateButton.disabled = false
+            setIsLoading(false)
+
+            if(![8,9].includes(matrixType))
+                matrixBWarning.innerHTML = "essayer une autre fois!"
+            else
+                matrixAWarning.innerHTML = "essayer une autre fois!"
         })
     }
 
@@ -98,7 +159,7 @@ export default function MultiplicationMatrices(){
 
         if(matrixAWarning.innerText != '')
             matrixAWarning.innerHTML = ''
-        if(matrixBWarning.innerText != '')
+        if( matrixBWarning && matrixBWarning.innerText != '')
             matrixBWarning.innerHTML = ''
         if( matrixABandWarning && matrixABandWarning.innerText != '')
             matrixABandWarning.innerHTML = ''
@@ -111,27 +172,30 @@ export default function MultiplicationMatrices(){
 
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
-            <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
+            <div className='w-full flex justify-end font-semibold sm:text-[28px] text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
                 Multiplication des matrices
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <p>
-                    La multiplication de deux matrices carre denses : après la multiplication de la matrice, il est possible d'ajouter des instructions supplémentaires sur la matrice qui en résulte, telles que le calcul d'inverse ou la multiplication par une matrice...
-                </p>
+                    En utilisant des nombres réels, vous pouvez calculer la multiplication des deux matrices. Vous avez la possibilité de choisir le type de matrice que vous utiliserez pour réduire la complexité du code appliqué. Si vous ne le faites pas, les matrices denses sont automatiquement utilisées.                </p>
                 <br/>
                 <div className="flex flex-col">
                     <div className="mt-[10px]">
                         Vous pouvez sélectionner le type de matrices que vous souhaitez travailler avec :
                     </div>
                     <div className="pl-[25px] mt-[15px] w-full flex space-x-[10px]">
-                        <div className="w-[80%] font-bold border-2 relative">
-                            <div id="matricesTypeListButton" className="flex justify-between px-[10px] py-[5px] cursor-pointer h-[45px]" onClick={openmatricesTypeList}>
+                        <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
+                            <div id="matricesTypeListButton" className="w-full border-2 flex justify-between px-[10px] py-[5px] items-center cursor-pointer sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
                                 <div>
-                                    Types des matrices
+                                {
+                                    matrixType != -1 ? matrixTypes[matrixType] : "Types des matrices"
+                                }    
                                 </div>
-                                <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
+                                <div>
+                                    <FontAwesomeIcon className="mt-[5px] w-fit" icon={faChevronDown} />
+                                </div>
                             </div>
-                            <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden absolute border-y-2 border-x-2 font-bold top-[50px] right-0 w-full">
+                            <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden border-y-2 border-x-2 font-bold w-full">
                                 {
                                     matrixTypes.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matrixTypes.length - 1 ? " border-b-[3px]" : '')}>
                                         <label className="flex justify-between items-center px-[15px]" onClick={() => chooseMatrixType(index)}>
@@ -146,19 +210,21 @@ export default function MultiplicationMatrices(){
                                         </label>
                                     </li>)
                                 }
-                                
                             </ul>
                         </div>
                     </div>
                 </div>
-                <MatrixMultiplicationInput containsMatrixBand={[4, 5, 6, 7, 8, 9].includes(matrixType) ? 1 : matrixType == 10 ? 2 : undefined} sameBandOnTwoMatrices={matrixType == 7 ? true : undefined} openMatrixMultiplication={openMatrixMultiplication} />
+                <MatrixMultiplicationInput oneMatrixWillBeUsed={[8, 9].includes(matrixType)} containsMatrixBand={[4, 5, 6, 7, 8, 9].includes(matrixType) ? 1 : matrixType == 10 ? 2 : undefined} sameBandOnTwoMatrices={matrixType == 7 ? true : undefined} openMatrixMultiplication={openMatrixMultiplication} />
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto' + (matrixAColumns > 7 || matrixBColumns > 7 ? '' : ' xl:justify-center xl:items-center')} className={'flex space-x-[20px] outline-none'}>
-                <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixType={matrixType == 1 ? 0 : matrixType == 2 ? 1 : matrixType == 3 ? 0 : [4, 7, 8, 9].includes(matrixType) ? 2 : matrixType == 5 ? 3 : [6, 10].includes(matrixType) ? 4 : undefined } matrixName={'A'} bandSize={[4, 5, 6, 7, 8, 9, 10].includes(matrixType) ? bandASize : undefined} />
-                </div>
+                {
+                    [8, 9].includes(matrixType) ? null :
+                    <div className="flex justify-center items-center">
+                        <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixType={matrixType == 1 ? 0 : matrixType == 2 ? 1 : matrixType == 3 ? 0 : [4, 7].includes(matrixType) ? 2 : matrixType == 5 ? 3 : [6, 10].includes(matrixType) ? 4 : undefined } matrixName={'A'} bandSize={[4, 5, 6, 7, 8, 9, 10].includes(matrixType) ? bandASize : undefined} />
+                    </div>
+                }
                 <div className="">
-                    <MatrixInput matrixLines={matrixBLines} matrixColumns={matrixBColumns} matrixName={'B'} matrixType={matrixType == 1 ? 1 : matrixType == 7 ? 4 : matrixType == 10 ? 3 : undefined } bandSize={[7, 10].includes(matrixType) ? bandBSize : undefined} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} />
+                    <MatrixInput matrixLines={[8, 9].includes(matrixType) ? matrixALines : matrixBLines} matrixColumns={[8, 9].includes(matrixType) ? matrixAColumns : matrixBColumns} matrixName={[8, 9].includes(matrixType) ? 'A' : 'B'} matrixType={matrixType == 1 ? 1 : matrixType == 7 ? 4 : matrixType == 10 ? 3 : [8, 9].includes(matrixType) ? 2 : undefined } bandSize={[7, 10].includes(matrixType) ? bandBSize : [8,9].includes(matrixType) ? bandASize : undefined} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading}/>
                 </div>
             </ReactModal>
         </div>
@@ -218,6 +284,8 @@ function getMatrix(matrixName){
 function getMatrixTypeNameInTheServer(matrixType, matrixOrder){
 
     switch(matrixType){
+        case -1 : 
+            return 'dense'
         case 0 : 
             return 'dense'
         case 1 :
@@ -248,8 +316,6 @@ function checkMatricesValidity(matrixType){
     //getting matrices size
     matrixALines = document.getElementById('matrixALines').value
     matrixAColumns = document.getElementById('matrixAColumns').value
-    matrixBLines = document.getElementById('matrixBLines').value
-    matrixBColumns = document.getElementById('matrixBColumns').value
     const matrixAWarning = document.getElementById('matrixAWarning')
     const matrixBWarning = document.getElementById('matrixBWarning')
     const matrixABand = document.getElementById('matrixABand')//used if we gonna work with band matrices in the matrix A
@@ -257,7 +323,15 @@ function checkMatricesValidity(matrixType){
     const matrixBBand = document.getElementById('matrixBBand')//used if we gonna work with band matrices in the matrix B
     const matrixBBandWarning = document.getElementById('matrixBBandWarning')
 
-    if(matrixAColumns == '' || matrixBColumns == '' || matrixALines == '' || matrixBLines == '')
+
+    if(![8,9].includes(matrixType)){
+        matrixBLines = document.getElementById('matrixBLines').value
+        matrixBColumns = document.getElementById('matrixBColumns').value
+
+        if( matrixAColumns == '' || matrixBColumns == '' || matrixALines == '' || matrixBLines == '')
+            return
+    }
+    else if (matrixAColumns == '' || matrixALines == '')
         return
 
     //checking the matrix type in the matrix type case because les matrices bande sup ou inf doivent etre des matrices carrees
@@ -316,10 +390,6 @@ function checkMatricesValidity(matrixType){
                 matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
                 validMatrixABand = false
             }
-            else if ((Number(matrixABand.value) + 1) == Number(matrixALines)){
-                matrixABandWarning.innerHTML = "La matrice A devient une matrice dense!"
-                validMatrixABand = false
-            }
             else 
                 bandASize = matrixABand.value
         }
@@ -340,10 +410,6 @@ function checkMatricesValidity(matrixType){
                 }
                 else if ((Number(matrixABand.value) + 1) > Number(matrixBLines)){
                     matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice B"
-                    validMatrixABand = false
-                }
-                else if ((Number(matrixABand.value) + 1) == Number(matrixBLines)){
-                    matrixABandWarning.innerHTML = "Ce type correspond à une matrice dense * matrice inferieure!"
                     validMatrixABand = false
                 }
                 else 
@@ -368,10 +434,6 @@ function checkMatricesValidity(matrixType){
                 matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
                 validMatrixABand = false
             }
-            else if ((Number(matrixABand.value) + 1) == Number(matrixALines)){
-                matrixABandWarning.innerHTML = "La matrice A devient une matrice supérieure!"
-                validMatrixABand = false
-            }
             else 
                 bandASize = matrixABand.value
         }
@@ -392,10 +454,6 @@ function checkMatricesValidity(matrixType){
             }
             else if ((Number(matrixABand.value) + 1) > Number(matrixALines)){
                 matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
-                validMatrixABand = false
-            }
-            else if ((Number(matrixABand.value) + 1) == Number(matrixALines)){
-                matrixABandWarning.innerHTML = "La matrice A devient une matrice inférieure!"
                 validMatrixABand = false
             }
             else 
@@ -419,10 +477,6 @@ function checkMatricesValidity(matrixType){
                     matrixBBandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice B"
                     validMatrixBBand = false
                 }
-                else if ((Number(matrixBBand.value) + 1) == Number(matrixBLines)){
-                    matrixBBandWarning.innerHTML = "La matrice B devient une matrice supérieure!"
-                    validMatrixBBand = false
-                }
                 else if(validMatrixABand && bandASize == matrixBBand.value){
                     matrixBBandWarning.innerHTML = "La bande du A et la bande du B doivent être différentes!"
                     validMatrixBBand = false
@@ -437,7 +491,7 @@ function checkMatricesValidity(matrixType){
     //checking the warnings
     if(validMatrixASize && matrixAWarning.innerText != '')
         matrixAWarning.innerHTML = ''
-    if(validMatrixBSize && matrixBWarning.innerText != '')
+    if( ![8, 9].includes(matrixType) && validMatrixBSize && matrixBWarning.innerText != '')
         matrixBWarning.innerHTML = ''
     if(matrixABand && validMatrixABand && matrixABandWarning.innerText != '')//if we are not working with band matrices matrixABand will be null
         matrixABandWarning.innerHTML = ''

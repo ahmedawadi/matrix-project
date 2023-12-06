@@ -5,12 +5,14 @@ import ReactModal from "react-modal"
 import MatrixInput from "./matrixInput"
 import { getMatrixWithSpecificSize } from "./determinant"
 import axios from "axios"
+import { data } from "autoprefixer"
 
 let matrixSize = 1
 
 export default function MatrixInverse(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
 
     //this function is used to get the values of a matrix with a specific size
     const getMatrixInput = () => {
@@ -26,41 +28,49 @@ export default function MatrixInverse(){
     
     const calculate = () => {
 
-        const matrixWarning = document.getElementById('matrixWarning')
-        
-        if(matrixWarning.innerText != '')
-            matrixWarning.innerHTML = ''
-
         const matrix = getMatrixWithSpecificSize('A', matrixSize)
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        const matrixAWarning = document.getElementById('matrixWarningA')
 
-        if(!matrix)
-            return
+        if(!matrix){
+            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            return 
+        }
+        else if(matrixAWarning.innerText != '')
+            matrixAWarning.innerHTML = ''
 
+        setIsLoading(true) 
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
+           
         const dataToSend = {
             matrix : matrix
         }
         
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/inverse/', dataToSend).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/inverseCalculation?matrixId=' + res.data._id, '_blank')
 
-            const matrixWarning = document.getElementById('matrixWarning')
-
-            if(matrixWarning.innerText != '')
-                matrixWarning.innerHTML = ''
-
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(error => {
             
             if(error?.response?.status == 400){
-                const matrixWarning = document.getElementById('matrixWarning')
-
-                matrixWarning.innerHTML = "il n'y a pas d'inverse à cette matrice"
+                matrixAWarning.innerHTML = "il n'y a pas d'inverse à cette matrice"
             }
+            else 
+                matrixAWarning.innerHTML = "essayer une autre fois!"
+
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+
         })
 
         
     }
-
+    
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
@@ -68,15 +78,12 @@ export default function MatrixInverse(){
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <div>
-                    Ici, vous pouvez calculer une matrice inverse contenant des nombres réelles  avec une solution très détaillée. L'inverse est calculée en utilisant l'élimination de Gauss-Jordan.                
-                </div>
+                    Vous avez la possibilité de calculer l'inverse d'une matrice contenant des nombres réels grâce à l'utilisation de l'algorithme de l'élimination de Gauss-Jordan. Cette fonctionnalité vous permet d'obtenir l'inverse de la matrice en question de manière efficace.                </div>
                 <div className='xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-center space-x-[25px] items-center w-full xl:h-[200px]'>
                     
-                    <div className='flex md:flex-row flex-col space-y-[5px] md:space-x-[15px] text-[20px]'>
-                        <div>
-                            Dimension de la matrice:
-                        </div>
-                        <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
+                    <div className='text-[20px]'>
+                        Dimension de la matrice: 
+                        <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] ml-[8px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
                     </div>
                     
                     <div className="h-full flex items-center">
@@ -88,7 +95,7 @@ export default function MatrixInverse(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} />
+                    <MatrixInput matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading}/>
                 </div>
             </ReactModal>
         </div>

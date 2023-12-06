@@ -36,7 +36,7 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
                                 Array.from({length : firstMatrix[0]?.length}).map((_, columnIndex) => <td key={columnIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] border-[2px]">
                                     <div className="flex justify-center items-center text-white">
                                         {
-                                            firstMatrix[lineIndex][columnIndex]
+                                            (Math.round(firstMatrix[lineIndex][columnIndex] * 100) / 100) 
                                         }
                                     </div>
                                 </td>)
@@ -59,7 +59,7 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
                             Array.from({length : secondMatrix?.length}).map((_, lineIndex) => <tr key={lineIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] px-[10px] py-[5px]">
                                 <td className="flex justify-center items-center text-white">
                                     {
-                                        secondMatrix[lineIndex]
+                                        (Math.round(secondMatrix[lineIndex] * 100) / 100)
                                     }
                                 </td>
                             </tr>)
@@ -107,7 +107,7 @@ export default function CalculatedMatrices({calcultionType, firstMatrix, secondM
                                     Array.from({length : secondMatrix[0]?.length}).map((_, columnIndex) => <td key={columnIndex} className="xl:text-[22px] text-[15px] border border-[#c2c2c2] border-[2px]">
                                         <div className="flex justify-center items-center text-white">
                                             {
-                                                secondMatrix[lineIndex][columnIndex]
+                                                (Math.round(secondMatrix[lineIndex][columnIndex] * 100 ) / 100)
                                             }
                                         </div>
                                     </td>)

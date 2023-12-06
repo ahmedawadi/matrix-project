@@ -11,6 +11,7 @@ import { closeMatricesTypeList, openmatricesTypeList } from "./multpilcationMatr
 
 let matrixSize = 1
 let bandSize = 1
+const iterativeMethodsTypes = ["utliliser Epsilon", "utliliser nombre d'itérations maximale"]
 const algorthims = [ "Méthode de matrice triangulaire par choix", "Méthode de Gauss avec pivotage partiel", "Méthodes d’élimination de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
 const triangularSystemMatricesType = ["Matrice inférieure dense", "Matrice supérieure dense", "Matrice inférieure demi-bande", "Matrice supérieure demi-bande"]
 const EG_LU__EGJ_matricesType = ["Matrice dense (Symétrique définie positive)", "Matrice bande (Symétrique définie positive)"]
@@ -22,7 +23,33 @@ export default function SystemSolving(){
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [algorithm, setAlgorithm] = useState(0)//by default the Gauss algorithm will be used
     const [matrixType, setMatrixType] = useState(0)//it will be used with the algorithms that needs the choose of specific type of matrices
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
+    const [iterativeMethod, setIterativeMethod] = useState(0)//it will be used in iterative method to indicate if the user want to work with maximal number of iterations or with epsilon
 
+    //this function is used to close the functionalities list when the user click outside of it and outside the button that open it 
+    const closeAlgorithmsTypesListInOutSideClick = useCallback((event) => {
+
+        const algorithmsTypeList = document.getElementById("algorithmsTypeList")
+        const algorithmsTypeListButton = document.getElementById("algorithmsTypeListButton")
+        
+        if(!(algorithmsTypeList?.contains(event.target) || algorithmsTypeListButton?.contains(event.target)))
+            closeAlgorithmsTypeList()
+            
+    })
+
+    useEffect(() => {
+        
+        if(typeof window !== 'undefined'){
+
+            //addition of the outside click of the matrix type list to the listenner functionalities
+            addEventListener('click', closeAlgorithmsTypesListInOutSideClick)
+        }
+
+        return () => {
+            removeEventListener('click', closeAlgorithmsTypesListInOutSideClick)
+        }
+
+    }, [])
 
     /*this functions are used to handle the list of matices types that the user will choose */
 
@@ -32,7 +59,8 @@ export default function SystemSolving(){
         const matricesTypeList = document.getElementById("matricesTypeList")
         const matricesTypeListButton = document.getElementById("matricesTypeListButton")
         
-        if(!(matricesTypeList?.contains(event.target) || matricesTypeListButton?.contains(event.target)))
+        //matricesTypeList and matriceTypeListButton can be null when we are dealing with iterative methods
+        if( matricesTypeList && matricesTypeListButton && !(matricesTypeList?.contains(event.target) || matricesTypeListButton?.contains(event.target)))
             closeMatricesTypeList()
             
     })
@@ -50,6 +78,7 @@ export default function SystemSolving(){
         }
 
     }, [])
+
     //this function is used just to selet which matrix type will we use
     const chooseMatrixType = (matrixType) => {
 
@@ -69,7 +98,7 @@ export default function SystemSolving(){
         matrixSize = document.getElementById('matrixSize').value
 
         //getting the band of the matrix and check it if the algorithm works with band matrix
-        if(([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType))){
+        if(matrixType == 1 && ([1, 2, 3, 4, 5].includes(algorithm)) || (algorithm == 0 && [2, 3].includes(matrixType))){
 
             const matrixBand = document.getElementById('matrixBand')//used if we gonna work with band matrices
             const matrixBandWarning = document.getElementById('matrixBandWarning')
@@ -89,6 +118,43 @@ export default function SystemSolving(){
                 matrixBandWarning.innerHTML = ''
 
         }
+        else if([6, 7].includes(algorithm)){ //checking the addition of the number of iterations if we're working with iteratives methods
+            const iterationsNumber = document.getElementById("iterationsNumber")
+            const iterationsNumberWarning = document.getElementById("iterationsNumberWarning")
+            const epsilon = document.getElementById("Epsilon")
+            const epsilonWarning = document.getElementById("EpsilonWarning")
+            
+            if(iterativeMethod == 1){
+                if(iterationsNumber.value == ''){
+                    iterationsNumberWarning.innerHTML = "Nombre d'itérations ne peut pas être vide!"
+                    return 
+                }
+                else if (iterationsNumber.value == 0){
+                    iterationsNumberWarning.innerHTML = "Nombre d'itérations ne peut pas être 0!"
+                    return 
+                }
+                else if (iterationsNumberWarning.innerText != '')
+                    iterationsNumberWarning.innerHTML = ''
+            }
+            else{//checking the addition of epsilon and the epsilon value (it can not be larger than 1)
+                
+                if(epsilon.value == ''){
+                    epsilonWarning.innerHTML = "Epsilon ne peut pas être vide!"
+                    return 
+                }
+                else if (epsilon.value == 0){
+                    epsilonWarning.innerHTML = "Epsilon ne peut pas être 0!"
+                    return 
+                }
+                else if (epsilon.value >= 1){
+                    epsilonWarning.innerHTML = "Epsilon doit être inférieure à 1!"
+                    return 
+                }
+                else if (epsilonWarning.innerText != '')
+                    epsilonWarning.innerHTML = ''
+            }
+            
+        }
 
         //get the matrix values
         setMatrixInputIsOpen(true)
@@ -98,10 +164,23 @@ export default function SystemSolving(){
     const calculate = () => {
         
         const systemData = getSystemToSolveData('X', 'b', matrixSize)
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        const systemWarning = document.getElementById('matrixWarningX')
+
+        if(!systemData){
+            systemWarning.innerHTML = "Il y a des cellules vides!"
+            return 
+        }
+        else if(systemWarning.innerText != '')
+            systemWarning.innerHTML = ''
 
         //system data is on that form [matrix, vector]
         if(!(systemData[0] && systemData[1]))
             return
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
 
         const dataToSend = {
             matrix : systemData[0],
@@ -116,30 +195,41 @@ export default function SystemSolving(){
         //addition of the band size for the banded matrices
         if(([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))
             dataToSend['m'] = bandSize
-        
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/solve/', dataToSend).then(res => {
+
+        //addition of the iterations number when we are working with iterative methods
+        //iterations number already checked that the user have added it
+        if([6, 7].includes(algorithm)){
+            if(iterativeMethod == 1)
+                dataToSend["max_iteration"] = document.getElementById("iterationsNumber").value
+            else 
+                dataToSend["epsilon"] = document.getElementById("Epsilon").value
+        }
+        axios.post('http://192.168.1.16:8000/matrix/solve/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/systemSolvingCalculation?matrixId=' + res.data._id, '_blank')
 
-            const matrixWarning = document.getElementById('matrixWarning')
-
-            if(matrixWarning.innerText != '')
-                matrixWarning.innerHTML = ''
-
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(error => {
-            
-            if(error?.response?.status == 400){
-                const matrixWarning = document.getElementById('matrixWarning')
+            console.log(error)
+            if(error?.response?.status == 400 && error.response?.data?.message)
+                systemWarning.innerHTML = error.response.data.message
+            else
+                systemWarning.innerHTML = "essayer une autre fois!"
 
-                matrixWarning.innerHTML = "Impossible de résoudre cette matrice"
-            }
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
         })
 
     }
 
     const chooseAlgorithm = (algorithm) => {
+
         setAlgorithm(algorithm)
         setMatrixType(0)
+        closeAlgorithmsTypeList()
         
         matricesTypeList = (algorithm == 0 ? triangularSystemMatricesType : [1, 5].includes(algorithm) ? EGPP_cholesky_matricesType : [2, 3, 4].includes(algorithm)? EG_LU__EGJ_matricesType : [])
 
@@ -152,71 +242,123 @@ export default function SystemSolving(){
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <div>
-                    Ici vous pouvez résoudre le système d'équations linéaire simultanées utilisant Le calculateur de la méthode de Gauss avec nombres réelles en ligne librement avec une solution très détaillée. La clef de notre calculateur est que chaque déterminant peut être calculer individuellement et que vous pouvez aussi regarder le type exact de matrice si le déterminant de la Matrice principale est zéro.
-                    <br/>
+                    Ici, vous pouvez résoudre un système d'équations linéaires simultanées. Vous pouvez également sélectionner le type de matrice dans le calculateur qui utilise divers algorithmes avec des nombres réels en ligne afin de réduire la complexité du code qui sera appliqué. et pour les méthodes iteratives, vous pouvez choisir d'arrêter votre algorithme par epsilon ou par un nombre maximal d'iterations.                    <br/>
                     <div className="mt-[45px]">
                         Vous pouvez choisir quel type d'algorithmes vous voulez utiliser pour résoudre votre système : 
                     </div>
-                    <ul className="list-disc pl-[25px] font-bold">
-                        {
-                            algorthims.map((algorithmName, index) => <li key={index} className="">
-                                <label className="flex space-x-[15px] w-fit">
-                                    <div>
-                                        {
-                                            algorithmName
-                                        }
-                                    </div>
-                                    <input type="radio" checked={index == algorithm} className="accent-black w-[15px]" onClick={() => chooseAlgorithm(index)} /> 
-                                </label>
-                            </li>)
-                        }
-                        
-                    </ul>
-                </div>
-                <div className={"w-[80%] font-bold border-2 relative" + ([6, 7].includes(algorithm) ? " hidden" : "")}>
-                    <div id="matricesTypeListButton" className="flex justify-between px-[10px] py-[5px] cursor-pointer h-[45px]" onClick={openmatricesTypeList}>
-                        <div>
-                            Types des matrices
+                    <div className=" mt-[15px] w-full flex space-x-[10px]">
+                        <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
+                            <div id="algorithmsTypeListButton" className="flex justify-between items-center border-2 px-[10px] py-[5px] cursor-pointer sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openAlgorithmsTypeList}>
+                                <div>
+                                {
+                                    algorthims[algorithm]
+                                }
+                                </div>
+                                <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
+                            </div>
+                            <ul id="algorithmsTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden border-y-2 border-x-2 font-bold w-full">
+                                {
+                                    algorthims.map((algorithmName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != algorthims.length - 1 ? " border-b-[3px]" : '')}>
+                                        <label className="flex justify-between items-center px-[15px]" onClick={() => chooseAlgorithm(index)}>
+                                            <div>
+                                                {
+                                                    algorithmName
+                                                }
+                                            </div>
+                                            {
+                                                index === algorithm ? <FontAwesomeIcon icon={faCheck} /> : null
+                                            }
+                                        </label>
+                                    </li>)
+                                }
+                                
+                            </ul>
                         </div>
-                        <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
                     </div>
-                    <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden absolute border-y-2 border-x-2 font-bold top-[50px] right-0 w-full">
-                        {   
-                            matricesTypeList.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matricesTypeList.length - 1 ? " border-b-[3px]" : '')}>
-                                <label className="flex justify-between items-center px-[15px]" onClick={() => chooseMatrixType(index)}>
-                                    <div>
-                                        {
-                                            matrixTypeName
-                                        }
-                                    </div>
+                </div>
+                {
+                    ![6, 7].includes(algorithm) ? <>
+                                <div className="mt-[45px] pr-[15px]">
+                            Vous pouvez choisir quel type de matrice vous allez utiliser avec votre algorithme : 
+                        </div>
+                        <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
+                            <div id="matricesTypeListButton" className="flex items-center justify-between border-2 px-[10px] py-[5px] cursor-pointer w-full sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
+                                <div>
                                     {
-                                        index === matrixType ? <FontAwesomeIcon icon={faCheck} /> : null
+                                        matricesTypeList[matrixType]
                                     }
-                                </label>
-                            </li>)
-                        }
-                        
-                    </ul>
-                </div> 
+                                </div>
+                                <div>
+                                    <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
+                                </div>
+                            </div>
+                            <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden border-y-2 border-x-2 font-bold w-full">
+                                {   
+                                    matricesTypeList.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matricesTypeList.length - 1 ? " border-b-[3px]" : '')}>
+                                        <label className="flex justify-between items-center px-[15px]" onClick={() => chooseMatrixType(index)}>
+                                            <div>
+                                                {
+                                                    matrixTypeName
+                                                }
+                                            </div>
+                                            {
+                                                index === matrixType ? <FontAwesomeIcon icon={faCheck} /> : null
+                                            }
+                                        </label>
+                                    </li>)
+                                }
+                                
+                            </ul>
+                        </div> 
+                    </> : <>
+                        <div className="mt-[45px] pr-[15px]">
+                            Vous pouvez choisir quel methode vous allez utiliser comme une condition d'arret à votre algorithme: 
+                        </div>
+                        <ul className="list-disc sm:px-[45px] px-[15px]">
+                            {
+                                iterativeMethodsTypes.map((iterativeMethodType, index) => <li key={index} className="w-full">
+                                    <label className="flex justify-between w-full font-semibold">
+                                        <div>
+                                            {
+                                                iterativeMethodType
+                                            }
+                                        </div>
+                                        <input type="radio" checked={iterativeMethod == index} className="accent-black" onClick={() => setIterativeMethod(index)}/>
+                                    </label>
+                                </li>)
+                            }
+                        </ul>
+                    </>
+                }
                 <div className="flex flex-col space-y-[25px] items-center justify-center xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] w-full xl:h-[200px]">
                     {   
                         (([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))?
                         <div className="flex flex-col w-full">
-                            <div className="font-extrabold flex items-center space-x-[15px] w-full">
-                                <div>
-                                    * Ajouter la taille du bande de la matrice : 
-                                </div>
-                                <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkPositiveValue(event)}/>
+                            <div className="font-extrabold w-full"> 
+                                * Ajouter la taille du bande de la matrice : 
+                                <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] ml-[15px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkPositiveValue(event)}/>
                             </div>
                             <div id="matrixBandWarning" className="text-[#c92a1e] text-[18px]"></div>
+                        </div> : [6, 7].includes(algorithm) && iterativeMethod == 1 ? 
+                        <div  className="flex flex-col w-full">
+                            <div className="font-extrabold sm:text-[20px] text-[18px] flex-none w-full">
+                                * nombre d'itérations maximale à cette algorithme :
+                                <input key={"iterativeInput"} type='number' id="iterationsNumber" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] ml-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")] flex-1' onChange={(event) => checkPositiveValue(event)}/>
+                            </div>
+                            <div id="iterationsNumberWarning" className="text-[#c92a1e] text-[18px]"></div>
+                        </div> : [6, 7].includes(algorithm) && iterativeMethod == 0 ? 
+                        <div className="flex flex-col w-full">
+                            <div className="font-extrabold sm:text-[20px] text-[18px] flex-none w-full">
+                                * la valeur d'Epsilon :
+                                <input key={"epsilonInput"} type='number' id="Epsilon" defaultValue={'0.01'} className='w-[70px] h-[30px] mt-[5px] ml-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")] flex-1' onChange={(event) => checkPositiveValue(event)}/>
+                            </div>
+                            <div id="EpsilonWarning" className="text-[#c92a1e] text-[18px]"></div>
                         </div> : null
                     }
                     <div className='flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-center space-x-[25px] items-center'>
-                        <div className='flex md:flex-row flex-col space-y-[5px] md:space-x-[15px] text-[20px]'>
-                            <div>
-                                Dimension de la matrice:
-                            </div>
-                            <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
+                        <div className='text-[20px]'>
+                            Dimension de la matrice :
+                            <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px]  ml-[10px] md:mt-0 mt-[8px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
                         </div>
                         
                         <div className="h-full flex items-center">
@@ -229,11 +371,29 @@ export default function SystemSolving(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto outline-none'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate}  />
+                    <MatrixInput matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>
     )
+}
+
+//this function is used to close the functionalities list 
+export function closeAlgorithmsTypeList(){
+
+    const algorithmTypeList = document.getElementById("algorithmsTypeList")
+
+    if(!algorithmTypeList.classList.contains('hidden'))
+        algorithmTypeList.classList.add('hidden')
+}
+
+//this function is used to open the functionalities list 
+export function openAlgorithmsTypeList(){
+    
+    const algorithmTypeList = document.getElementById("algorithmsTypeList")
+
+    if(algorithmTypeList.classList.contains('hidden'))
+        algorithmTypeList.classList.remove('hidden')
 }
 
 //getting system data with a specifc matrix name and specific vector name and specific size
@@ -274,7 +434,7 @@ function getSystemToSolveData(matrixName, vectorName, matrixSize){
 //used to get the matrix type that we'll pass in the input
 function getMatrixType(algorithm, matrixType){
 
-    if(algorithm == 0){
+    if(algorithm == 0){//only triangular methods here
         switch(matrixType){
             case 0 : //inferior matrix
                 return 1
@@ -286,7 +446,7 @@ function getMatrixType(algorithm, matrixType){
                 return 3
         }
     }
-    else if([2, 3, 4].includes(algorithm)){
+    else if([2, 3, 4].includes(algorithm)){//LU GJ EG
         switch(matrixType){
             case 0 : //symetric matrix
                 return 5
@@ -294,7 +454,7 @@ function getMatrixType(algorithm, matrixType){
                 return 6
         }
     }
-    else if ([1, 5].includes(algorithm)){
+    else if ([1, 5].includes(algorithm)){//GPP Cholesky
         switch(matrixType){
             case 0 : //dense matrix
                 return undefined
@@ -320,12 +480,15 @@ function getMatrixTypeNameOnTheServer(algorithm, matrixType){
                 return "upper banded"
         }
     }
-    else if ([1, 2, 3, 4, 5].includes(algorithm)){
+    else if ([1, 5].includes(algorithm)){
+        
+    }
+    else if ([2, 3, 4].includes(algorithm)){
         switch(matrixType){
             case 0 : //dense matrix
-                return "dense"
+                return "symmetric dense"
             case 1 ://band matrix
-                return "banded"
+                return "symmetric banded"
         }
     }
 

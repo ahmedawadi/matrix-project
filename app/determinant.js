@@ -11,6 +11,7 @@ let matrixSize = 1
 export default function Determinant(){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
 
     //this function is used to get the values of a matrix with a specific size
     const getMatrixInput = () => {
@@ -26,19 +27,36 @@ export default function Determinant(){
 
     const calculate = () => {
         const matrix = getMatrixWithSpecificSize('A', matrixSize)
+        const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
+        const matrixAWarning = document.getElementById('matrixWarningA')
 
-        if(!matrix)
-            return
+        if(!matrix){
+            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            return 
+        }
+        else if(matrixAWarning.innerText != '')
+            matrixAWarning.innerHTML = ''
+
+        setIsLoading(true)
+        calculateButton.classList.add("opacity-40")
+        calculateButton.disabled = true
 
         const dataToSend = {
             matrix : matrix
         }
         
-        axios.post('https://matrixapi-ez2e.onrender.com/matrix/determinant/', dataToSend).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/determinantCaclucation?matrixId=' + res.data._id, '_blank')
+            
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(_ => {
-            //needs to be catched
+            setIsLoading(false)
+            calculateButton.classList.remove("opacity-40")
+            calculateButton.disabled = false
+            matrixAWarning.innerHTML = "essayer une autre fois!"
         })
 
     }
@@ -50,15 +68,13 @@ export default function Determinant(){
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <div>
-                    Ici, vous pouvez calculer un déterminant d'une matrice avec des nombres réelles avec une solution très détaillée. Le déterminant est calculé en réduisant la matrice en forme échelonnée et en multipliant les éléments de sa diagonale principale.
+                    Ici, vous avez la possibilité de calculer le déterminant d'une matrice contenant des nombres réels.                
                 </div>
                 <div className='xl:px-[30px] xl:py-[0px] py-[5px] px-[10px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-between items-center w-full xl:h-[200px]'>
                     
-                    <div className='flex md:flex-row flex-col space-y-[5px] md:space-x-[15px] text-[20px]'>
-                        <div>
-                            Dimension de la matrice:
-                        </div>
-                        <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
+                    <div className='text-[20px]'>
+                        Dimension de la matrice:
+                        <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px] p-[5px] ml-[7px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
                     </div>
                     
                     <div className="h-full flex items-center">
@@ -70,7 +86,7 @@ export default function Determinant(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate}  />
+                    <MatrixInput matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'A'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate}  isLoading={isLoading}/>
                 </div>
             </ReactModal>
         </div>
