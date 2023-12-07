@@ -137,7 +137,7 @@ export default function MultiplicationMatrices(){
             setMatrixInputIsOpen(false)
         }).catch(_ => {
 
-            calculateButton.classList.add("opacity-40")
+            calculateButton.classList.remove("opacity-40")
             calculateButton.disabled = false
             setIsLoading(false)
 
@@ -185,7 +185,7 @@ export default function MultiplicationMatrices(){
                     </div>
                     <div className="pl-[25px] mt-[15px] w-full flex space-x-[10px]">
                         <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
-                            <div id="matricesTypeListButton" className="w-full border-2 flex justify-between px-[10px] py-[5px] items-center cursor-pointer sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
+                            <div id="matricesTypeListButton" className="w-full border-2 flex justify-between px-[10px] py-[5px] items-center cursor-pointer text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
                                 <div>
                                 {
                                     matrixType != -1 ? matrixTypes[matrixType] : "Types des matrices"

@@ -197,14 +197,14 @@ export default function SystemSolving(){
             dataToSend['m'] = bandSize
 
         //addition of the iterations number when we are working with iterative methods
-        //iterations number already checked that the user have added it
+        //iterations number already checked that the user have added it  
         if([6, 7].includes(algorithm)){
             if(iterativeMethod == 1)
                 dataToSend["max_iteration"] = document.getElementById("iterationsNumber").value
             else 
                 dataToSend["epsilon"] = document.getElementById("Epsilon").value
         }
-        axios.post('http://192.168.1.16:8000/matrix/solve/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/solve/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/systemSolvingCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)
@@ -248,7 +248,7 @@ export default function SystemSolving(){
                     </div>
                     <div className=" mt-[15px] w-full flex space-x-[10px]">
                         <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
-                            <div id="algorithmsTypeListButton" className="flex justify-between items-center border-2 px-[10px] py-[5px] cursor-pointer sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openAlgorithmsTypeList}>
+                            <div id="algorithmsTypeListButton" className="flex justify-between items-center border-2 px-[10px] py-[5px] cursor-pointer text-[16px] sm:text-[22px]" onClick={openAlgorithmsTypeList}>
                                 <div>
                                 {
                                     algorthims[algorithm]
