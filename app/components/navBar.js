@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-const navBarElements = ["Home", "About US", "Feedback"]
+const navBarElements = ["Accueil", "À propos de nous", "Feedback"]
 const pagePath = ["/", "/about", "/feedback"]
 
 export function NavBar(){

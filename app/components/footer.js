@@ -6,17 +6,17 @@ import Link from "next/link"
 
 export default function Footer(){
     return (
-        <div className="w-full h-full flex md:flex-row flex-col md:space-y-0 space-y-[25px] bg-[#424143] px-[20px] py-[20px] text-[#E4E7EA]">
-            <div className="basis-[80%] h-full">
-                <div className="flex md:flex-row flex-col md:space-x-[20px] space-x-0 md:space-y-0 space-y-[30px]">
+        <div className="w-full h-full flex lg:flex-row flex-col lg:space-y-0 space-y-[25px] bg-[#424143] xl:px-[30px] px-[20px] py-[20px] text-[#E4E7EA]">
+            <div className="basis-[85%] h-full">
+                <div className="flex lg:flex-row flex-col lg:space-x-[20px] space-x-0 lg:space-y-0 space-y-[30px]">
                     <div className="basis-1/3">
                         <div className="flex flex-col space-y-[30px]">
                             <label className="flex flex-col space-y-[4px]">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(0)}>
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(0)}>
                                     Notre Front-End developer
-                                    <div id="plusIcon0" className="md:hidden">+</div>
+                                    <div id="plusIcon0" className="lg:hidden">+</div>
                                 </div>
-                                <div id="linkInfo0" className="md:flex space-x-[10px] items-center pl-[15px] hidden">
+                                <div id="linkInfo0" className="lg:flex space-x-[10px] items-center pl-[15px] hidden">
                                     <div className="text-[14px]">
                                         ahmed awadi
                                     </div>
@@ -32,11 +32,11 @@ export default function Footer(){
                                 </div>
                             </label>
                             <label className="flex flex-col space-y-[4px]">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(1)}>
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(1)}>
                                     Notre Back-End developer
-                                    <div id="plusIcon1" className="md:hidden">+</div>
+                                    <div id="plusIcon1" className="lg:hidden">+</div>
                                 </div>
-                                <div id="linkInfo1" className="md:flex space-x-[5px] items-center pl-[15px] md:inline-block hidden">
+                                <div id="linkInfo1" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                     <div className="text-[14px]">
                                         mohamed awadi
                                     </div>
@@ -56,11 +56,11 @@ export default function Footer(){
                     <div className="basis-1/3">
                         <div className="flex flex-col space-y-[30px]">
                             <label className="flex flex-col space-y-[4px]">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(2)}>
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(2)}>
                                     Notre UX/UI Designer
-                                    <div id="plusIcon2" className="md:hidden">+</div>
+                                    <div id="plusIcon2" className="lg:hidden">+</div>
                                 </div>
-                                <div id="linkInfo2" className="md:flex space-x-[5px] items-center pl-[15px] md:inline-block hidden">
+                                <div id="linkInfo2" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                     <div className="text-[14px]">
                                         soulaima bouhachem
                                     </div>
@@ -73,11 +73,11 @@ export default function Footer(){
                                 </div>
                             </label>
                             <label className="flex flex-col space-y-[4px]">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(3)}>
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(3)}>
                                     Notre algorithm developer
-                                    <div id="plusIcon3" className="md:hidden">+</div>
+                                    <div id="plusIcon3" className="lg:hidden">+</div>
                                 </div>
-                                <div id="linkInfo3" className="md:flex space-x-[5px] items-center pl-[15px] md:inline-block hidden">
+                                <div id="linkInfo3" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                     <div className="text-[14px]">
                                         amal moussa
                                     </div>
@@ -92,12 +92,12 @@ export default function Footer(){
                     </div>
                     <div className="basis-1/3">
                         <div className="flex flex-col space-y-[30px]">
-                            <label className="flex flex-col space-y-[4px] md:w-fit w-full">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(4)}>
+                            <label className="flex flex-col space-y-[4px] lg:w-fit w-full">
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(4)}>
                                     Notre link Github Front-end
-                                    <div id="plusIcon4" className="md:hidden">+</div>
+                                    <div id="plusIcon4" className="lg:hidden">+</div>
                                 </div>
-                                <a id="linkInfo4" href="" target="_blank" className="md:flex space-x-[5px] items-center pl-[15px] md:inline-block hidden">
+                                <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                     <div className="w-[20px] h-[20px]">
                                         <FontAwesomeIcon icon={faGithub} size="lg" />
                                     </div>
@@ -107,11 +107,11 @@ export default function Footer(){
                                 </a>
                             </label>
                             <label className="flex flex-col space-y-[4px]">
-                                <div className="font-semibold md:text-[16px] text-[20px] flex justify-between md:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(5)}>
+                                <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(5)}>
                                     Notre link Github Back-end
-                                    <div id="plusIcon5" className="md:hidden">+</div>
+                                    <div id="plusIcon5" className="lg:hidden">+</div>
                                 </div>
-                                <a id="linkInfo5" href="https://github.com/mawedi/matrixoperationsapi" target="_blank" className="md:flex space-x-[5px] items-center pl-[15px] md:inline-block hidden">
+                                <a id="linkInfo5" href="https://github.com/mawedi/matrixoperationsapi" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                     <div className="w-[20px] h-[20px]">
                                         <FontAwesomeIcon icon={faGithub} size="lg" />
                                     </div>
@@ -124,7 +124,7 @@ export default function Footer(){
                     </div>
                 </div>
             </div>
-            <div className='md:basis-[20%] lg:pl-0 pl-[5px] flex items-end md:justify-end justify-end [#E4E7EA]space-nowrap md:text-[40px] text-[30px] font-black  font-serif'>
+            <div className='lg:basis-[15%] lg:pl-0 pl-[5px] flex items-end lg:justify-end justify-end [#E4E7EA]space-nowrap lg:text-[40px] text-[30px] font-black  font-serif'>
                 <div className="w-fit opacity-80 hover:opacity-100">
                     <div className='calculTitle'>
                         Calcul des

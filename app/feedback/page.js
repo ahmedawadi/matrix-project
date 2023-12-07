@@ -14,6 +14,7 @@ export default function Page(){
     const router = useRouter()
 
     const submitFeedBack = () => {
+        
         const firstName = document.getElementById("firstName")
         const firstNameWarning = document.getElementById("firstNameWarning")
         const lastName = document.getElementById("lastName")
@@ -23,11 +24,12 @@ export default function Page(){
         const feedback = document.getElementById("feedback")
         const feedbackWarning = document.getElementById("feedbackWarning")
         const submitionWarning = document.getElementById("submitionWarning")
-        const sbumitionButton = document.getElementById("submitionButton")//used to disable the submition button
+        const submitionButton = document.getElementById("submitionButton")//used to disable the submition button
         let validFormData = true
 
         setSubmitionIsLoading(true)
-        sbumitionButton.disable = true
+        submitionButton.disabled = true
+        submitionButton.classList.add("opacity-60")
 
         if(submitionWarning.innerText != '')
             submitionWarning.innerHTML = ''
@@ -67,7 +69,8 @@ export default function Page(){
         if(!validFormData){
             //stop the loading
             setSubmitionIsLoading(false)
-            sbumitionButton.disable = false
+            submitionButton.disabled = false
+            submitionButton.classList.remove("opacity-60")
         }
         else {
             //send the data
@@ -103,7 +106,8 @@ export default function Page(){
                     submitionWarning.innerHTML = 'Réssayer une autre fois'
 
                 setSubmitionIsLoading(false)
-                sbumitionButton.disable = false
+                submitionButton.disabled = false
+                submitionButton.classList.remove("opacity-60")
             })
 
         }
@@ -114,7 +118,7 @@ export default function Page(){
         <div className="flex justify-center">
             <div className='md:w-[70%] w-[95%] bg-[#424143] py-[16px] xl:px-[50px] px-[15px]  flex flex-col'>
                 <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[16px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
-                    Feed-back
+                    Feedback
                 </div>
                 <div className="flex flex-col space-y-[30px] text-[#E4E7EA]">
                     <div className="flex flex-col space-y-[5px]">
