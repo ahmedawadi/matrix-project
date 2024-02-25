@@ -47,7 +47,7 @@ export default function MatrixInverse(){
             matrix : matrix
         }
         
-        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post('https://web-production-e015.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/inverseCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)

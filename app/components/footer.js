@@ -95,34 +95,37 @@ export default function Footer(){
                             <div className="flex flex-col space-y-[30px]">
                                 <label className="flex flex-col space-y-[4px] lg:w-fit w-full">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(4)}>
-                                        Notre link Github Front-end
+                                        Notre link Github
                                         <div id="plusIcon4" className="lg:hidden">+</div>
                                     </div>
                                     <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
+                                        <div cldivssName="text-[14px]">
+                                            Website code
+                                        </div>
                                         <div className="w-[20px] h-[20px]">
                                             <FontAwesomeIcon icon={faGithub} size="lg" />
-                                        </div>
-                                        <div cldivssName="text-[14px]">
-                                            Front-end Code
                                         </div>
                                     </a>
                                 </label>
                                 <label className="flex flex-col space-y-[4px]">
-                                    <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(5)}>
-                                        Notre link Github Back-end
-                                        <div id="plusIcon5" className="lg:hidden">+</div>
+                                    <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(3)}>
+                                        Notre superviseur
+                                        <div id="plusIcon3" className="lg:hidden">+</div>
                                     </div>
-                                    <a id="linkInfo5" href="https://github.com/mawedi/matrixoperationsapi" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
-                                        <div className="w-[20px] h-[20px]">
-                                            <FontAwesomeIcon icon={faGithub} size="lg" />
-                                        </div>
+                                    <div id="linkInfo3" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                         <div className="text-[14px]">
-                                            Back-end Code
+                                            Dr. Sirirne Marrakchi
                                         </div>
-                                    </a>
+                                        <div className="cursor-pointer ">
+                                            <a className="w-[20px] h-[20px]" href="https://www.linkedin.com/in/sirine-marrakchi-5a691a66/" target="_blank">
+                                                <FontAwesomeIcon icon={faLinkedin} size="lg" />
+                                            </a>
+                                        </div>
+                                    </div>
                                 </label>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 <div className='lg:basis-[15%] lg:pl-0 pl-[5px] flex items-end lg:justify-end justify-end [#E4E7EA]space-nowrap lg:text-[40px] text-[30px] font-black  font-serif'>
@@ -137,57 +140,13 @@ export default function Footer(){
                 </div>
             </div>
             <div className="w-full h-[1px] bg-[#b5b5b5]"></div>
-            <div className="w-full h-full flex justify-between lg:px-[30px] lg:py-[10px] py-0 px-0 text-white md:text-[15px] text-[10px] lg:flex-row flex-col">
-                <div className="flex space-x-[-30px]">
-                    <a href="https://fss.rnu.tn/" className="ml-[-15px]">
-                        <img src="facultyLogo.png" className="w-[150px] h-[105px]"/>
-                    </a>
-                    <div className="flex flex-col space-y-[4px] justify-center">
-                        <div className="flex space-x-[5px]">
-                            <span className="font-semibold">
-                                Adresse :
-                            </span>
-                            <span>
-                                Route de la Soukra km 4 - BP 1171-3000 Sfax
-                            </span>
-                        </div>
-                        <div className="flex space-x-[5px]">
-                            <span className="font-semibold">
-                                T.:
-                            </span>
-                            <span>
-                                74 27 64 00 - 74 27 67 63
-                            </span>
-                        </div>
-                        <div className="flex space-x-[5px]">
-                            <span className="font-semibold">
-                                F.:
-                            </span>
-                            <span>
-                                74 27 44 37
-                            </span>
-                        </div>
-                        <div className="flex space-x-[5px]">
-                            <span className="font-semibold">
-                                Email :
-                            </span>
-                            <span>
-                                contact@fss.rnu.tn
-                            </span>
-                        </div>
+            <div className="bg-[#383838] w-full h-full flex justify-center px-[30px] py-[5px] text-white md:text-[15px] text-[10px]">
+                <a href="https://fss.rnu.tn/" className="flex ">
+                    <img src="facultyLogo.png" className="w-[40px] h-[25px]"/>
+                    <div className="font-thin text-[14px]">
+                        Faculté des Sciences de Sfax 2023-2024
                     </div>
-                </div>
-                <div className="w-full h-[1px] bg-[#b5b5b5] lg:hidden "></div>
-                <div className="w-fit flex flex-col justify-end pb-[20px] text-[18px] lg:px-[15px] px-[5px] lg:pt-0 pt-[15px]">
-                    <div className="flex space-x-[10px]">
-                        <span className="font-bold">
-                            Supervised by :
-                        </span>
-                        <span>
-                            Dr. Sirirne Marrakchi
-                        </span>
-                    </div>
-                </div>
+                </a>                
             </div>
         </div>
     )

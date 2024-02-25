@@ -99,7 +99,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post('https://web-production-e015.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('determinantCaclucation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
                 
@@ -113,7 +113,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post('https://web-production-e015.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
                 matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
@@ -125,7 +125,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post('https://web-production-e015.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('inverseCalculation?matrixId=' + res.data._id, '_blank')
     
                 setMatrixInputIsOpen(false)
@@ -144,7 +144,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post('https://web-production-e015.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('transposeCalculation?matrixId=' + res.data._id, '_blank')
     
                 setMatrixInputIsOpen(false)
@@ -196,7 +196,7 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'https://matrixoperationsapi-production.up.railway.app/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const url = 'https://web-production-e015.up.railway.app/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
         const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation' : null) + '?matrixId='
 
         axios.post(url, dataToSend, {timeout: 12000}).then(res => {
@@ -459,28 +459,28 @@ function getResultTitle(joinedPage){
 function getMatrixUrl(typeCalculation, matrixId){
 
     if(typeCalculation == 'determinantCaclucation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/determinant/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/determinant/' + matrixId + '/'
 
     else if(typeCalculation == 'rankCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/rank/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/rank/' + matrixId + '/'
     
     else if(typeCalculation == 'systemSolvingCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/solve/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/solve/' + matrixId + '/'
 
     else if(typeCalculation == 'multiplicationCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/multiply/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/multiply/' + matrixId + '/'
     
     else if(typeCalculation == 'additionCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/add/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/add/' + matrixId + '/'
     
     else if(typeCalculation == 'substractionCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/substract/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/substract/' + matrixId + '/'
     
     else if(typeCalculation == 'inverseCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/inverse/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/inverse/' + matrixId + '/'
 
     else if(typeCalculation == 'transposeCalculation')
-        return 'https://matrixoperationsapi-production.up.railway.app/matrix/transpose/' + matrixId + '/'
+        return 'https://web-production-e015.up.railway.app/matrix/transpose/' + matrixId + '/'
 
 }
 

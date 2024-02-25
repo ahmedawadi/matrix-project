@@ -81,7 +81,7 @@ export default function Page(){
                 message: feedback.value
             }
 
-            axios.post("https://matrixoperationsapi-production.up.railway.app/matrix/send-email/", feedbackInfo).then(res => {
+            axios.post("https://web-production-e015.up.railway.app/matrix/send-email/", feedbackInfo).then(res => {
                 //remove data from inputs
                 firstName.value = ''
                 lastName.value = ''

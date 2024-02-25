@@ -45,7 +45,7 @@ export default function Determinant(){
             matrix : matrix
         }
         
-        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post('https://web-production-e015.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/determinantCaclucation?matrixId=' + res.data._id, '_blank')
             
             setIsLoading(false)

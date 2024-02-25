@@ -49,7 +49,7 @@ export default function MatrixRank(){
         calculateButton.classList.add("opacity-40")
         calculateButton.disabled = true
 
-        axios.post('https://matrixoperationsapi-production.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post('https://web-production-e015.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)
