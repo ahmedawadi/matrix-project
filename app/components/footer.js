@@ -98,7 +98,7 @@ export default function Footer(){
                                         Notre link Github
                                         <div id="plusIcon4" className="lg:hidden">+</div>
                                     </div>
-                                    <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
+                                    <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project-full-stack" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                         <div cldivssName="text-[14px]">
                                             Website code
                                         </div>
@@ -108,11 +108,11 @@ export default function Footer(){
                                     </a>
                                 </label>
                                 <label className="flex flex-col space-y-[4px]">
-                                    <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(3)}>
+                                    <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(5)}>
                                         Notre superviseur
-                                        <div id="plusIcon3" className="lg:hidden">+</div>
+                                        <div id="plusIcon5" className="lg:hidden">+</div>
                                     </div>
-                                    <div id="linkInfo3" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
+                                    <div id="linkInfo5" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
                                         <div className="text-[14px]">
                                             Dr. Sirirne Marrakchi
                                         </div>
