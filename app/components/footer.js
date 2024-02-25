@@ -95,7 +95,7 @@ export default function Footer(){
                             <div className="flex flex-col space-y-[30px]">
                                 <label className="flex flex-col space-y-[4px] lg:w-fit w-full">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(4)}>
-                                        Notre link Github
+                                        Notre Lien Github
                                         <div id="plusIcon4" className="lg:hidden">+</div>
                                     </div>
                                     <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project-full-stack" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
