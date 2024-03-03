@@ -16,7 +16,7 @@ const matrixTypes = ["dense X dense", "supérieure X inférieure", "inférieure 
 let bandASize = 0//used if we gonna work with band matrices on the matrix A
 let bandBSize = 0//used if we gonna work with band matrices on the matrix B
 
-export default function MultiplicationMatrices(){
+export default function MultiplicationMatrices({multiplicationPageData}){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [matrixType, setMatrixType] = useState(-1)//by default the matries types are dense
@@ -170,25 +170,39 @@ export default function MultiplicationMatrices(){
         closeMatricesTypeList()
     }
 
+    const dimensionsDesc = {
+        dim1Desc: multiplicationPageData.dimension1Desc,
+        dim2Desc: multiplicationPageData.dimension2Desc, 
+        buttonName : multiplicationPageData.calculationButtonName
+    }
+
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold sm:text-[28px] text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
-                Multiplication des matrices
+                {
+                    multiplicationPageData.pageName
+                }
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <p>
-                    En utilisant des nombres réels, vous pouvez calculer la multiplication des deux matrices. Vous avez la possibilité de choisir le type de matrice que vous utiliserez pour réduire la complexité du code appliqué. Si vous ne le faites pas, les matrices denses sont automatiquement utilisées.                </p>
+                    {
+                        multiplicationPageData.pageDesc
+                    }
+                </p>
+
                 <br/>
                 <div className="flex flex-col">
                     <div className="mt-[10px]">
-                        Vous pouvez sélectionner le type de matrices que vous souhaitez travailler avec :
+                        {
+                            multiplicationPageData.matrixTypeDec
+                        }
                     </div>
                     <div className="pl-[25px] mt-[15px] w-full flex space-x-[10px]">
                         <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
                             <div id="matricesTypeListButton" className="w-full border-2 flex justify-between px-[10px] py-[5px] items-center cursor-pointer text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
                                 <div>
                                 {
-                                    matrixType != -1 ? matrixTypes[matrixType] : "Types des matrices"
+                                    matrixType != -1 ? matrixTypes[matrixType] : multiplicationPageData.matrixTypesButtonName
                                 }    
                                 </div>
                                 <div>
@@ -197,7 +211,7 @@ export default function MultiplicationMatrices(){
                             </div>
                             <ul id="matricesTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden border-y-2 border-x-2 font-bold w-full">
                                 {
-                                    matrixTypes.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matrixTypes.length - 1 ? " border-b-[3px]" : '')}>
+                                    multiplicationPageData.matrixTypes.map((matrixTypeName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != matrixTypes.length - 1 ? " border-b-[3px]" : '')}>
                                         <label className="flex justify-between items-center px-[15px]" onClick={() => chooseMatrixType(index)}>
                                             <div>
                                                 {
@@ -214,7 +228,7 @@ export default function MultiplicationMatrices(){
                         </div>
                     </div>
                 </div>
-                <MatrixMultiplicationInput oneMatrixWillBeUsed={[8, 9].includes(matrixType)} containsMatrixBand={[4, 5, 6, 7, 8, 9].includes(matrixType) ? 1 : matrixType == 10 ? 2 : undefined} sameBandOnTwoMatrices={matrixType == 7 ? true : undefined} openMatrixMultiplication={openMatrixMultiplication} />
+                <MatrixMultiplicationInput dimensionsDesc={dimensionsDesc} oneMatrixWillBeUsed={[8, 9].includes(matrixType)} containsMatrixBand={[4, 5, 6, 7, 8, 9].includes(matrixType) ? 1 : matrixType == 10 ? 2 : undefined} sameBandOnTwoMatrices={matrixType == 7 ? true : undefined} openMatrixMultiplication={openMatrixMultiplication} />
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto' + (matrixAColumns > 7 || matrixBColumns > 7 ? '' : ' xl:justify-center xl:items-center')} className={'flex space-x-[20px] outline-none'}>
                 {

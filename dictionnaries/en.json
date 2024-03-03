@@ -1,0 +1,46 @@
+{
+    "navBar" : {
+        "home" : "Home",
+        "about_us" : "About US",
+        "feedback" : "Feedback"
+    },
+    "operations": {
+        "multiplication" : "Matrix Multiplication",
+        "system": "System Resolution",
+        "inverse" : "Inverse Matrix",
+        "transpose" : "Matrix Transpose",
+        "determinant": "Determinant",
+        "addSous": "Matrix Addition/Substraction",
+        "rank" : "Matrix Rank"
+    },
+    "matrixMultiplication" : {
+        "pageName":"Matrices multiplications",
+        "pageDesc": "Using real numbers, you can calculate the multiplication of two matrices. You have the option to choose the type of matrix you will use to reduce the complexity of the applied code. If not specified, dense matrices are automatically used.",
+        "matrixTypesButtonName": "Matrices types",
+        "matrixTypes": 
+        ["dense X dense", "upper X lower", "lower X dense", "upper X dense", "banded X dense", "upper banded X dense", "lower banded X dense", "banded X lower banded", "banded X inverse of matrix", "banded X transpose of matrix", "lower banded X upper banded"],
+        "matrixTypeDec": "You can select the type of matrices you want to work with:",
+        "calculationButtonName": "Add matrices",
+        "dimension1Desc" :"Matrix A dimension:",
+        "dimension2Desc" : "Matrix B dimension:"
+
+    },
+    "systemResolution" : {
+
+    },
+    "inverse" : {
+
+    },
+    "transpose": {
+
+    },
+    "determinant" : {
+
+    },
+    "add_sous" : {
+
+    },
+    "rank": {
+
+    }
+}

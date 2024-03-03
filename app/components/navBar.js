@@ -1,20 +1,31 @@
 'use client'
 
-import { faBars, faBurger, faClose, faHamburger } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faBurger, faChevronDown, faClose, faHamburger } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
-const navBarElements = ["Accueil", "À propos de nous", "Feedback"]
 const pagePath = ["/", "/about", "/feedback"]
 
-export function NavBar(){
+export function NavBar({navBarElements}){
 
     const currentPage = usePathname()
+    const enLang = currentPage.startsWith("/en")
+
+    function switchLang(lang){
+
+        if(enLang && lang== "en" || !enLang && lang == "fr")
+            return 
+
+        if(enLang)
+            window.location.assign(currentPage.replace("/en", "/fr") + currentPage.substring(3))
+        else
+            window.location.assign(currentPage.replace("/fr", "/en") + currentPage.substring(3))
+    }
 
     return (
         <div className='w-full lg:px-[50px] px-[5px] flex justify-between items-center overflow-hidden'>
-            <div className='lg:pl-0 pl-[5px] whitespace-nowrap text-[30px] lg:text-[75px] font-black titleSkew font-serif'>
+            <div className='lg:pl-0 pl-[5px] whitespace-nowrap text-[30px] lg:text-[75px] font-black titleSkew font-serif flex space-x-[25px]'>
                <Link href={'/'} className="w-fit opacity-80 hover:opacity-100 cursor-pointer">
                     <div className='calculTitle'>
                         Calcul des
@@ -23,6 +34,7 @@ export function NavBar(){
                         Matrices
                     </div>
                </Link>
+
             </div>
             <div id="barsOpenningButton" className="lg:hidden text-white absolute right-[15px]">
                 <FontAwesomeIcon icon={faBars} size="xl" onClick={seeNavBarElements} />
@@ -33,16 +45,26 @@ export function NavBar(){
                     <FontAwesomeIcon icon={faClose} size="2xl" onClick={hideNavBarElements} />
                 </div>
                 {
-                    navBarElements.map((navBarElement, index) => <Link onClick={hideNavBarElements} href={pagePath[index]} key={index} className={"lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[20px] hover:bg-[#424143] hover:rounded-[20px] lg:text-white font-serif font-exrabold cursor-pointer duration-[500ms]" + (currentPage == pagePath[index] ? ' navBarPageElement' : ' navBarElements')}>
+                    navBarElements.slice(0, 3).map((navBarElement, index) => <Link onClick={hideNavBarElements} href={pagePath[index]} key={index} className={"lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[20px] hover:bg-[#424143] hover:rounded-[20px] lg:text-white font-serif font-exrabold cursor-pointer duration-[500ms]" + (currentPage == pagePath[index] ? ' navBarPageElement' : ' navBarElements')}>
                         {
                             navBarElement
                         }
                     </Link>)
                 }
+                <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("en")}>
+                    <img className="h-[30px] cursor-pointer " src="united-kingdom.png" />
+                    <div className={"w-[28px] h-[2px] bg-white" + (enLang ? "" : " hidden")}></div>
+                </div>
+                <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("fr")}>
+                    <img className="h-[30px] cursor-pointer " src="france.png" />
+                    <div className={"w-[28px] h-[2px] bg-white" + (!enLang ? "" : " hidden")}></div>
+                </div>
             </div>
         </div>
     )
 }
+
+
 
 //function used to open nav bar elements in the mobile version
 function seeNavBarElements(){

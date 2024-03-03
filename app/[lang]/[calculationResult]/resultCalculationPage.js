@@ -2,11 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
-import MatrixAdditionSubstractionInput from '../components/matrixAdditionSubstractionInput'
-import MatrixMultiplicationInput from "../components/matrixMultiplicationInput"
-import CalculatedMatrices from "../components/calculatedMatrices"
+import MatrixAdditionSubstractionInput from '../../components/matrixAdditionSubstractionInput'
+import MatrixMultiplicationInput from "../../components/matrixMultiplicationInput"
+import CalculatedMatrices from "../../components/calculatedMatrices"
 import ReactModal from 'react-modal'
-import MatrixInput from "../matrixInput"
+import MatrixInput from "../../matrixInput"
 import axios from 'axios'
 import useSWR from 'swr'
 

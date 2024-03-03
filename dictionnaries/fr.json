@@ -1,0 +1,46 @@
+{
+    "navBar" : {
+        "home" : "Accueil",
+        "about_us" : "À propos de nous",
+        "feedback" : "Feedback"
+    },
+    "operations": {
+        "multiplication" : "Multiplication matricielle",
+        "system": "Résoudre d'un systeme",
+        "inverse" : "Inverse d'une matrice",
+        "transpose" : "Transposée d'une matrice",
+        "determinant": "Déterminant",
+        "addSous": "Addition/Soustraction",
+        "rank" : "Rang d'une matrice"
+    },
+    "matrixMultiplication" : {
+        "pageName":"Multiplication matricielle",
+        "pageDesc": "En utilisant des nombres réels, vous pouvez calculer la multiplication des deux matrices. Vous avez la possibilité de choisir le type de matrice que vous utiliserez pour réduire la complexité du code appliqué. Si vous ne le faites pas, les matrices denses sont automatiquement utilisées.",
+        "matrixTypesButtonName": "Types des matrices",
+        "matrixTypes": 
+        ["dense X dense", "supérieure X inférieure", "inférieure X dense", "supérieure X dense", "bande X dense", "demi bande supérieure X dense", "demi bande inférieure X dense", "bande X demi bande inférieure", "bande X l'inverse du matrice", "bande X la transposée du matrice", "demi bande inférieure X demi bande supérieure"],
+        "matrixTypeDec": " Vous pouvez sélectionner le type de matrices que vous souhaitez travailler avec :",
+        "calculationButtonName": "Ajouter matrices",
+        "dimension1Desc" :"Dimension de la matrice A:",
+        "dimension2Desc" : "Dimension de la matrice B:"
+
+    },
+    "systemResolution" : {
+
+    },
+    "inverse" : {
+
+    },
+    "transpose": {
+
+    },
+    "determinant" : {
+
+    },
+    "add_sous" : {
+
+    },
+    "rank": {
+
+    }
+}
