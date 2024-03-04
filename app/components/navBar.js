@@ -44,7 +44,7 @@ export function NavBar({navBarElements, title}){
                 <FontAwesomeIcon icon={faBars} size="xl" onClick={seeNavBarElements} />
             </div>
 
-            <div id="navBarElements" className="flex lg:h-full lg:flex-row lg:space-x-[13px] lg:static lg:pt-0 lg:bg-transparent lg:mt-[15px] flex-col space-y-[7px] lg:translate-x-0 lg:bg-transparent lg:h-fit h-[100vh] bg-[#424143] justify-center items-center h-screen right-0 left-0 top-0 right-0 translate-x-[120%] text-white duration-[1000ms]">
+            <div id="navBarElements" className="flex lg:h-full lg:flex-row lg:space-x-[13px] lg:static lg:pt-0 lg:bg-transparent lg:mt-[15px] flex-col space-y-[7px] lg:translate-x-0 lg:bg-transparent lg:h-fit h-[100vh] lg:z-0 fixed z-50 bg-[#424143] justify-center items-center h-screen right-0 left-0 top-0 right-0 translate-x-[120%] text-white duration-[1000ms]">
                 <div id="barsClosingButton" className="lg:hidden hidden text-white absolute right-[20px] top-[10px] duration">
                     <FontAwesomeIcon icon={faClose} size="2xl" onClick={hideNavBarElements} />
                 </div>
@@ -55,13 +55,15 @@ export function NavBar({navBarElements, title}){
                         }
                     </Link>)
                 }
-                <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("en")}>
-                    <img className="h-[30px] cursor-pointer " src="united-kingdom.png" />
-                    <div className={"w-[28px] h-[2px] bg-white" + (enLang ? "" : " hidden")}></div>
-                </div>
-                <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("fr")}>
-                    <img className="h-[30px] cursor-pointer " src="france.png" />
-                    <div className={"w-[28px] h-[2px] bg-white" + (!enLang ? "" : " hidden")}></div>
+                <div className="flex space-x-[13px]">
+                    <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("en")}>
+                        <img className="h-[30px] cursor-pointer " src="united-kingdom.png" />
+                        <div className={"w-[28px] h-[2px] bg-white" + (enLang ? "" : " hidden")}></div>
+                    </div>
+                    <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("fr")}>
+                        <img className="h-[30px] cursor-pointer " src="france.png" />
+                        <div className={"w-[28px] h-[2px] bg-white" + (!enLang ? "" : " hidden")}></div>
+                    </div>
                 </div>
             </div>
         </div>
