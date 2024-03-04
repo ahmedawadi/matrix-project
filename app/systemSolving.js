@@ -11,16 +11,11 @@ import { closeMatricesTypeList, openmatricesTypeList } from "./multpilcationMatr
 
 let matrixSize = 1
 let bandSize = 1
-const iterativeMethodsTypes = ["utliliser Epsilon", "utliliser nombre d'itérations maximale"]
-const algorthims = [ "Méthode de matrice triangulaire par choix", "Méthode de Gauss avec pivotage partiel", "Méthodes d’élimination de Gauss", "Méthode de Gauss Jordan", "Méthode de décomposition LU", "Méthode de Cholesky", "Méthode de Jacobi", "Méthode de Gauss-Seidel" ]//algorthims that will be choosed to sovle the system
-const triangularSystemMatricesType = ["Matrice inférieure dense", "Matrice supérieure dense", "Matrice inférieure demi-bande", "Matrice supérieure demi-bande"]
-const EG_LU__EGJ_matricesType = ["Matrice dense (Symétrique définie positive)", "Matrice bande (Symétrique définie positive)"]
-const EGPP_cholesky_matricesType = ["Matrice dense non symétrique", "Matrice bande non symétrique"]
-let matricesTypeList = triangularSystemMatricesType//it will contains the list that we need to choose from it
 
-export default function SystemSolving(){
+export default function SystemSolving({systemResolutionPageData, inputText}){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
+    const [matricesTypeList, setMatricesTypeList] = useState([])//it will contains the list that we need to choose from it
     const [algorithm, setAlgorithm] = useState(0)//by default the Gauss algorithm will be used
     const [matrixType, setMatrixType] = useState(0)//it will be used with the algorithms that needs the choose of specific type of matrices
     const [isLoading, setIsLoading] = useState(false)//it will be used when we are waiting for the calculation
@@ -44,6 +39,8 @@ export default function SystemSolving(){
             //addition of the outside click of the matrix type list to the listenner functionalities
             addEventListener('click', closeAlgorithmsTypesListInOutSideClick)
         }
+
+        setMatricesTypeList(systemResolutionPageData.matrixTypes)
 
         return () => {
             removeEventListener('click', closeAlgorithmsTypesListInOutSideClick)
@@ -231,34 +228,40 @@ export default function SystemSolving(){
         setMatrixType(0)
         closeAlgorithmsTypeList()
         
-        matricesTypeList = (algorithm == 0 ? triangularSystemMatricesType : [1, 5].includes(algorithm) ? EGPP_cholesky_matricesType : [2, 3, 4].includes(algorithm)? EG_LU__EGJ_matricesType : [])
+        setMatricesTypeList(algorithm == 0 ? systemResolutionPageData.triangularSystemMatricesType : [1, 5].includes(algorithm) ? systemResolutionPageData.EGPP_cholesky_matricesType : [2, 3, 4].includes(algorithm)? systemResolutionPageData.EG_LU__EGJ_matricesType : [])
 
     }
 
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
-                Résoudre d'un système 
+                {
+                    systemResolutionPageData.pageName
+                }
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <div>
-                    Ici, vous pouvez résoudre un système d'équations linéaires simultanées. Vous pouvez également sélectionner le type de matrice dans le calculateur qui utilise divers algorithmes avec des nombres réels en ligne afin de réduire la complexité du code qui sera appliqué. et pour les méthodes iteratives, vous pouvez choisir d'arrêter votre algorithme par epsilon ou par un nombre maximal d'iterations.                    <br/>
+                    {
+                        systemResolutionPageData.pageDesc
+                    }
                     <div className="mt-[45px]">
-                        Vous pouvez choisir quel type d'algorithmes vous voulez utiliser pour résoudre votre système : 
+                        {
+                            systemResolutionPageData.algorithmTypeDec
+                        }
                     </div>
                     <div className=" mt-[15px] w-full flex space-x-[10px]">
                         <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
                             <div id="algorithmsTypeListButton" className="flex justify-between items-center border-2 px-[10px] py-[5px] cursor-pointer text-[16px] sm:text-[22px]" onClick={openAlgorithmsTypeList}>
                                 <div>
                                 {
-                                    algorthims[algorithm]
+                                    systemResolutionPageData.algorithms[algorithm]
                                 }
                                 </div>
                                 <FontAwesomeIcon className="mt-[5px] w-fit" size="lg" icon={faChevronDown} />
                             </div>
                             <ul id="algorithmsTypeList" className="bg-[#424143] text-[#b5b5b5] max-h-[200px] overflow-y-auto hidden border-y-2 border-x-2 font-bold w-full">
                                 {
-                                    algorthims.map((algorithmName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != algorthims.length - 1 ? " border-b-[3px]" : '')}>
+                                    systemResolutionPageData.algorithms.map((algorithmName, index) => <li key={index} className={"text-[20px] font-bold cursor-pointer hover:text-white hover:bg-[url('../public/titleFont.png')]" + (index != systemResolutionPageData.algorithms.length - 1 ? " border-b-[3px]" : '')}>
                                         <label className="flex justify-between items-center px-[15px]" onClick={() => chooseAlgorithm(index)}>
                                             <div>
                                                 {
@@ -278,8 +281,10 @@ export default function SystemSolving(){
                 </div>
                 {
                     ![6, 7].includes(algorithm) ? <>
-                                <div className="mt-[45px] pr-[15px]">
-                            Vous pouvez choisir quel type de matrice vous allez utiliser avec votre algorithme : 
+                            <div className="mt-[45px] pr-[15px]">
+                            {
+                                systemResolutionPageData.matrixTypeDec
+                            }
                         </div>
                         <div className="w-[80%] font-bold flex flex-col space-y-[4px]">
                             <div id="matricesTypeListButton" className="flex items-center justify-between border-2 px-[10px] py-[5px] cursor-pointer w-full sm:h-[45px] text-[16px] sm:text-[22px]" onClick={openmatricesTypeList}>
@@ -312,11 +317,13 @@ export default function SystemSolving(){
                         </div> 
                     </> : <>
                         <div className="mt-[45px] pr-[15px]">
-                            Vous pouvez choisir quel methode vous allez utiliser comme une condition d'arret à votre algorithme: 
+                            {
+                                systemResolutionPageData.chooseStopCondition
+                            }
                         </div>
                         <ul className="list-disc sm:px-[45px] px-[15px]">
                             {
-                                iterativeMethodsTypes.map((iterativeMethodType, index) => <li key={index} className="w-full">
+                                systemResolutionPageData.iterativeMethodsTypes.map((iterativeMethodType, index) => <li key={index} className="w-full">
                                     <label className="flex justify-between w-full font-semibold">
                                         <div>
                                             {
@@ -335,21 +342,27 @@ export default function SystemSolving(){
                         (([1, 2, 3, 4, 5].includes(algorithm) && matrixType == 1) || (algorithm == 0 && [2, 3].includes(matrixType)))?
                         <div className="flex flex-col w-full">
                             <div className="font-extrabold w-full"> 
-                                * Ajouter la taille du bande de la matrice : 
+                                {
+                                    systemResolutionPageData.warnings.bandSizeMatrixAddition
+                                }
                                 <input type='number' id="matrixBand" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] ml-[15px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkPositiveValue(event)}/>
                             </div>
                             <div id="matrixBandWarning" className="text-[#c92a1e] text-[18px]"></div>
                         </div> : [6, 7].includes(algorithm) && iterativeMethod == 1 ? 
                         <div  className="flex flex-col w-full">
                             <div className="font-extrabold sm:text-[20px] text-[18px] flex-none w-full">
-                                * nombre d'itérations maximale à cette algorithme :
+                                {
+                                    systemResolutionPageData.maxIterationsDesc
+                                }
                                 <input key={"iterativeInput"} type='number' id="iterationsNumber" defaultValue={'1'} className='w-[50px] h-[30px] mt-[5px] ml-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")] flex-1' onChange={(event) => checkPositiveValue(event)}/>
                             </div>
                             <div id="iterationsNumberWarning" className="text-[#c92a1e] text-[18px]"></div>
                         </div> : [6, 7].includes(algorithm) && iterativeMethod == 0 ? 
                         <div className="flex flex-col w-full">
                             <div className="font-extrabold sm:text-[20px] text-[18px] flex-none w-full">
-                                * la valeur d'Epsilon :
+                                {
+                                    systemResolutionPageData.epsilonValueDesc
+                                }
                                 <input key={"epsilonInput"} type='number' id="Epsilon" defaultValue={'0.01'} className='w-[70px] h-[30px] mt-[5px] ml-[5px] p-[5px] text-[18px] font-medium text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")] flex-1' onChange={(event) => checkPositiveValue(event)}/>
                             </div>
                             <div id="EpsilonWarning" className="text-[#c92a1e] text-[18px]"></div>
@@ -357,13 +370,17 @@ export default function SystemSolving(){
                     }
                     <div className='flex xl:flex-row flex-col space-y-[15px] xl:space-y-[0px] justify-center space-x-[25px] items-center'>
                         <div className='text-[20px]'>
-                            Dimension de la matrice :
+                            {
+                                systemResolutionPageData.dimension1Desc
+                            }
                             <input type='number' id="matrixSize" defaultValue={'1'} className='w-[50px] h-[30px]  ml-[10px] md:mt-0 mt-[8px] p-[5px] text-[18px] text-black hover:bg-[url("../public/titleFont.png")] focus:bg-[url("../public/titleFont.png")]' onChange={(event) => checkMatrixSize(event)} />
                         </div>
                         
                         <div className="h-full flex items-center">
                             <button className="font-semibold border-2 border-[#4a4a4a] text-white px-[10px] py-[5px] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={getMatrix}>
-                                Ajouter matrice
+                                {
+                                    systemResolutionPageData.calculationButtonName
+                                }
                             </button>
                         </div>
                     </div>
@@ -371,7 +388,7 @@ export default function SystemSolving(){
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60' } className={'flex overflow-auto outline-none'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate} isLoading={isLoading} />
+                    <MatrixInput inputText={inputText} matrixType={getMatrixType(algorithm, matrixType)}  bandSize={bandSize} matrixLines={matrixSize} matrixColumns={matrixSize} matrixName={'X'} closeMatrix={() => setMatrixInputIsOpen(false)} containsBVector={true} catlucate={calculate} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>

@@ -16,7 +16,7 @@ const matrixTypes = ["dense X dense", "supérieure X inférieure", "inférieure 
 let bandASize = 0//used if we gonna work with band matrices on the matrix A
 let bandBSize = 0//used if we gonna work with band matrices on the matrix B
 
-export default function MultiplicationMatrices({multiplicationPageData}){
+export default function MultiplicationMatrices({multiplicationPageData, inputText}){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [matrixType, setMatrixType] = useState(-1)//by default the matries types are dense
@@ -61,7 +61,7 @@ export default function MultiplicationMatrices({multiplicationPageData}){
     const openMatrixMultiplication = () => {
 
         //check the validity of the matrices added
-        if(!checkMatricesValidity(matrixType))
+        if(!checkMatricesValidity(matrixType, multiplicationPageData.warnings))
             return
 
         //get the matrices values
@@ -234,11 +234,11 @@ export default function MultiplicationMatrices({multiplicationPageData}){
                 {
                     [8, 9].includes(matrixType) ? null :
                     <div className="flex justify-center items-center">
-                        <MatrixInput matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixType={matrixType == 1 ? 0 : matrixType == 2 ? 1 : matrixType == 3 ? 0 : [4, 7].includes(matrixType) ? 2 : matrixType == 5 ? 3 : [6, 10].includes(matrixType) ? 4 : undefined } matrixName={'A'} bandSize={[4, 5, 6, 7, 8, 9, 10].includes(matrixType) ? bandASize : undefined} />
+                        <MatrixInput inputText={inputText} matrixLines={matrixALines} matrixColumns={matrixAColumns} matrixType={matrixType == 1 ? 0 : matrixType == 2 ? 1 : matrixType == 3 ? 0 : [4, 7].includes(matrixType) ? 2 : matrixType == 5 ? 3 : [6, 10].includes(matrixType) ? 4 : undefined } matrixName={'A'} bandSize={[4, 5, 6, 7, 8, 9, 10].includes(matrixType) ? bandASize : undefined} />
                     </div>
                 }
                 <div className="">
-                    <MatrixInput matrixLines={[8, 9].includes(matrixType) ? matrixALines : matrixBLines} matrixColumns={[8, 9].includes(matrixType) ? matrixAColumns : matrixBColumns} matrixName={[8, 9].includes(matrixType) ? 'A' : 'B'} matrixType={matrixType == 1 ? 1 : matrixType == 7 ? 4 : matrixType == 10 ? 3 : [8, 9].includes(matrixType) ? 2 : undefined } bandSize={[7, 10].includes(matrixType) ? bandBSize : [8,9].includes(matrixType) ? bandASize : undefined} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading}/>
+                    <MatrixInput inputText={inputText} matrixLines={[8, 9].includes(matrixType) ? matrixALines : matrixBLines} matrixColumns={[8, 9].includes(matrixType) ? matrixAColumns : matrixBColumns} matrixName={[8, 9].includes(matrixType) ? 'A' : 'B'} matrixType={matrixType == 1 ? 1 : matrixType == 7 ? 4 : matrixType == 10 ? 3 : [8, 9].includes(matrixType) ? 2 : undefined } bandSize={[7, 10].includes(matrixType) ? bandBSize : [8,9].includes(matrixType) ? bandASize : undefined} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading}/>
                 </div>
             </ReactModal>
         </div>
@@ -326,7 +326,7 @@ function getMatrixTypeNameInTheServer(matrixType, matrixOrder){
 }
 
 //check the validity of matrices based on the matrice type
-function checkMatricesValidity(matrixType){
+function checkMatricesValidity(matrixType, warnings){
     //getting matrices size
     matrixALines = document.getElementById('matrixALines').value
     matrixAColumns = document.getElementById('matrixAColumns').value
@@ -357,14 +357,14 @@ function checkMatricesValidity(matrixType){
     if(matrixType == 1){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice supérieure doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareSuperiorMatrix
             validMatrixASize = false
 
         }
 
         if(matrixBLines !== matrixBColumns){
 
-            matrixBWarning.innerHTML = 'La matrice inferieure doit être carre.!'
+            matrixBWarning.innerHTML = warnings.squareInferiorMatrix
             validMatrixBSize = false
 
         }
@@ -373,7 +373,7 @@ function checkMatricesValidity(matrixType){
     else if (matrixType == 2){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice inferieure doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareInferiorMatrix
             validMatrixASize = false
 
         }
@@ -381,7 +381,7 @@ function checkMatricesValidity(matrixType){
     else if (matrixType == 3){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice supérieure doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareInferiorMatrix
             validMatrixASize = false
 
         }
@@ -389,7 +389,7 @@ function checkMatricesValidity(matrixType){
     else if([4, 7, 8, 9].includes(matrixType)){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice bande doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareBandedMatrix
             validMatrixASize = false
 
         }
@@ -397,11 +397,11 @@ function checkMatricesValidity(matrixType){
         if(validMatrixASize){//check the band size
 
             if(matrixABand.value == ''){
-                matrixABandWarning.innerHTML = 'Ajouter la bande de la matrice A!'
+                matrixABandWarning.innerHTML = warnings.bandSizeMatrixAddition + " A!"
                 validMatrixABand = false
             }
             else if ((Number(matrixABand.value) + 1) > Number(matrixALines)){
-                matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
+                matrixABandWarning.innerHTML = warnings.bandSizeNotApplicable + " A!"
                 validMatrixABand = false
             }
             else 
@@ -411,7 +411,7 @@ function checkMatricesValidity(matrixType){
         if(matrixType == 7){//here we gonna use the matrixABand as the band value because the two matrices have the same band
             if(matrixBLines !== matrixBColumns){
 
-                matrixBWarning.innerHTML = 'La matrice bande inférieure doit être carre!'
+                matrixBWarning.innerHTML = warnings.squareInferiorBandedMatrix
                 validMatrixBSize = false
 
             }
@@ -419,11 +419,11 @@ function checkMatricesValidity(matrixType){
             if(validMatrixBSize){//check the band size
 
                 if(matrixABand.value == ''){
-                    matrixABandWarning.innerHTML = 'Ajouter la bande de la matrice!'
+                    matrixABandWarning.innerHTML = warnings.bandSizeMatrixAddition + "!"
                     validMatrixABand = false
                 }
                 else if ((Number(matrixABand.value) + 1) > Number(matrixBLines)){
-                    matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice B"
+                    matrixABandWarning.innerHTML = warnings.bandSizeNotApplicable + " B!"
                     validMatrixABand = false
                 }
                 else 
@@ -434,18 +434,18 @@ function checkMatricesValidity(matrixType){
     else if (matrixType == 5){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice bande supérieure doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareSuperiorBandedMatrix
             validMatrixASize = false
         }
 
         if(validMatrixASize){//check the band size
 
             if(matrixABand.value == ''){
-                matrixABandWarning.innerHTML = 'Ajouter la bande de la matrice!'
+                matrixABandWarning.innerHTML = warnings.bandSizeMatrixAddition + "!"
                 validMatrixABand = false
             }
             else if ((Number(matrixABand.value) + 1) > Number(matrixALines)){
-                matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
+                matrixABandWarning.innerHTML = warnings.bandSizeNotApplicable + " A!"
                 validMatrixABand = false
             }
             else 
@@ -455,7 +455,7 @@ function checkMatricesValidity(matrixType){
     else if ([6, 10].includes(matrixType)){
         if(matrixALines !== matrixAColumns){
 
-            matrixAWarning.innerHTML = 'La matrice bande inférieure doit être carre!'
+            matrixAWarning.innerHTML = warnings.squareInferiorBandedMatrix
             validMatrixASize = false
 
         }
@@ -463,11 +463,11 @@ function checkMatricesValidity(matrixType){
         if(validMatrixASize){//check the band size
 
             if(matrixABand.value == ''){
-                matrixABandWarning.innerHTML = 'Ajouter la bande de la matrice!'
+                matrixABandWarning.innerHTML = warnings.bandSizeMatrixAddition + "!"
                 validMatrixABand = false
             }
             else if ((Number(matrixABand.value) + 1) > Number(matrixALines)){
-                matrixABandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice A"
+                matrixABandWarning.innerHTML = warnings.bandSizeNotApplicable + " A!"
                 validMatrixABand = false
             }
             else 
@@ -477,22 +477,22 @@ function checkMatricesValidity(matrixType){
         if(matrixType == 10){//check the superior band in the matrix B
             if(matrixBLines !== matrixBColumns){
 
-                matrixBWarning.innerHTML = 'La matrice bande supérieure doit être carre!'
+                matrixBWarning.innerHTML = warnings.squareSuperiorBandedMatrix
                 validMatrixBSize = false
             }
 
             if(validMatrixBSize){//check the band size
 
                 if(matrixBBand.value == ''){
-                    matrixBBandWarning.innerHTML = 'Ajouter la bande de la matrice!'
+                    matrixBBandWarning.innerHTML = warnings.bandSizeMatrixAddition + "!"
                     validMatrixBBand = false
                 }
                 else if ((Number(matrixBBand.value) + 1) > Number(matrixBLines)){
-                    matrixBBandWarning.innerHTML = "taille de la bande ne s'applique pas à la matrice B"
+                    matrixBBandWarning.innerHTML =warnings.bandSizeNotApplicable + " B!"
                     validMatrixBBand = false
                 }
                 else if(validMatrixABand && bandASize == matrixBBand.value){
-                    matrixBBandWarning.innerHTML = "La bande du A et la bande du B doivent être différentes!"
+                    matrixBBandWarning.innerHTML = warnings.AandBBandSizeAreDifferent
                     validMatrixBBand = false
                 }
                 else 

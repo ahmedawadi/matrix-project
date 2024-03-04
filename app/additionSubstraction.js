@@ -9,7 +9,7 @@ import axios from 'axios'
 let matrixLines = 1
 let matrixColumns = 1
 
-export default function AdditionSubstraction(){
+export default function AdditionSubstraction({inputText, add_sousPageData}){
 
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)
     const [additionOrSubstraction, setAdditionOrSubstraction] = useState(0)//0 is addition and 1 is substraction
@@ -39,14 +39,14 @@ export default function AdditionSubstraction(){
         const matrixBWarning = document.getElementById("matrixWarningB")
 
         if(!matrixA){
-            matrixAWarning.innerHTML = "Il y a des cellules vides!"
+            matrixAWarning.innerHTML = add_sousPageData.warnings.emptyCells
             validMatrices = false
         }
         else if(matrixAWarning.innerText != '')
             matrixAWarning.innerHTML = ''
         
         if(!matrixB){
-            matrixBWarning.innerHTML = "Il y a des cellules vides!"
+            matrixBWarning.innerHTML = add_sousPageData.warnings.emptyCells
             validMatrices = false 
         }
         else if(matrixBWarning.innerText != '')
@@ -78,7 +78,7 @@ export default function AdditionSubstraction(){
             calculateButton.classList.remove("opacity-40")
             calculateButton.disabled = false
 
-            matrixBWarning.innerHTML = "essayer une autre fois!"
+            matrixBWarning.innerHTML = add_sousPageData.warnings.tryAgain
         })
 
     }
@@ -86,20 +86,24 @@ export default function AdditionSubstraction(){
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
-                Addition et Soustraction matricielle
+                {
+                    add_sousPageData.pageName
+                }
             </div>
             <div className='xl:pt-[80px] xl:text-[22px] pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px]'>
                 <div>
-                    Ici, vous pouvez additionner et soustraire des matrices avec des nombres réeeles.
+                    {
+                        add_sousPageData.pageDesc
+                    }
                 </div>
-                <MatrixAdditionSubstractionInput setAdditionOrSubstraction={setAdditionOrSubstraction} additionOrSubstraction={additionOrSubstraction} getMatrix={getMatrixInput} />
+                <MatrixAdditionSubstractionInput add_sousPageData={add_sousPageData} setAdditionOrSubstraction={setAdditionOrSubstraction} additionOrSubstraction={additionOrSubstraction} getMatrix={getMatrixInput} />
             </div>
             <ReactModal ariaHideApp={false} isOpen={matrixInputIsOpen} overlayClassName={'xl:justify-center xl:items-center fixed top-0 left-0 right-0 bottom-0 flex bg-black bg-opacity-60 overflow-auto' + (matrixColumns > 7 ? '' : ' xl:justify-center xl:items-center')} className={'flex space-x-[20px] outline-none'}>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} />
+                    <MatrixInput inputText={inputText} matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'A'} />
                 </div>
                 <div className="flex justify-center items-center">
-                    <MatrixInput matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading} />
+                    <MatrixInput inputText={inputText} matrixLines={matrixLines} matrixColumns={matrixColumns} matrixName={'B'} closeMatrix={() => setMatrixInputIsOpen(false)} catlucate={calculate} isLoading={isLoading} />
                 </div>
             </ReactModal>
         </div>

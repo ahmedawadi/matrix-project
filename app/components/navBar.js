@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation"
 
 const pagePath = ["/", "/about", "/feedback"]
 
-export function NavBar({navBarElements}){
+export function NavBar({navBarElements, title}){
 
     const currentPage = usePathname()
     const enLang = currentPage.startsWith("/en")
@@ -28,10 +28,14 @@ export function NavBar({navBarElements}){
             <div className='lg:pl-0 pl-[5px] whitespace-nowrap text-[30px] lg:text-[75px] font-black titleSkew font-serif flex space-x-[25px]'>
                <Link href={'/'} className="w-fit opacity-80 hover:opacity-100 cursor-pointer">
                     <div className='calculTitle'>
-                        Calcul des
+                        {
+                            title.first
+                        }
                     </div>
                     <div className='lg:pl-[55px] pl-[20px] lg:mt-[-50px] mt-[-20px] calculSecondTitle'>
-                        Matrices
+                        {
+                            title.second
+                        }
                     </div>
                </Link>
 
@@ -40,7 +44,7 @@ export function NavBar({navBarElements}){
                 <FontAwesomeIcon icon={faBars} size="xl" onClick={seeNavBarElements} />
             </div>
 
-            <div id="navBarElements" className="flex lg:h-full lg:flex-row lg:space-x-[13px] lg:static lg:pt-0 lg:bg-transparent lg:mt-[15px] flex-col space-y-[7px] lg:translate-x-0 lg:bg-transparent lg:h-fit h-[100vh] bg-[#424143] justify-center items-center fixed z-50 h-screen right-0 left-0 top-0 right-0 translate-x-[120%] text-white duration-[1000ms]">
+            <div id="navBarElements" className="flex lg:h-full lg:flex-row lg:space-x-[13px] lg:static lg:pt-0 lg:bg-transparent lg:mt-[15px] flex-col space-y-[7px] lg:translate-x-0 lg:bg-transparent lg:h-fit h-[100vh] bg-[#424143] justify-center items-center h-screen right-0 left-0 top-0 right-0 translate-x-[120%] text-white duration-[1000ms]">
                 <div id="barsClosingButton" className="lg:hidden hidden text-white absolute right-[20px] top-[10px] duration">
                     <FontAwesomeIcon icon={faClose} size="2xl" onClick={hideNavBarElements} />
                 </div>

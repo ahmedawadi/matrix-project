@@ -10,7 +10,7 @@ import Determinant from '../determinant'
 import AdditionSubstraction from '../additionSubstraction'
 import MatrixRank from '../rank'
 
-export default function MatrixOperations({functionnalities, multiplicationPageData}){
+export default function MatrixOperations({functionnalities, multiplicationPageData, inputText, systemResolutionPageData, inversePageData, transposePageData, determinantPageData, rankPageData, add_sousPageData}){
 
     const [matrixFunctionnality, setMatrixFunctionnality] = useState(0)//used to choose which matrix functionality will be displayed to the user
 
@@ -21,13 +21,13 @@ export default function MatrixOperations({functionnalities, multiplicationPageDa
                 </div>
                 {
                     matrixFunctionnality === 0 ?
-                        <MultiplicationMatrices multiplicationPageData={multiplicationPageData}/> : matrixFunctionnality === 1 ? 
-                            <SystemSolving /> : matrixFunctionnality === 2 ? 
-                                < MatrixInverse /> : matrixFunctionnality === 3 ? 
-                                    < MatrixTranspose /> : matrixFunctionnality === 4 ? 
-                                        < Determinant /> : matrixFunctionnality === 5 ? 
-                                            < AdditionSubstraction /> : matrixFunctionnality === 6 ?
-                                                <MatrixRank /> : null
+                        <MultiplicationMatrices inputText={inputText} multiplicationPageData={multiplicationPageData}/> : matrixFunctionnality === 1 ? 
+                            <SystemSolving inputText={inputText} systemResolutionPageData={systemResolutionPageData} /> : matrixFunctionnality === 2 ? 
+                                < MatrixInverse inversePageData={inversePageData} inputText={inputText} /> : matrixFunctionnality === 3 ? 
+                                    < MatrixTranspose transposePageData={transposePageData} inputText={inputText}/> : matrixFunctionnality === 4 ? 
+                                        < Determinant determinantPageData={determinantPageData} inputText={inputText}/> : matrixFunctionnality === 5 ? 
+                                            < AdditionSubstraction add_sousPageData={add_sousPageData} inputText={inputText}/> : matrixFunctionnality === 6 ?
+                                                <MatrixRank rankPageData={rankPageData} inputText={inputText}/> : null
                 }
                 
             </div>

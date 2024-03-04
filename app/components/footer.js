@@ -4,7 +4,7 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 
-export default function Footer(){
+export default function Footer({footerElements}){
     return (
         <div className="w-full flex flex-col bg-[#424143]">
             <div className="w-full h-full flex lg:flex-row flex-col lg:space-y-0 space-y-[25px]  xl:px-[30px] px-[20px] py-[20px] text-[#E4E7EA]">
@@ -14,7 +14,9 @@ export default function Footer(){
                             <div className="flex flex-col space-y-[30px]">
                                 <label className="flex flex-col space-y-[4px]">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(0)}>
-                                        Notre Front-End developer
+                                        {
+                                            footerElements.frontEndDev
+                                        }
                                         <div id="plusIcon0" className="lg:hidden">+</div>
                                     </div>
                                     <div id="linkInfo0" className="lg:flex space-x-[10px] items-center pl-[15px] hidden">
@@ -34,7 +36,9 @@ export default function Footer(){
                                 </label>
                                 <label className="flex flex-col space-y-[4px]">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(1)}>
-                                        Notre Back-End developer
+                                        {
+                                            footerElements.backEndDev
+                                        }
                                         <div id="plusIcon1" className="lg:hidden">+</div>
                                     </div>
                                     <div id="linkInfo1" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
@@ -58,7 +62,9 @@ export default function Footer(){
                             <div className="flex flex-col space-y-[30px]">
                                 <label className="flex flex-col space-y-[4px]">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(2)}>
-                                        Notre UX/UI Designer
+                                        {
+                                            footerElements.uiux
+                                        }
                                         <div id="plusIcon2" className="lg:hidden">+</div>
                                     </div>
                                     <div id="linkInfo2" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
@@ -75,7 +81,9 @@ export default function Footer(){
                                 </label>
                                 <label className="flex flex-col space-y-[4px]">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(3)}>
-                                        Notre algorithm developer
+                                        {
+                                            footerElements.algorithmDev
+                                        }
                                         <div id="plusIcon3" className="lg:hidden">+</div>
                                     </div>
                                     <div id="linkInfo3" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
@@ -95,7 +103,9 @@ export default function Footer(){
                             <div className="flex flex-col space-y-[30px]">
                                 <label className="flex flex-col space-y-[4px] lg:w-fit w-full">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(4)}>
-                                        Notre Lien Github
+                                        {
+                                            footerElements.gitLink
+                                        }
                                         <div id="plusIcon4" className="lg:hidden">+</div>
                                     </div>
                                     <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project-full-stack" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
@@ -109,7 +119,9 @@ export default function Footer(){
                                 </label>
                                 <label className="flex flex-col space-y-[4px]">
                                     <div className="font-semibold lg:text-[16px] text-[20px] flex justify-between lg:cursor-auto cursor-pointer" onClick={() => seeOrHideLink(5)}>
-                                        Notre superviseur
+                                        {
+                                            footerElements.supervisor
+                                        }
                                         <div id="plusIcon5" className="lg:hidden">+</div>
                                     </div>
                                     <div id="linkInfo5" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
@@ -131,10 +143,14 @@ export default function Footer(){
                 <div className='lg:basis-[15%] lg:pl-0 pl-[5px] flex items-end lg:justify-end justify-end [#E4E7EA]space-nowrap lg:text-[40px] text-[30px] font-black  font-serif'>
                     <div className="w-fit opacity-80 hover:opacity-100">
                         <div className='calculTitle'>
-                            Calcul des
+                            {
+                                footerElements.title.first
+                            }
                         </div>
                         <div className='lg:pl-[55px] pl-[20px] lg:mt-[-30px] mt-[-10px] calculSecondTitle'>
-                            Matrices
+                            {
+                                footerElements.title.second
+                            }
                         </div>
                     </div>
                 </div>
@@ -144,7 +160,9 @@ export default function Footer(){
                 <a href="https://fss.rnu.tn/" className="flex ">
                     <img src="facultyLogo.png" className="w-[40px] h-[25px]"/>
                     <div className="font-thin text-[14px]">
-                        Faculté des Sciences de Sfax 2023-2024
+                        {
+                            footerElements.faculty
+                        }
                     </div>
                 </a>                
             </div>

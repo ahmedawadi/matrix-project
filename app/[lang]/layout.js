@@ -24,12 +24,12 @@ export default async function RootLayout({ children, params}) {
     <html lang="en">
       <body className='backgroundImage min-h-screen w-full flex flex-col justify-between'>
         <div className='flex flex-col md:space-y-[50px] space-y-[30px] lg:space-y-[75px]'>
-          <NavBar navBarElements={translatedNavBarElements} />
+          <NavBar title={dict.navBar.title} navBarElements={translatedNavBarElements} />
           {
             children
           }
         </div>
-       <div className='mt-[60px]'> <Footer/></div>
+       <div className='mt-[60px]'> <Footer footerElements={dict.footer}/></div>
         </body>      
 
     </html>

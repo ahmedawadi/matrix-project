@@ -13,7 +13,7 @@ export default async function Home({params}){
     return (
         <div className='lg:pl-[100px] px-[20px]'>
             
-            <MatrixOperations functionnalities={translatedFunctionnalities} multiplicationPageData={dict.matrixMultiplication}  />
+            <MatrixOperations add_sousPageData={dict.add_sous} rankPageData={dict.rank} determinantPageData={dict.determinant} transposePageData={dict.transpose} inversePageData={dict.inverse} systemResolutionPageData={dict.systemResolution}  inputText={dict.input} functionnalities={translatedFunctionnalities} multiplicationPageData={dict.matrixMultiplication}  />
             
         </div>
     )
