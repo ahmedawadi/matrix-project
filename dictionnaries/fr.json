@@ -146,5 +146,29 @@
         "replace": "Remplir les cellules vides avec des zéros",
         "replaceVector": "Remplir les cellules vides de vecteur avec des zéros",
         "calculate": "Calculer"
+    }, 
+    "about": {
+        "pageName": "À propos de nous",
+        "content":{
+            "firstWord": "Bienvenue ",
+            "firstParagraph" : "sur notre site dédié au calcul matriciel avancé, où l'excellence mathématique rencontre la simplicité d'utilisation.",
+            "secondParagraph": "Chez nous, nous nous engageons à fournir des outils puissants pour la manipulation de matrices, offrant des fonctionnalités complètes telles que la multiplication, l'addition, et la soustraction matricielles. Nous allons au-delà en résolvant efficacement les systèmes d'équations linéaires à l'aide de méthodes matricielles avancées. Notre plateforme propose également des fonctionnalités essentielles telles que le calcul du déterminant, la détermination du rang et la transposée de matrices, permettant aux utilisateurs de résoudre des problèmes complexes avec une facilité remarquable. Que vous soyez un étudiant en mathématiques, un professionnel de l'ingénierie ou un passionné de données, notre site est conçu pour répondre à vos besoins matriciels avec précision et efficacité.",
+            "thirdParagraph": "Explorez notre suite d'outils et découvrez la puissance des calculs matriciels simplifiés."
+        }
+    },
+    "feedBack": {
+        "firstName": "nom",
+        "lastName": "prénom",
+        "comment": "Vos commmentaires/questions",
+        "obligatoryFields": "Tous les champs sont obligatoires*",
+        "sendButton" : "Envoyer",
+        "warnings": {
+            "emptyFirstName": "le champs prénom est vide!",
+            "emptyLastName": "le champs nom est vide!",
+            "emptyEmail": "le champs email est vide!",
+            "invalidEmail": "Le format de l'e-mail est incorrect!",
+            "emptyComment": "le champs feedback est vide!",
+            "tryAgain": "Réssayer une autre fois"
+        }
     }
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request){
-
     const {origin, pathname} = request.nextUrl
     
     if(!request.url.includes(".") && !["en", "fr"].includes(pathname.substring(1, 3))){  

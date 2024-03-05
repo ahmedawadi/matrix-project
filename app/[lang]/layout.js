@@ -16,7 +16,7 @@ const navBarElements = ["home", "about_us", "feedback"]
 
 
 export default async function RootLayout({ children, params}) {
-
+  
   const dict = await getDictionary(params.lang)
   const translatedNavBarElements = navBarElements.map(navBarElement => dict.navBar[navBarElement])
 

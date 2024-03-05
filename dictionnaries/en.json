@@ -152,5 +152,29 @@
         "replace": "Fill the empty cells with zeros",
         "replaceVector": "Fill the empty cells of the vector with zeros",
         "calculate": "Calculate"
+    }, 
+    "about": {
+        "pageName": "About Us",
+        "content": {
+            "firstWord": "Welcome",
+            "firstParagraph": "to our dedicated website for advanced matrix calculation, where mathematical excellence meets user-friendly simplicity.",
+            "secondParagraph": "At our platform, we are committed to providing powerful tools for matrix manipulation, offering comprehensive features such as matrix multiplication, addition, and subtraction. We go beyond by effectively solving systems of linear equations using advanced matrix methods. Our platform also features essential functionalities such as determinant calculation, rank determination, and matrix transpose, allowing users to solve complex problems with remarkable ease. Whether you are a mathematics student, an engineering professional, or a data enthusiast, our website is designed to meet your matrix needs with precision and efficiency.",
+            "thirdParagraph": "Explore our suite of tools and discover the power of simplified matrix computations."
+        }
+    },
+    "feedBack": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "comment": "Your comments/questions",
+        "obligatoryFields": "All fields are mandatory*",
+        "sendButton" : "Send",
+        "warnings": {
+            "emptyFirstName": "The first name field is empty!",
+            "emptyLastName": "The last name field is empty!",
+            "emptyEmail": "The email field is empty!",
+            "invalidEmail": "The email format is invalid!",
+            "emptyComment": "The feedback field is empty!",
+            "tryAgain": "Try again"
+        }
     }
 }
