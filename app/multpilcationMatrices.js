@@ -136,7 +136,7 @@ export default function MultiplicationMatrices({multiplicationPageData, inputTex
             calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(_ => {
-
+            console.log(_)
             calculateButton.classList.remove("opacity-40")
             calculateButton.disabled = false
             setIsLoading(false)
