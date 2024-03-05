@@ -184,7 +184,7 @@
         "checkCalculatedMatrix": "voir la matrice calculée",
         "hideCalculatedMatrices": "masquer les matrices calculées",
         "hideCalculatedMatrix": "masquer la matrices calculée",
-        "calcuationResult": ["Résultat de la calculation du déterminant", "Résultat de la produit matriciel", "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", "Résultat de la calculation du matrice inverse", "Résultat de la transposition de la matrice", "Résultat de la calculation du rang"],
+        "calculationResult": ["Résultat de la calculation du déterminant", "Résultat de la produit matriciel", "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", "Résultat de la calculation du matrice inverse", "Résultat de la transposition de la matrice", "Résultat de la calculation du rang"],
         "functionalities" : ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel provenant de la gauche", "Produit matriciel provenant de la droite", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"],
         "warnings": {
             "tryAgain":"Essayer de calculer une autre fois!",

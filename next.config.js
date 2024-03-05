@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env: {
-        backendDomainName : "https://matrixoperationsapi.vercel.app/",
+        backendDomainName : "http://192.168.1.19:8000",
     }
 }
 

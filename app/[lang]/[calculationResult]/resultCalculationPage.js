@@ -246,7 +246,7 @@ export function CalculationResult({params, content}){
             <div className='xl:px-[50px] xl:w-[70%] w-full bg-[#424143] py-[20px] flex flex-col min-h-screen'>
                 <div className='xl:text-[28px] xl:pl-[0px] sm:pl-[20px] px-[10px] w-full flex justify-end font-semibold text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
                     {
-                        getResultTitle(params.calculationResult, content.calcuationResult)
+                        getResultTitle(params.calculationResult, content.calculationResult)
                     }
                 </div>
                 <div className="xl:pt-[40px] xl:text-[22px] pt-[30px] pl-[15px] text-[#b5b5b5] text-[18px]">

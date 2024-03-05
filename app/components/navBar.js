@@ -18,9 +18,9 @@ export function NavBar({navBarElements, title}){
             return 
 
         if(enLang)
-            window.location.assign(currentPage.replace("/en", "/fr"))
+            window.location.assign(location.href.replace("/en", "/fr"))
         else
-            window.location.assign(currentPage.replace("/fr", "/en"))
+            window.location.assign(location.href.replace("/fr", "/en"))
     }
 
     return (
