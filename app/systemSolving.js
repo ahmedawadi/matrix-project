@@ -209,7 +209,7 @@ export default function SystemSolving({systemResolutionPageData, inputText}){
             calculateButton.disabled = false
             setMatrixInputIsOpen(false)
         }).catch(error => {
-            console.log(error)
+            
             if(error?.response?.status == 400 && error.response?.data?.message)
                 systemWarning.innerHTML = error.response.data.message
             else
