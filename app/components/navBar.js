@@ -18,9 +18,9 @@ export function NavBar({navBarElements, title}){
             return 
 
         if(enLang)
-            window.location.assign(currentPage.replace("/en", "/fr") + currentPage.substring(3))
+            window.location.assign(currentPage.replace("/en", "/fr"))
         else
-            window.location.assign(currentPage.replace("/fr", "/en") + currentPage.substring(3))
+            window.location.assign(currentPage.replace("/fr", "/en"))
     }
 
     return (
@@ -56,12 +56,12 @@ export function NavBar({navBarElements, title}){
                     </Link>)
                 }
                 <div className="flex space-x-[13px]">
-                    <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("en")}>
-                        <img className="h-[30px] cursor-pointer " src="united-kingdom.png" />
+                    <div className="lg:text-[30px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("en")}>
+                        <img alt="english" className="h-[30px] cursor-pointer " src="/united-kingdom.png" />
                         <div className={"w-[28px] h-[2px] bg-white" + (enLang ? "" : " hidden")}></div>
                     </div>
-                    <div className="lg:text-[30px] lg:text-[20px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("fr")}>
-                        <img className="h-[30px] cursor-pointer " src="france.png" />
+                    <div className="lg:text-[30px] text-[35px] lg:hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] lg:py-[5px] lg:px-[10px] hover:bg-[#424143] hover:rounded-[20px] flex flex-col space-y-[5px] items-center lg:text-white font-serif font-exrabold duration-[500ms]" onClick={() => switchLang("fr")}>
+                        <img alt="french" className="h-[30px] cursor-pointer " src="/france.png" />
                         <div className={"w-[28px] h-[2px] bg-white" + (!enLang ? "" : " hidden")}></div>
                     </div>
                 </div>

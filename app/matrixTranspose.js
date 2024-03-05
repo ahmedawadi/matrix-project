@@ -51,7 +51,7 @@ export default function MatrixTranspose({inputText, transposePageData}){
         calculateButton.classList.add("opacity-40")
         calculateButton.disabled = true
         
-        axios.post('https://web-production-e015.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post(process.env.backendDomainName + '/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/transposeCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)

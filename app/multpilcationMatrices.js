@@ -128,7 +128,7 @@ export default function MultiplicationMatrices({multiplicationPageData, inputTex
             dataToSend['m_second_matrix'] = bandBSize
         }
 
-        axios.post('https://web-production-e015.up.railway.app/matrix/multiply/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post(process.env.backendDomainName + '/matrix/multiply/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/multiplicationCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)

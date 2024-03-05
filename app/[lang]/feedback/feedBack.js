@@ -81,7 +81,7 @@ export default function Feedback({content}){
                 message: feedback.value
             }
 
-            axios.post("https://web-production-e015.up.railway.app/matrix/send-email/", feedbackInfo).then(res => {
+            axios.post(process.env.backendDomainName + "/matrix/send-email/", feedbackInfo).then(res => {
                 //remove data from inputs
                 firstName.value = ''
                 lastName.value = ''

@@ -49,7 +49,7 @@ export default function MatrixRank({inputText, rankPageData}){
         calculateButton.classList.add("opacity-40")
         calculateButton.disabled = true
 
-        axios.post('https://web-production-e015.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post(process.env.backendDomainName + '/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)
@@ -66,7 +66,6 @@ export default function MatrixRank({inputText, rankPageData}){
 
         
     }
-
     return (
         <div className='xl:basis-[80%] bg-[#424143] py-[20px] xl:px-[50px] px-[15px]  flex flex-col'>
             <div className='w-full flex justify-end font-semibold text-[28px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>

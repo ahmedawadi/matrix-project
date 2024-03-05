@@ -201,7 +201,7 @@ export default function SystemSolving({systemResolutionPageData, inputText}){
             else 
                 dataToSend["epsilon"] = document.getElementById("Epsilon").value
         }
-        axios.post('https://web-production-e015.up.railway.app/matrix/solve/', dataToSend, {timeout: 12000}).then(res => {
+        axios.post(process.env.backendDomainName + '/matrix/solve/', dataToSend, {timeout: 12000}).then(res => {
             window.open('/systemSolvingCalculation?matrixId=' + res.data._id, '_blank')
 
             setIsLoading(false)

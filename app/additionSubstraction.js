@@ -64,7 +64,7 @@ export default function AdditionSubstraction({inputText, add_sousPageData}){
             second_matrix: matrixB
         }
         
-        axios.post('https://web-production-e015.up.railway.app/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend, {timeout: 12000}).then(res => {
+        axios.post(process.env.backendDomainName + '/matrix/' + (additionOrSubstraction == 0 ? 'add/' : 'substract/') , dataToSend, {timeout: 12000}).then(res => {
             window.open(`/${(additionOrSubstraction == 0 ? 'additionCalculation' : 'substractionCalculation' )}?matrixId=${res.data._id}`, '_blank')
 
             setIsLoading(false)

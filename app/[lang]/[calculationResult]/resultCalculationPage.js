@@ -78,8 +78,6 @@ export function CalculationResult({params}){
                 secondCalculatedMatrix = data.second_matrix
                 setMatrix(data.result)
             }
-
-
         }
            
 
@@ -99,7 +97,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('https://web-production-e015.up.railway.app/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post(process.env.backendDomainName + '/matrix/determinant/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('determinantCaclucation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
                 
@@ -113,7 +111,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
     
-            axios.post('https://web-production-e015.up.railway.app/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post(process.env.backendDomainName + '/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
                 matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
@@ -125,7 +123,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('https://web-production-e015.up.railway.app/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post(process.env.backendDomainName + '/matrix/inverse/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('inverseCalculation?matrixId=' + res.data._id, '_blank')
     
                 setMatrixInputIsOpen(false)
@@ -144,7 +142,7 @@ export function CalculationResult({params}){
                 matrix : matrix
             }
 
-            axios.post('https://web-production-e015.up.railway.app/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
+            axios.post(process.env.backendDomainName + '/matrix/transpose/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('transposeCalculation?matrixId=' + res.data._id, '_blank')
     
                 setMatrixInputIsOpen(false)
@@ -196,7 +194,7 @@ export function CalculationResult({params}){
         
         
         //adding the url based on the type of action choosed by the user
-        const url = 'https://web-production-e015.up.railway.app/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
+        const url = process.env.backendDomainName + '/matrix/' + (actionToTake == 2 || actionToTake == 3 ? 'multiply/' : actionToTake == 4 && additionOrSubstraction == 0 ? 'add/' : actionToTake == 4 && additionOrSubstraction ? 'substract/' : null)
         const urlToOpenOnDisplayedMatrix = '/' + (actionToTake == 2 || actionToTake == 3 ? 'multiplicationCalculation'  : actionToTake == 4 && additionOrSubstraction == 0 ? 'additionCalculation' : actionToTake == 4 && additionOrSubstraction ? 'substractionCalculation' : null) + '?matrixId='
 
         axios.post(url, dataToSend, {timeout: 12000}).then(res => {
@@ -459,28 +457,28 @@ function getResultTitle(joinedPage){
 function getMatrixUrl(typeCalculation, matrixId){
 
     if(typeCalculation == 'determinantCaclucation')
-        return 'https://web-production-e015.up.railway.app/matrix/determinant/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/determinant/' + matrixId + '/'
 
     else if(typeCalculation == 'rankCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/rank/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/rank/' + matrixId + '/'
     
     else if(typeCalculation == 'systemSolvingCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/solve/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/solve/' + matrixId + '/'
 
     else if(typeCalculation == 'multiplicationCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/multiply/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/multiply/' + matrixId + '/'
     
     else if(typeCalculation == 'additionCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/add/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/add/' + matrixId + '/'
     
     else if(typeCalculation == 'substractionCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/substract/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/substract/' + matrixId + '/'
     
     else if(typeCalculation == 'inverseCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/inverse/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/inverse/' + matrixId + '/'
 
     else if(typeCalculation == 'transposeCalculation')
-        return 'https://web-production-e015.up.railway.app/matrix/transpose/' + matrixId + '/'
+        return process.env.backendDomainName + '/matrix/transpose/' + matrixId + '/'
 
 }
 
