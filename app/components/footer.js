@@ -109,7 +109,7 @@ export default function Footer({footerElements}){
                                         <div id="plusIcon4" className="lg:hidden">+</div>
                                     </div>
                                     <a id="linkInfo4" href="https://github.com/ahmedawadi/matrix-project-full-stack" target="_blank" className="lg:flex space-x-[5px] items-center pl-[15px] lg:inline-block hidden">
-                                        <div cldivssName="text-[14px]">
+                                        <div className="text-[14px]">
                                             Website code
                                         </div>
                                         <div className="w-[20px] h-[20px]">
@@ -154,11 +154,12 @@ export default function Footer({footerElements}){
                         </div>
                     </div>
                 </div>
+                
             </div>
             <div className="w-full h-[1px] bg-[#b5b5b5]"></div>
             <div className="bg-[#383838] w-full h-full flex justify-center px-[30px] py-[5px] text-white md:text-[15px] text-[10px]">
-                <a href="https://fss.rnu.tn/" className="flex ">
-                    <img src="facultyLogo.png" className="w-[40px] h-[25px]"/>
+                <a href="https://fss.rnu.tn/"  className="flex ">
+                    <img src="/facultyLogo.png" alt="facultyLogo" className="w-[40px] h-[25px]"/>
                     <div className="font-thin text-[14px]">
                         {
                             footerElements.faculty
