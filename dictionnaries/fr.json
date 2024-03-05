@@ -170,5 +170,27 @@
             "emptyComment": "le champs feedback est vide!",
             "tryAgain": "Réssayer une autre fois"
         }
+    },
+    "resultPage": {
+        "pageDesc": "Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé. ",
+        "matrixRank": "Rang de la matrice",
+        "matrixDeterminant": "Déterminant de la matrice",
+        "recalculate": "Recalculer",
+        "continueCalcul": "Continuer le calcul",
+        "calculatedMatrix": "La matrice calculée",
+        "calculatedMatrices": "Les matrices calculées",
+        "checkSystem" : "voir le système",
+        "checkCalculatedMatrices": "voir les matrices calculées",
+        "checkCalculatedMatrix": "voir la matrice calculée",
+        "hideCalculatedMatrices": "masquer les matrices calculées",
+        "hideCalculatedMatrix": "masquer la matrices calculée",
+        "calcuationResult": ["Résultat de la calculation du déterminant", "Résultat de la produit matriciel", "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", "Résultat de la calculation du matrice inverse", "Résultat de la transposition de la matrice", "Résultat de la calculation du rang"],
+        "functionalities" : ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel provenant de la gauche", "Produit matriciel provenant de la droite", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"],
+        "warnings": {
+            "tryAgain":"Essayer de calculer une autre fois!",
+            "emptyCells":"Il y a des cellules vides!",
+            "inverseCalculImpossible": "Impossible de calculer l'inverse de cette matrice!",
+            "noInverse":"il n'y a pas d'inverse à cette matrice"
+        }
     }
 }

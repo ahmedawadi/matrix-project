@@ -176,5 +176,27 @@
             "emptyComment": "The feedback field is empty!",
             "tryAgain": "Try again"
         }
+    }, 
+    "resultPage": {
+        "pageDesc": "Here, you will find the result of your calculation and you can use it to continue the calculation based on it. You can also see what you have calculated.",
+        "matrixRank": "Matrix Rank",
+        "matrixDeterminant": "Matrix Determinant",
+        "recalculate": "Recalculate",
+        "continueCalcul": "Continue Calculation",
+        "calculatedMatrix": "Calculated Matrix",
+        "calculatedMatrices": "Calculated Matrices",
+        "checkSystem": "View System",
+        "checkCalculatedMatrices": "View Calculated Matrices",
+        "checkCalculatedMatrix": "View Calculated Matrix",
+        "hideCalculatedMatrices": "Hide Calculated Matrices",
+        "hideCalculatedMatrix": "Hide Calculated Matrix",
+        "calcuationResult": ["Determinant Calculation Result", "Matrix Product Calculation Result", "Matrix Addition Calculation Result", "Matrix Subtraction Calculation Result", "System Resolution Result", "Matrix Inverse Calculation Result", "Matrix Transposition Result", "Matrix Rank Calculation Result"],
+        "functionalities": ["Matrix Determinant", "Matrix Rank", "Left-hand Matrix Product", "Right-hand Matrix Product", "Addition/Subtraction", "Matrix Inverse", "Matrix Transpose"],
+        "warnings": {
+            "tryAgain": "Try calculating again!",
+            "emptyCells": "There are empty cells!",
+            "inverseCalculImpossible": "Unable to calculate the inverse of this matrix!",
+            "noInverse": "There is no inverse for this matrix"
+        }
     }
 }

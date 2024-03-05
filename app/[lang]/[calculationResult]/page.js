@@ -1,4 +1,5 @@
 
+import { getDictionary } from '../../../dictionnaries/dictionaries'
 import {CalculationResult} from './resultCalculationPage'
 
 export function generateStaticParams(){
@@ -6,9 +7,11 @@ export function generateStaticParams(){
 }
 
 export default function page({params}){
-
+    
+    const dict = getDictionary(params.lang)
+    
     return (
-        <CalculationResult params={params} />
+        <CalculationResult content={dict.resultPage} params={params} />
 
     )
 }

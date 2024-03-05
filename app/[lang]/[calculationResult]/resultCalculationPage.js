@@ -10,9 +10,6 @@ import MatrixInput from "../../matrixInput"
 import axios from 'axios'
 import useSWR from 'swr'
 
-const calcuationResult = ['Résultat de la calculation du déterminant', 'Résultat de la produit matriciel', "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", 'Résultat de la calculation du matrice inverse', "Résultat de la transposition de la matrice", 'Résultat de la calculation du rang']
-const functionalities = ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel provenant de la gauche", "Produit matriciel provenant de la droite", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"]
-
 //this variables are used for the matrix multiplication
 let matrixALines = 1
 let matrixAColumns = 1
@@ -24,7 +21,7 @@ let firstCalculatedMatrix = null
 let secondCalculatedMatrix = null
 const fetcher = (url) => axios.get(url).then(res => res.data)
 
-export function CalculationResult({params}){
+export function CalculationResult({params, content}){
 
     const [matrix, setMatrix] = useState(null)//matrix to display
     const [matrixInputIsOpen, setMatrixInputIsOpen] = useState(false)//used to get the matrix values from the user when the user want to continue calculation with his matrix
@@ -101,7 +98,7 @@ export function CalculationResult({params}){
                 window.open('determinantCaclucation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
                 
-                matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
+                matrixCalculationWarning.innerHTML = content.warnings.tryAgain
             })
         }
         else if (functionality == 1){
@@ -114,7 +111,7 @@ export function CalculationResult({params}){
             axios.post(process.env.backendDomainName + '/matrix/rank/', dataToSend, {timeout: 12000}).then(res => {
                 window.open('/rankCalculation?matrixId=' + res.data._id, '_blank')
             }).catch(_ => {
-                matrixCalculationWarning.innerHTML = "essayer de calculer une autre fois!"
+                matrixCalculationWarning.innerHTML = content.warnings.tryAgain
             })
         }
         else if (functionality == 5){
@@ -130,10 +127,10 @@ export function CalculationResult({params}){
             }).catch(error => {
                 
                 if(error?.response?.status == 400){
-                    matrixCalculationWarning.innerHTML = "il n'y a pas d'inverse à cette matrice"
+                    matrixCalculationWarning.innerHTML = content.warnings.noInverse
                 }
 
-                matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
+                matrixCalculationWarning.innerHTML = content.warnings.inverseCalculImpossible
             })
         }
         else if (functionality == 6){
@@ -147,7 +144,7 @@ export function CalculationResult({params}){
     
                 setMatrixInputIsOpen(false)
             }).catch(_ => {
-                matrixCalculationWarning.innerHTML = "Impossible de calculer l'inverse de cette matrice!"
+                matrixCalculationWarning.innerHTML = content.warnings.inverseCalculImpossible
             })
         }
         else 
@@ -168,7 +165,7 @@ export function CalculationResult({params}){
         const calculateButton = document.getElementById("calculateButton")//will be used to animate the button when it is waiting for the calculation
 
         if(!newMatrixAdded){
-            matrixWarning.innerHTML = "Il y a des cellules vides!"
+            matrixWarning.innerHTML = content.warnings.emptyCells
             return
         }
         else if(matrixWarning.innerText != '')
@@ -206,7 +203,7 @@ export function CalculationResult({params}){
 
             setMatrixInputIsOpen(false)
         }).catch(_ => {
-            matrixWarning.innerHTML = "essayer de calculer une autre fois!"
+            matrixWarning.innerHTML = content.warnings.tryAgain
 
             calculateButton.classList.remove("opacity-40")
             calculateButton.disabled = false
@@ -249,18 +246,20 @@ export function CalculationResult({params}){
             <div className='xl:px-[50px] xl:w-[70%] w-full bg-[#424143] py-[20px] flex flex-col min-h-screen'>
                 <div className='xl:text-[28px] xl:pl-[0px] sm:pl-[20px] px-[10px] w-full flex justify-end font-semibold text-[22px] text-white pb-[20px] border-b-[0.5px] border-[#4a4a4a] font-serif shadow-[0_1px_0_rgba(10,10,10,0.5)]'>
                     {
-                        getResultTitle(params.calculationResult)
+                        getResultTitle(params.calculationResult, content.calcuationResult)
                     }
                 </div>
                 <div className="xl:pt-[40px] xl:text-[22px] pt-[30px] pl-[15px] text-[#b5b5b5] text-[18px]">
-                    Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé.               
+                    {
+                        content.pageDesc
+                    }              
                 </div>
                 <div className='pt-[30px] flex flex-col space-y-[30px] text-[#b5b5b5] text-[18px] xl:pt-[50px]'>
                     <div className="w-full flex flex-col items-center justify-center">
                         <div id="calculatedMatrices" className="hidden flex flex-col space-y-[20px] w-full pb-[20px] mb-[30px] border-[1px] border-[#4a4a4a] shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)] ">
                             <div className="xl:text-[28px] pl-[20px] font-serif text-[22px] font-extrabold">
                                 {
-                                    params.calculationResult == 'inverseCalculation' || params.calculationResult == 'transposeCalculation' ? 'La matrice calculée' : 'Les matrices calculées'
+                                    params.calculationResult == 'inverseCalculation' || params.calculationResult == 'transposeCalculation' ? content.calculatedMatrix : content.calculatedMatrices
                                 }
                             </div>
                             <CalculatedMatrices calcultionType={params.calculationResult} firstMatrix={firstCalculatedMatrix} secondMatrix={secondCalculatedMatrix} />
@@ -269,21 +268,21 @@ export function CalculationResult({params}){
                             <div className="flex space-x-[10px]">
                                 {
                                     params.calculationResult == 'determinantCaclucation' || params.calculationResult == 'rankCalculation' ? null :
-                                    <button id="displayCalculatedMatricesButton" className="relative font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={seeCalculatedMatrices}>
+                                    <button id="displayCalculatedMatricesButton" className="relative font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={() => seeCalculatedMatrices(content)}>
                                     {
-                                        params.calculationResult == 'systemSolvingCalculation' ? "voir le système" : "voir les matrices calculées"
+                                        params.calculationResult == 'systemSolvingCalculation' ? content.checkSystem : content.checkCalculatedMatrices
                                     }    
                                     </button>
                                 }
                                 <div className="relative">
                                     <button id="functionnalitiesListButton" className="font-semibold border-2 border-[#575757] hover:border-[#4a4a4a] rounded-[5px] text-white px-[10px] py-[5px] hover:shadow-[-1px_-1px_1px_rgba(0,0,0,0.7)]" onClick={openFunctionnalitiesList}>
                                         {
-                                            params.calculationResult == 'determinantCaclucation' ? 'Recalculer' : 'Continuer le calcul'
+                                            params.calculationResult == 'determinantCaclucation' ? content.recalculate : content.continueCalcul
                                         }
                                     </button>
                                     <div id="functionnalitiesList" className={"hidden absolute sm:right-0 md:w-[300px] sm:top-[45px] w-[250px] flex flex-col border-y-[2px] border-[#4a4a4a] backgroundImage" + (params.calculationResult == 'determinantCaclucation' || params.calculationResult == 'rankCalculation' ? " top-[45px] right-[-30px]" : " right-0 top-[70px]")} >
                                         {
-                                            functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
+                                            content.functionalities.map((functionality, index) => (matrix && matrix?.length != matrix[0]?.length) && (index == 0 || index == 1 || index == 5) ? null : <div key={index} className="py-[10px] px-[20px] border-b-[0.5px] border-[#4a4a4a] cursor-pointer px-[15px] py-[10px] hover:text-white hover:bg-[url('../public/titleFont.png')]" onClick={() => continueCalculation(index)}>
                                                 {
                                                     functionality
                                                 }
@@ -357,11 +356,11 @@ export function CalculationResult({params}){
                             {   
                                 params.calculationResult == 'determinantCaclucation' ? <div>
                                 {
-                                    'Déterminant de la matrice = ' + (Math.round(matrixDeterminantResult * 100) / 100)
+                                    content.matrixDeterminant + ' = ' + (Math.round(matrixDeterminantResult * 100) / 100)
                                 }    
                                 </div> : params.calculationResult == 'rankCalculation' ? <div>
                                 {
-                                    'Rang de la matrice = ' + (Math.round(matrixRankResult * 100) / 100)
+                                    content.matrixRank + ' = ' + (Math.round(matrixRankResult * 100) / 100)
                                 }    
                                 </div> : null
                             }
@@ -430,7 +429,7 @@ function getMatrix(matrixName){
 }
 
 //used to put the result title based on the dynamic page joining
-function getResultTitle(joinedPage){
+function getResultTitle(joinedPage, calcuationResult){
 
     const possibePages = ['determinantCaclucation', 'multiplicationCalculation', 'additionCalculation', 'substractionCalculation', 'systemSolvingCalculation', 'inverseCalculation', 'transposeCalculation', 'rankCalculation']
 
@@ -483,7 +482,7 @@ function getMatrixUrl(typeCalculation, matrixId){
 }
 
 //this function is used to see the calculated matrices to get that result
-function seeCalculatedMatrices(){
+function seeCalculatedMatrices(content){
 
     const seeCalculatedMatricesButton = document.getElementById('displayCalculatedMatricesButton')
     const calculatedMatrices = document.getElementById('calculatedMatrices')
@@ -492,17 +491,17 @@ function seeCalculatedMatrices(){
         calculatedMatrices.classList.remove('hidden')
 
         if(seeCalculatedMatricesButton.innerText.includes('la matrice'))
-            seeCalculatedMatricesButton.innerHTML = 'masquer la matrices calculée'
+            seeCalculatedMatricesButton.innerHTML = content.hideCalculatedMatrix
         else 
-            seeCalculatedMatricesButton.innerHTML = 'masquer les matrices calculées'
+            seeCalculatedMatricesButton.innerHTML = content.hideCalculatedMatrices
     }
     else {
         calculatedMatrices.classList.add('hidden')
         
         if(seeCalculatedMatricesButton.innerText.includes('la matrice'))
-            seeCalculatedMatricesButton.innerHTML = 'voir la matrices calculée'
+            seeCalculatedMatricesButton.innerHTML = content.checkCalculatedMatrix
         else 
-            seeCalculatedMatricesButton.innerHTML = 'voir les matrices calculées'
+            seeCalculatedMatricesButton.innerHTML = content.checkCalculatedMatrices
     }
 
 
