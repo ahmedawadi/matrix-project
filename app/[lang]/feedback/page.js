@@ -1,5 +1,5 @@
 import { getDictionary } from "../../../dictionnaries/dictionaries"
-import FeedBack from "./feedback.js"
+import FeedBack from "./feedback"
 
 export default async function Page({params}){
 
