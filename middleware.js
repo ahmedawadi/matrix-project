@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request){
-    const {origin, pathname} = request.nextUrl
-    
+    const {pathname} = request.nextUrl
+    console.log("joined middleware")
     if(!request.url.includes(".") && !["en", "fr"].includes(pathname.substring(1, 3))){  
         request.nextUrl.pathname = "/en" + pathname
         

@@ -30,7 +30,7 @@
     "**/*.tsx",
     "dist/types/**/*.ts",
     "build/types/**/*.ts"
-  ],
+, "app/[lang]/feedback/layout.jsx", "middleware.js"  ],
   "exclude": [
     "node_modules"
   ]
