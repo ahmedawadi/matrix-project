@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request){
     const {pathname} = request.nextUrl
-    console.log("joined middleware")
-    if(!request.url.includes(".") && !["en", "fr"].includes(pathname.substring(1, 3))){  
+    console.log(pathname)
+    if(!pathname.includes(".") && !["en", "fr"].includes(pathname.substring(1, 3))){  
         request.nextUrl.pathname = "/en" + pathname
         
         return NextResponse.redirect(request.nextUrl)
