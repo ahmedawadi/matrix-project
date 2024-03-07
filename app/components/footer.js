@@ -158,8 +158,8 @@ export default function Footer({footerElements}){
             </div>
             <div className="w-full h-[1px] bg-[#b5b5b5]"></div>
             <div className="bg-[#383838] w-full h-full flex justify-center px-[30px] py-[5px] text-white md:text-[15px] text-[10px]">
-                <a href="https://fss.rnu.tn/"  className="flex ">
-                    <img src="/facultyLogo.png" alt="facultyLogo" className="w-[40px] h-[25px]"/>
+                <a href="https://fss.rnu.tn/"  className="flex items-center">
+                    <img src="/facultyLogo.png" alt="facultyLogo"/>
                     <div className="font-thin text-[14px]">
                         {
                             footerElements.faculty
