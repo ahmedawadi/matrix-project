@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Matrix project',
-  description: 'web site that calculate matrices operations and can ',
+  title: 'Matrices Calculation',
+  description: 'web site that calculate matrices operations and can be used to calculate with different algorithms on the matrices and with different matrices types',
 }
 
 const navBarElements = ["home", "about_us", "feedback"]
