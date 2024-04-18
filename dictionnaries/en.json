@@ -1,0 +1,202 @@
+{
+    "navBar" : {
+        "home" : "Home",
+        "about_us" : "About US",
+        "feedback" : "Feedback",
+        "title": {
+            "first": "Matrices",
+            "second": "Calculation"
+        }
+    },
+    "footer" : {
+        "frontEndDev": "Our Front-End developer",
+        "backEndDev": "Our Back-End developer",
+        "uiux": "Our UI/UX Designer",
+        "algorithmDev": "Our algorithm developer",
+        "gitLink": "Github link",
+        "supervisor": "Our supervisor",
+        "faculty": "Faculty of sciences of Sfax 2023-2024",
+        "title": {
+            "first": "Matrices",
+            "second": "Calculation"
+        }
+    },
+    "operations": {
+        "multiplication" : "Matrix Multiplication",
+        "system": "System Resolution",
+        "inverse" : "Inverse Matrix",
+        "transpose" : "Matrix Transpose",
+        "determinant": "Determinant",
+        "addSous": "Matrix Addition/Substraction",
+        "rank" : "Matrix Rank"
+    },
+    "matrixMultiplication" : {
+        "pageName":"Matrices multiplications",
+        "pageDesc": "Using real numbers, you can calculate the multiplication of two matrices. You have the option to choose the type of matrix you will use to reduce the complexity of the applied code. If not specified, dense matrices are automatically used.",
+        "matrixTypesButtonName": "Matrices types",
+        "matrixTypes": 
+        ["dense X dense", "upper X lower", "lower X dense", "upper X dense", "banded X dense", "upper banded X dense", "lower banded X dense", "banded X lower banded", "banded X inverse of matrix", "banded X transpose of matrix", "lower banded X upper banded"],
+        "matrixTypeDec": "You can select the type of matrices you want to work with:",
+        "calculationButtonName": "Add matrices",
+        "dimension1Desc" :"Matrix A dimension:",
+        "dimension2Desc" : "Matrix B dimension:",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "squareSuperiorMatrix": "The superior matrix must be square!",
+            "squareInferiorMatrix": "The inferior matrix must be square!",
+            "squareBandedMatrix": "The banded matrix must be square!",
+            "bandSizeMatrixAddition": "Add the band size of the matrix",
+            "bandSizeNotApplicable": "Band size does not apply to the matrix",
+            "squareInferiorBandedMatrix": "The inferior banded matrix must be square!",
+            "squareSuperiorBandedMatrix": "The superior banded matrix must be square!",
+            "AandBBandSizeAreDifferent": "The band sizes of matrix A and matrix B must be different!"
+        }
+
+    },
+    "systemResolution": {
+        "pageName": "System Resolution",
+        "pageDesc": "Here, you can solve a system of simultaneous linear equations. You can also select the matrix type in the calculator that uses various algorithms with real numbers online to reduce the complexity of the applied code. And for iterative methods, you can choose to stop your algorithm by epsilon or by a maximum number of iterations.",
+        "algorithms": [
+            "Triangular Matrix Method by Choice",
+            "Gauss Method with Partial Pivoting",
+            "Gauss Elimination Methods",
+            "Gauss Jordan Method",
+            "LU Decomposition Method",
+            "Cholesky Method",
+            "Jacobi Method",
+            "Gauss-Seidel Method"
+        ],
+        "matrixTypes": [
+            "Lower Dense Matrix",
+            "Upper Dense Matrix",
+            "Lower Half-Banded Matrix",
+            "Upper Half-Banded Matrix"
+        ],
+        "iterativeMethodsTypes": ["Use Epsilon", "Use Maximum Number of Iterations"],
+        "EG_LU__EGJ_matricesType": ["Dense Matrix (Positive Definite Symmetric)", "Banded Matrix (Positive Definite Symmetric)"],
+        "EGPP_cholesky_matricesType": ["Non-symmetric Dense Matrix", "Non-symmetric Banded Matrix"],
+        "matrixTypeDec": "You can choose which type of matrix you will use with your algorithm:",
+        "algorithmTypeDec": "You can choose which type of algorithms you want to use to solve your system:",
+        "chooseStopCondition": "You can choose which method you will use as a stop condition for your algorithm:",
+        "calculationButtonName": "Add Matrix",
+        "dimension1Desc": "Dimension of Matrix :",
+        "maxIterationsDesc": "* Maximum number of iterations for this algorithm:",
+        "epsilonValueDesc": "* Epsilon value:",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "squareSuperiorMatrix": "The superior matrix must be square!",
+            "squareInferiorMatrix": "The inferior matrix must be square!",
+            "squareBandedMatrix": "The banded matrix must be square!",
+            "bandSizeMatrixAddition": "Add the band size of the matrix",
+            "bandSizeNotApplicable": "Band size does not apply to the matrix",
+            "squareInferiorBandedMatrix": "The lower banded matrix must be square!",
+            "squareSuperiorBandedMatrix": "The upper banded matrix must be square!",
+            "AandBBandSizeAreDifferent": "The band of matrix A and the band of matrix B must be different!"
+        }
+    },
+    "inverse": {
+        "pageName": "Matrix Inverse",
+        "pageDesc": "You have the ability to compute the inverse of a matrix containing real numbers using the Gauss-Jordan elimination algorithm. This feature allows you to efficiently obtain the inverse of the given matrix.",
+        "dimension1Desc": "Matrix Dimension:",
+        "calculationButtonName": "Add Matrix",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "noInverse": "There is no inverse for this matrix",
+            "tryAgain": "Try again!"
+        }
+    },
+    "transpose": {
+        "pageName": "Transposed Matrix",
+        "pageDesc": "Here you can calculate a transposed matrix with real numbers online and for free.",
+        "dimension1Desc": "Matrix Dimension:",
+        "calculationButtonName": "Add Matrix",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "tryAgain": "Try again!"
+        }
+    },
+    "determinant" : {
+        "pageName": "Matrix Determinant",
+        "pageDesc": "Here, you have the opportunity to calculate the determinant of a matrix containing real numbers.",
+        "dimension1Desc": "Matrix Dimension:",
+        "calculationButtonName": "Add Matrix",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "tryAgain": "Try again!"
+        }
+    },
+    "add_sous" : {
+        "pageName": "Matrix Addition and Subtraction",
+        "pageDesc": "Here, you can add and subtract matrices with real numbers.",
+        "dimension1Desc": "Matrix Dimension:",
+        "calculationButtonName": "Add Matrix",
+        "operationType": "Operation Type",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "tryAgain": "Try again!"
+        }
+    },
+    "rank": {
+        "pageName": "Matrix Rank",
+        "pageDesc": "Here you can calculate the rank of a matrix containing real numbers online.",
+        "dimension1Desc": "Matrix Dimension:",
+        "calculationButtonName": "Add Matrix",
+        "warnings": {
+            "emptyCells": "There are empty cells!",
+            "tryAgain": "Try again!"
+        }
+    },
+    "input": {
+        "title": "Matrix Input",
+        "clear": "Clear",
+        "replace": "Fill the empty cells with zeros",
+        "replaceVector": "Fill the empty cells of the vector with zeros",
+        "calculate": "Calculate"
+    }, 
+    "about": {
+        "pageName": "About Us",
+        "content": {
+            "firstWord": "Welcome",
+            "firstParagraph": "to our dedicated website for advanced matrix calculation, where mathematical excellence meets user-friendly simplicity.",
+            "secondParagraph": "At our platform, we are committed to providing powerful tools for matrix manipulation, offering comprehensive features such as matrix multiplication, addition, and subtraction. We go beyond by effectively solving systems of linear equations using advanced matrix methods. Our platform also features essential functionalities such as determinant calculation, rank determination, and matrix transpose, allowing users to solve complex problems with remarkable ease. Whether you are a mathematics student, an engineering professional, or a data enthusiast, our website is designed to meet your matrix needs with precision and efficiency.",
+            "thirdParagraph": "Explore our suite of tools and discover the power of simplified matrix computations."
+        }
+    },
+    "feedBack": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "comment": "Your comments/questions",
+        "obligatoryFields": "All fields are mandatory*",
+        "sendButton" : "Send",
+        "warnings": {
+            "emptyFirstName": "The first name field is empty!",
+            "emptyLastName": "The last name field is empty!",
+            "emptyEmail": "The email field is empty!",
+            "invalidEmail": "The email format is invalid!",
+            "emptyComment": "The feedback field is empty!",
+            "tryAgain": "Try again"
+        }
+    }, 
+    "resultPage": {
+        "pageDesc": "Here, you will find the result of your calculation and you can use it to continue the calculation based on it. You can also see what you have calculated.",
+        "matrixRank": "Matrix Rank",
+        "matrixDeterminant": "Matrix Determinant",
+        "recalculate": "Recalculate",
+        "continueCalcul": "Continue Calculation",
+        "calculatedMatrix": "Calculated Matrix",
+        "calculatedMatrices": "Calculated Matrices",
+        "checkSystem": "View System",
+        "checkCalculatedMatrices": "View Calculated Matrices",
+        "checkCalculatedMatrix": "View Calculated Matrix",
+        "hideCalculatedMatrices": "Hide Calculated Matrices",
+        "hideCalculatedMatrix": "Hide Calculated Matrix",
+        "calculationResult": ["Determinant Calculation Result", "Matrix Product Calculation Result", "Matrix Addition Calculation Result", "Matrix Subtraction Calculation Result", "System Resolution Result", "Matrix Inverse Calculation Result", "Matrix Transposition Result", "Matrix Rank Calculation Result"],
+        "functionalities": ["Matrix Determinant", "Matrix Rank", "Left-hand Matrix Product", "Right-hand Matrix Product", "Addition/Subtraction", "Matrix Inverse", "Matrix Transpose"],
+        "warnings": {
+            "tryAgain": "Try calculating again!",
+            "emptyCells": "There are empty cells!",
+            "inverseCalculImpossible": "Unable to calculate the inverse of this matrix!",
+            "noInverse": "There is no inverse for this matrix"
+        }
+    }
+}

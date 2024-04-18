@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.backgroundImage{
+  background-image: url('../public/backgroundImage.png');
+  
+}
+
+.titleSkew{
+  transform: skew(0, -5deg)
+}
+
+.calculTitle{
+
+  background-image: url(../public/titleFont.png);
+  background-clip: text;
+  color: transparent;
+  
+}
+
+@media (max-width: 1024px){
+  .navBarElements{
+  background-image: url(../public/titleFont.png);
+  background-clip: text;
+  color: transparent;
+  }
+}
+
+@media (max-width: 1024px){
+  .navBarPageElement{
+    background-image: url(../public/backgroundImage.png);
+    background-clip: text;
+    color: transparent;
+  }
+  
+}
+
+
+
+
+.calculSecondTitle{
+  background-image: url(../public/titleSecondPartFont.png);
+  background-clip: text;
+  color: transparent;
+
+}
