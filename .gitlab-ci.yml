@@ -1,0 +1,5 @@
+apt update
+apt install nodejs
+npm install 
+npm run build 
+npm start
