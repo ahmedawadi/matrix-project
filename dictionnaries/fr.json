@@ -1,196 +1,230 @@
 {
-    "navBar" : {
-        "home" : "Accueil",
-        "about_us" : "À propos de nous",
-        "feedback" : "Feedback",
-        "title": {
-            "first": "Calcul des",
-            "second": "Matrices"
-        }
-    },
-    "footer" : {
-        "frontEndDev": "Notre Front-End developer",
-        "backEndDev": "Notre Back-End developer",
-        "uiux": "Notre UI/UX Designer",
-        "algorithmDev": "Notre algorithm developer",
-        "gitLink": "Notre Lien Github",
-        "supervisor": "Notre superviseur",
-        "faculty" : "Faculté des Sciences de Sfax 2023-2024",
-        "title": {
-            "first": "Calcul des",
-            "second": "Matrices"
-        }
-    },
-    "operations": {
-        "multiplication" : "Multiplication matricielle",
-        "system": "Résoudre d'un systeme",
-        "inverse" : "Inverse d'une matrice",
-        "transpose" : "Transposée d'une matrice",
-        "determinant": "Déterminant",
-        "addSous": "Addition/Soustraction",
-        "rank" : "Rang d'une matrice"
-    },
-    "matrixMultiplication" : {
-        "pageName":"Multiplication matricielle",
-        "pageDesc": "En utilisant des nombres réels, vous pouvez calculer la multiplication des deux matrices. Vous avez la possibilité de choisir le type de matrice que vous utiliserez pour réduire la complexité du code appliqué. Si vous ne le faites pas, les matrices denses sont automatiquement utilisées.",
-        "matrixTypesButtonName": "Types des matrices",
-        "matrixTypes": 
-        ["dense X dense", "supérieure X inférieure", "inférieure X dense", "supérieure X dense", "bande X dense", "demi bande supérieure X dense", "demi bande inférieure X dense", "bande X demi bande inférieure", "bande X l'inverse du matrice", "bande X la transposée du matrice", "demi bande inférieure X demi bande supérieure"],
-        "matrixTypeDec": " Vous pouvez sélectionner le type de matrices que vous souhaitez travailler avec :",
-        "calculationButtonName": "Ajouter matrices",
-        "dimension1Desc" :"Dimension de la matrice A:",
-        "dimension2Desc" : "Dimension de la matrice B:",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "squareSuperiorMatrix": "La matrice supérieure doit être carre!",
-            "squareInferiorMatrix": "La matrice inferieure doit être carre.!",
-            "squareBandedMatrix": "La matrice bande doit être carre!",
-            "bandSizeMatrixAddition": "Ajouter la bande de la matrice",
-            "bandSizeNotApplicable": "taille de la bande ne s'applique pas à la matrice",
-            "squareInferiorBandedMatrix": "La matrice bande inférieure doit être carrée!",
-            "squareSuperiorBandedMatrix": "La matrice bande supérieure doit être carrée!",
-            "AandBBandSizeAreDifferent": "La bande du A et la bande du B doivent être différentes!"
-            
-        }
-
-    },
-    "systemResolution" : {
-        "pageName":"Résoudre d'un système",
-        "pageDesc": "Ici, vous pouvez résoudre un système d'équations linéaires simultanées. Vous pouvez également sélectionner le type de matrice dans le calculateur qui utilise divers algorithmes avec des nombres réels en ligne afin de réduire la complexité du code qui sera appliqué. et pour les méthodes iteratives, vous pouvez choisir d'arrêter votre algorithme par epsilon ou par un nombre maximal d'iterations.",
-        "algorithms": 
-            [
-                "Méthode de matrice triangulaire par choix",
-                "Méthode de Gauss avec pivotage partiel",
-                "Méthodes d’élimination de Gauss",
-                "Méthode de Gauss Jordan",
-                "Méthode de décomposition LU",
-                "Méthode de Cholesky",
-                "Méthode de Jacobi",
-                "Méthode de Gauss-Seidel"
-            ],
-        "matrixTypes":[
-            "Matrice inférieure dense",
-            "Matrice supérieure dense",
-            "Matrice inférieure demi-bande",
-            "Matrice supérieure demi-bande"
-        ],
-        "iterativeMethodsTypes" : ["utliliser Epsilon", "utliliser nombre d'itérations maximale"],
-        "EG_LU__EGJ_matricesType" : ["Matrice dense (Symétrique définie positive)", "Matrice bande (Symétrique définie positive)"],
-        "EGPP_cholesky_matricesType" : ["Matrice dense non symétrique", "Matrice bande non symétrique"],
-        "matrixTypeDec": "Vous pouvez choisir quel type de matrice vous allez utiliser avec votre algorithme :",
-        "algorithmTypeDec": "Vous pouvez choisir quel type d'algorithmes vous voulez utiliser pour résoudre votre système :",
-        "chooseStopCondition": "Vous pouvez choisir quel methode vous allez utiliser comme une condition d'arret à votre algorithme: ",
-        "calculationButtonName": "Ajouter matrice",
-        "dimension1Desc" :"Dimension de la matrice :",
-        "maxIterationsDesc": "* nombre d'itérations maximale à cette algorithme :",
-        "epsilonValueDesc": "* la valeur d'Epsilon :",
-        "warnings": {
-            "bandSizeMatrixAddition": "Ajouter la bande de la matrice"
-        }
-    },
-    "inverse" : {
-        "pageName":"Matrice inverse",
-        "pageDesc": "Vous avez la possibilité de calculer l'inverse d'une matrice contenant des nombres réels grâce à l'utilisation de l'algorithme de l'élimination de Gauss-Jordan. Cette fonctionnalité vous permet d'obtenir l'inverse de la matrice en question de manière efficace.",
-        "dimension1Desc" :"Dimension de la matrice :",
-        "calculationButtonName": "Ajouter matrice",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "noInverse": "il n'y a pas d'inverse à cette matrice",
-            "tryAgain": "Essayer une autre fois!"
-        }
-    },
-    "transpose": {
-        "pageName":"Matrice transposée",
-        "pageDesc": "Ici vous pouvez calculer en ligne et gratuitement une matrice transposée avec des nombres réelles.",
-        "dimension1Desc" :"Dimension de la matrice :",
-        "calculationButtonName": "Ajouter matrice",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "tryAgain": "Essayer une autre fois!"
-        }
-    },
-    "determinant" : {
-        "pageName":"Déterminant d'une matrice",
-        "pageDesc": "Ici, vous avez la possibilité de calculer le déterminant d'une matrice contenant des nombres réels.",
-        "dimension1Desc" :"Dimension de la matrice :",
-        "calculationButtonName": "Ajouter matrice",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "tryAgain": "Essayer une autre fois!"
-        }
-    },
-    "add_sous" : {
-        "pageName": "Addition et Soustraction matricielle",
-        "pageDesc": "Ici, vous pouvez additionner et soustraire des matrices avec des nombres réeeles.",
-        "dimension1Desc": "Dimension de la matrice:",
-        "calculationButtonName": "Ajouter matrice",
-        "operationType": "Type d'opération",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "tryAgain": "Essayer une autre fois!"
-        }
-    },
-    "rank": {
-        "pageName":"Rang d'une matrice",
-        "pageDesc": "Ici vous pouvez calculer en ligne le rang d'une matrice contenant des nombres réelles.",
-        "dimension1Desc" :"Dimension de la matrice :",
-        "calculationButtonName": "Ajouter matrice",
-        "warnings": {
-            "emptyCells": "Il y a des cellules vides!",
-            "tryAgain": "Essayer une autre fois!"
-        }
-    },
-    "input": {
-        "title": "Entrée de matrice",
-        "clear": "Effacer",
-        "replace": "Remplir les cellules vides avec des zéros",
-        "replaceVector": "Remplir les cellules vides de vecteur avec des zéros",
-        "calculate": "Calculer"
-    }, 
-    "about": {
-        "pageName": "À propos de nous",
-        "content":{
-            "firstWord": "Bienvenue ",
-            "firstParagraph" : "sur notre site dédié au calcul matriciel avancé, où l'excellence mathématique rencontre la simplicité d'utilisation.",
-            "secondParagraph": "Chez nous, nous nous engageons à fournir des outils puissants pour la manipulation de matrices, offrant des fonctionnalités complètes telles que la multiplication, l'addition, et la soustraction matricielles. Nous allons au-delà en résolvant efficacement les systèmes d'équations linéaires à l'aide de méthodes matricielles avancées. Notre plateforme propose également des fonctionnalités essentielles telles que le calcul du déterminant, la détermination du rang et la transposée de matrices, permettant aux utilisateurs de résoudre des problèmes complexes avec une facilité remarquable. Que vous soyez un étudiant en mathématiques, un professionnel de l'ingénierie ou un passionné de données, notre site est conçu pour répondre à vos besoins matriciels avec précision et efficacité.",
-            "thirdParagraph": "Explorez notre suite d'outils et découvrez la puissance des calculs matriciels simplifiés."
-        }
-    },
-    "feedBack": {
-        "firstName": "nom",
-        "lastName": "prénom",
-        "comment": "Vos commmentaires/questions",
-        "obligatoryFields": "Tous les champs sont obligatoires*",
-        "sendButton" : "Envoyer",
-        "warnings": {
-            "emptyFirstName": "le champs prénom est vide!",
-            "emptyLastName": "le champs nom est vide!",
-            "emptyEmail": "le champs email est vide!",
-            "invalidEmail": "Le format de l'e-mail est incorrect!",
-            "emptyComment": "le champs feedback est vide!",
-            "tryAgain": "Réssayer une autre fois"
-        }
-    },
-    "resultPage": {
-        "pageDesc": "Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé. ",
-        "matrixRank": "Rang de la matrice",
-        "matrixDeterminant": "Déterminant de la matrice",
-        "recalculate": "Recalculer",
-        "continueCalcul": "Continuer le calcul",
-        "calculatedMatrix": "La matrice calculée",
-        "calculatedMatrices": "Les matrices calculées",
-        "checkSystem" : "voir le système",
-        "checkCalculatedMatrices": "voir les matrices calculées",
-        "checkCalculatedMatrix": "voir la matrice calculée",
-        "hideCalculatedMatrices": "masquer les matrices calculées",
-        "hideCalculatedMatrix": "masquer la matrices calculée",
-        "calculationResult": ["Résultat de la calculation du déterminant", "Résultat de la produit matriciel", "Résultat de l'addition matriciel", "Résultat de la soustraction matriciel", "Résultat de la résolution du système", "Résultat de la calculation du matrice inverse", "Résultat de la transposition de la matrice", "Résultat de la calculation du rang"],
-        "functionalities" : ["Déterminant d'une matrice", "Rang d'une matrice", "Produit matriciel provenant de la gauche", "Produit matriciel provenant de la droite", "Addition/Soustraction", "Inverse d'une matrice", "Transposée d'une matrice"],
-        "warnings": {
-            "tryAgain":"Essayer de calculer une autre fois!",
-            "emptyCells":"Il y a des cellules vides!",
-            "inverseCalculImpossible": "Impossible de calculer l'inverse de cette matrice!",
-            "noInverse":"il n'y a pas d'inverse à cette matrice"
-        }
+  "navBar": {
+    "home": "Accueil",
+    "about_us": "À propos de nous",
+    "feedback": "Feedback",
+    "title": {
+      "first": "Calcul des",
+      "second": "Matrices"
     }
+  },
+  "footer": {
+    "frontEndDev": "Notre Front-End developer",
+    "backEndDev": "Notre Back-End developer",
+    "uiux": "Notre UI/UX Designer",
+    "algorithmDev": "Notre algorithm developer",
+    "gitLink": "Notre Lien Github",
+    "supervisor": "Notre superviseur",
+    "faculty": "Faculté des Sciences de Sfax 2023-2024",
+    "title": {
+      "first": "Calcul des",
+      "second": "Matrices"
+    }
+  },
+  "operations": {
+    "multiplication": "Multiplication matricielle",
+    "system": "Résoudre d'un systeme",
+    "inverse": "Inverse d'une matrice",
+    "transpose": "Transposée d'une matrice",
+    "determinant": "Déterminant",
+    "addSous": "Addition/Soustraction",
+    "rank": "Rang d'une matrice"
+  },
+  "matrixMultiplication": {
+    "pageName": "Multiplication matricielle",
+    "pageDesc": "En utilisant des nombres réels, vous pouvez calculer la multiplication des deux matrices. Vous avez la possibilité de choisir le type de matrice que vous utiliserez pour réduire la complexité du code appliqué. Si vous ne le faites pas, les matrices denses sont automatiquement utilisées.",
+    "matrixTypesButtonName": "Types des matrices",
+    "matrixTypes": [
+      "dense X dense",
+      "supérieure X inférieure",
+      "inférieure X dense",
+      "supérieure X dense",
+      "bande X dense",
+      "demi bande supérieure X dense",
+      "demi bande inférieure X dense",
+      "bande X demi bande inférieure",
+      "bande X l'inverse du matrice",
+      "bande X la transposée du matrice",
+      "demi bande inférieure X demi bande supérieure"
+    ],
+    "matrixTypeDec": " Vous pouvez sélectionner le type de matrices que vous souhaitez travailler avec :",
+    "calculationButtonName": "Ajouter matrices",
+    "dimension1Desc": "Dimension de la matrice A:",
+    "dimension2Desc": "Dimension de la matrice B:",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "squareSuperiorMatrix": "La matrice supérieure doit être carre!",
+      "squareInferiorMatrix": "La matrice inferieure doit être carre.!",
+      "squareBandedMatrix": "La matrice bande doit être carre!",
+      "bandSizeMatrixAddition": "Ajouter la bande de la matrice",
+      "bandSizeNotApplicable": "taille de la bande ne s'applique pas à la matrice",
+      "squareInferiorBandedMatrix": "La matrice bande inférieure doit être carrée!",
+      "squareSuperiorBandedMatrix": "La matrice bande supérieure doit être carrée!",
+      "AandBBandSizeAreDifferent": "La bande du A et la bande du B doivent être différentes!"
+    }
+  },
+  "systemResolution": {
+    "pageName": "Résoudre d'un système",
+    "pageDesc": "Ici, vous pouvez résoudre un système d'équations linéaires simultanées. Vous pouvez également sélectionner le type de matrice dans le calculateur qui utilise divers algorithmes avec des nombres réels en ligne afin de réduire la complexité du code qui sera appliqué. et pour les méthodes iteratives, vous pouvez choisir d'arrêter votre algorithme par epsilon ou par un nombre maximal d'iterations.",
+    "algorithms": [
+      "Méthode de matrice triangulaire par choix",
+      "Méthode de Gauss avec pivotage partiel",
+      "Méthodes d’élimination de Gauss",
+      "Méthode de Gauss Jordan",
+      "Méthode de décomposition LU",
+      "Méthode de Cholesky",
+      "Méthode de Jacobi",
+      "Méthode de Gauss-Seidel"
+    ],
+    "matrixTypes": [
+      "Matrice inférieure dense",
+      "Matrice supérieure dense",
+      "Matrice inférieure demi-bande",
+      "Matrice supérieure demi-bande"
+    ],
+    "iterativeMethodsTypes": [
+      "utliliser Epsilon",
+      "utliliser nombre d'itérations maximale"
+    ],
+    "EG_LU__EGJ_matricesType": [
+      "Matrice dense (Symétrique définie positive)",
+      "Matrice bande (Symétrique définie positive)"
+    ],
+    "EGPP_cholesky_matricesType": [
+      "Matrice dense non symétrique",
+      "Matrice bande non symétrique"
+    ],
+    "matrixTypeDec": "Vous pouvez choisir quel type de matrice vous allez utiliser avec votre algorithme :",
+    "algorithmTypeDec": "Vous pouvez choisir quel type d'algorithmes vous voulez utiliser pour résoudre votre système :",
+    "chooseStopCondition": "Vous pouvez choisir quel methode vous allez utiliser comme une condition d'arret à votre algorithme: ",
+    "calculationButtonName": "Ajouter matrice",
+    "dimension1Desc": "Dimension de la matrice :",
+    "maxIterationsDesc": "* nombre d'itérations maximale à cette algorithme :",
+    "epsilonValueDesc": "* la valeur d'Epsilon :",
+    "warnings": {
+      "bandSizeMatrixAddition": "Ajouter la bande de la matrice"
+    }
+  },
+  "inverse": {
+    "pageName": "Matrice inverse",
+    "pageDesc": "Vous avez la possibilité de calculer l'inverse d'une matrice contenant des nombres réels grâce à l'utilisation de l'algorithme de l'élimination de Gauss-Jordan. Cette fonctionnalité vous permet d'obtenir l'inverse de la matrice en question de manière efficace.",
+    "dimension1Desc": "Dimension de la matrice :",
+    "calculationButtonName": "Ajouter matrice",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "noInverse": "il n'y a pas d'inverse à cette matrice",
+      "tryAgain": "Essayer une autre fois!"
+    }
+  },
+  "transpose": {
+    "pageName": "Matrice transposée",
+    "pageDesc": "Ici vous pouvez calculer en ligne et gratuitement une matrice transposée avec des nombres réelles.",
+    "dimension1Desc": "Dimension de la matrice :",
+    "calculationButtonName": "Ajouter matrice",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "tryAgain": "Essayer une autre fois!"
+    }
+  },
+  "determinant": {
+    "pageName": "Déterminant d'une matrice",
+    "pageDesc": "Ici, vous avez la possibilité de calculer le déterminant d'une matrice contenant des nombres réels.",
+    "dimension1Desc": "Dimension de la matrice :",
+    "calculationButtonName": "Ajouter matrice",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "tryAgain": "Essayer une autre fois!"
+    }
+  },
+  "add_sous": {
+    "pageName": "Addition et Soustraction matricielle",
+    "pageDesc": "Ici, vous pouvez additionner et soustraire des matrices avec des nombres réeeles.",
+    "dimension1Desc": "Dimension de la matrice:",
+    "calculationButtonName": "Ajouter matrice",
+    "operationType": "Type d'opération",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "tryAgain": "Essayer une autre fois!"
+    }
+  },
+  "rank": {
+    "pageName": "Rang d'une matrice",
+    "pageDesc": "Ici vous pouvez calculer en ligne le rang d'une matrice contenant des nombres réelles.",
+    "dimension1Desc": "Dimension de la matrice :",
+    "calculationButtonName": "Ajouter matrice",
+    "warnings": {
+      "emptyCells": "Il y a des cellules vides!",
+      "tryAgain": "Essayer une autre fois!"
+    }
+  },
+  "input": {
+    "title": "Entrée de matrice",
+    "clear": "Effacer",
+    "replace": "Remplir les cellules vides avec des zéros",
+    "replaceVector": "Remplir les cellules vides de vecteur avec des zéros",
+    "calculate": "Calculer"
+  },
+  "about": {
+    "pageName": "À propos de nous",
+    "content": {
+      "firstWord": "Bienvenue ",
+      "firstParagraph": "sur notre site dédié au calcul matriciel avancé, où l'excellence mathématique rencontre la simplicité d'utilisation.",
+      "secondParagraph": "Chez nous, nous nous engageons à fournir des outils puissants pour la manipulation de matrices, offrant des fonctionnalités complètes telles que la multiplication, l'addition, et la soustraction matricielles. Nous allons au-delà en résolvant efficacement les systèmes d'équations linéaires à l'aide de méthodes matricielles avancées. Notre plateforme propose également des fonctionnalités essentielles telles que le calcul du déterminant, la détermination du rang et la transposée de matrices, permettant aux utilisateurs de résoudre des problèmes complexes avec une facilité remarquable. Que vous soyez un étudiant en mathématiques, un professionnel de l'ingénierie ou un passionné de données, notre site est conçu pour répondre à vos besoins matriciels avec précision et efficacité.",
+      "thirdParagraph": "Explorez notre suite d'outils et découvrez la puissance des calculs matriciels simplifiés."
+    }
+  },
+  "feedBack": {
+    "firstName": "nom",
+    "lastName": "prénom",
+    "comment": "Vos commmentaires/questions",
+    "obligatoryFields": "Tous les champs sont obligatoires*",
+    "sendButton": "Envoyer",
+    "warnings": {
+      "emptyFirstName": "le champs prénom est vide!",
+      "emptyLastName": "le champs nom est vide!",
+      "emptyEmail": "le champs email est vide!",
+      "invalidEmail": "Le format de l'e-mail est incorrect!",
+      "emptyComment": "le champs feedback est vide!",
+      "tryAgain": "Réssayer une autre fois"
+    }
+  },
+  "resultPage": {
+    "pageDesc": "Ici, vous trouverez le résultat de votre calcul et vous pourrez l'utiliser pour continuer le calcul en fonction de celui-ci. Vous pouvez également voir ce que vous avez calculé. ",
+    "matrixRank": "Rang de la matrice",
+    "matrixDeterminant": "Déterminant de la matrice",
+    "recalculate": "Recalculer",
+    "continueCalcul": "Continuer le calcul",
+    "calculatedMatrix": "La matrice calculée",
+    "calculatedMatrices": "Les matrices calculées",
+    "checkSystem": "voir le système",
+    "checkCalculatedMatrices": "voir les matrices calculées",
+    "checkCalculatedMatrix": "voir la matrice calculée",
+    "hideCalculatedMatrices": "masquer les matrices calculées",
+    "hideCalculatedMatrix": "masquer la matrices calculée",
+    "calculationResult": [
+      "Résultat de la calculation du déterminant",
+      "Résultat de la produit matriciel",
+      "Résultat de l'addition matriciel",
+      "Résultat de la soustraction matriciel",
+      "Résultat de la résolution du système",
+      "Résultat de la calculation du matrice inverse",
+      "Résultat de la transposition de la matrice",
+      "Résultat de la calculation du rang"
+    ],
+    "functionalities": [
+      "Déterminant d'une matrice",
+      "Rang d'une matrice",
+      "Produit matriciel provenant de la gauche",
+      "Produit matriciel provenant de la droite",
+      "Addition/Soustraction",
+      "Inverse d'une matrice",
+      "Transposée d'une matrice"
+    ],
+    "warnings": {
+      "tryAgain": "Essayer de calculer une autre fois!",
+      "emptyCells": "Il y a des cellules vides!",
+      "inverseCalculImpossible": "Impossible de calculer l'inverse de cette matrice!",
+      "noInverse": "il n'y a pas d'inverse à cette matrice"
+    }
+  }
 }

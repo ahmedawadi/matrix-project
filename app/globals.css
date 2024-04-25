@@ -2,46 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-.backgroundImage{
-  background-image: url('../public/backgroundImage.png');
-  
+.backgroundImage {
+  background-image: url("../public/backgroundImage.png");
 }
 
-.titleSkew{
-  transform: skew(0, -5deg)
+.titleSkew {
+  transform: skew(0, -5deg);
 }
 
-.calculTitle{
-
+.calculTitle {
   background-image: url(../public/titleFont.png);
   background-clip: text;
   color: transparent;
-  
 }
 
-@media (max-width: 1024px){
-  .navBarElements{
-  background-image: url(../public/titleFont.png);
-  background-clip: text;
-  color: transparent;
+@media (max-width: 1024px) {
+  .navBarElements {
+    background-image: url(../public/titleFont.png);
+    background-clip: text;
+    color: transparent;
   }
 }
 
-@media (max-width: 1024px){
-  .navBarPageElement{
+@media (max-width: 1024px) {
+  .navBarPageElement {
     background-image: url(../public/backgroundImage.png);
     background-clip: text;
     color: transparent;
   }
-  
 }
 
-
-
-
-.calculSecondTitle{
+.calculSecondTitle {
   background-image: url(../public/titleSecondPartFont.png);
   background-clip: text;
   color: transparent;
-
 }

@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -29,9 +25,9 @@
     "**/*.ts",
     "**/*.tsx",
     "dist/types/**/*.ts",
-    "build/types/**/*.ts"
-, "app/[lang]/feedback/layout.jsx", "middleware.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "build/types/**/*.ts",
+    "app/[lang]/feedback/layout.jsx",
+    "middleware.js"
+  ],
+  "exclude": ["node_modules"]
 }
